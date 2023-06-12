@@ -1,11 +1,17 @@
 #include "TimerConfig.h"
 
-void setup() {
-  // put your setup code here, to run once:
+ISR( TIMER2_COMPA_vect )
+{
 
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
+void setup() {
+  pinMode( 12, OUTPUT );
+  PulseCaptureConfig();
+  PwmConfig();
+  PeriodicInterruptConfig();
+  Serial.begin(115200);
+}
 
+void loop() {
 }
