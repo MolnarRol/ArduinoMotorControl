@@ -14,6 +14,6 @@ void PeriodicInterruptConfig()
 };
 void PwmConfig()
 {
-  DDRB |= << DDRB1; // Set GPIO pin as output
+  DDRB |= 1 << DDB1; // Set GPIO pin as output
 
 };
