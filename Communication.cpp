@@ -19,7 +19,7 @@ void msgToCommand( String msg )
   {
     if( msg == CommandList[id].cmd )
     {      
-      CommandList[id].p_function();
+      CommandList[id].p_function( msg );
       return;
     }    
     id++;
@@ -27,7 +27,7 @@ void msgToCommand( String msg )
   Serial.println( "\t\"" + msg + "\" is invalid command");
 };
 
-void helper()
+void helper( String msg )
 {
   Serial.println("All possible commands:");
   uint8_t id = 0;  

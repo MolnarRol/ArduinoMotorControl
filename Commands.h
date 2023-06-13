@@ -1,3 +1,3 @@
 #include "Arduino.h"
 
-void clearTerminal();
+void clearTerminal( String msg );

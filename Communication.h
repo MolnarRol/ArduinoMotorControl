@@ -6,12 +6,12 @@
 struct Command
 {
   String cmd;  
-  void (*p_function)();
+  void (*p_function)( String msg );
   String help;
 };
 
 void msgToCommand( String msg );
-void helper();
+void helper( String msg );
 
 #ifdef __cplusplus
 extern "C" {

@@ -32,7 +32,7 @@ void setup() {
   PwmConfig();                // Output PWM signal
   PeriodicInterruptConfig();  // Generation periodic interrupt each 2 ms
   Serial.begin(115200);
-  clearTerminal();
+  clearTerminal( "" );
 }
 
 void loop() {
