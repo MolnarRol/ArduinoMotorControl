@@ -2,8 +2,9 @@
 extern "C" {
 #endif
 
-#include "Arduino.h"
 #include <stdint.h>
+#include "Arduino.h"
+
 
 void PulseCaptureConfig();
 void PeriodicInterruptConfig();
