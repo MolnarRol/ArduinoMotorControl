@@ -5,11 +5,13 @@
 
 struct Command
 {
-  String cmd;
+  String cmd;  
   void (*p_function)();
+  String help;
 };
 
 void msgToCommand( String msg );
+void helper();
 
 #ifdef __cplusplus
 extern "C" {
