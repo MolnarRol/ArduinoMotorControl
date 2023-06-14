@@ -13,7 +13,8 @@ void PWM_duty_Callback( String msg )
   }
   else 
   {
-    float o = GetPwmDuty();
+    Serial.print("PWM duty: ");
+    Serial.println(GetPwmDuty());
   }
 };
 

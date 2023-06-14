@@ -23,4 +23,6 @@ typedef struct CommandGroup
 void clearTerminal( String msg );
 void helper( String msg );
 
+void PWM_duty_Callback( String msg );
+
 #endif
