@@ -31,7 +31,3 @@ void PeriodicInterruptConfig()
   TCNT2 = 0;
 };
 
-void SetPwmDuty( float dutyPerc )
-{
-  OCR1A = (uint8_t)( 8.0f * dutyPerc );
-};

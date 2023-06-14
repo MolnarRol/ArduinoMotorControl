@@ -12,12 +12,12 @@ char UART_buff[UART_BUFF_LEN];
 
 void msgToCommand( String msg )
 {
+
+  // PWM Test
   String words[MAX_WORDS_IN_PROMPT];
   uint8_t n_words = stringToWords( msg, words );
-  for( uint8_t i = 0; i < n_words; i++ )    // DEBUG
-  {
-    parseFloat(words[i]);
-  }
+  float numFromStr = parseFloat(words[0]);
+  if( numFromStr != -1.0f ) SetPwmDuty( numFromStr ) ;
   
 
   // uint8_t id = 0;  
@@ -50,7 +50,7 @@ uint8_t stringToWords( String msg, String words[MAX_WORDS_IN_PROMPT] )
 
   for( idx; idx < msg.length(); idx++ )
   {
-    if( msg[idx] != ' ' ) 
+    if( msg[idx] != delimiter ) 
     {
       tmp_word[idx_word++] = msg[idx];
     }
@@ -82,6 +82,7 @@ float parseFloat( String strNum )
   uint8_t idx;
   for( idx = 0; idx < strNum.length(); idx++ )
   {
+    if( ( strNum[idx] < '0' || strNum[idx] > '9') &&  strNum[idx] != '.' ) return -1.0f;    // Return -1.0f if the string contains non number character withou
     if( strNum[idx] == decimalPoint )
     {
       foundDecimalPoint = 1;
@@ -98,13 +99,12 @@ float parseFloat( String strNum )
     parsedInteger += charToDec( integer[idx] );
   }
 
-  for( uint8_t idx = 0; idx < strlen(integer); idx++ )
+  for( uint8_t idx = 0; idx < strlen(decimal); idx++ )
   {
     parsedDecimal *= 10;
     parsedDecimal += charToDec( decimal[idx] );
   }
-  Serial.println(parsedDecimal);
-  parsedFloat = (float)parsedDecimal / ( 10.0f * (float)strlen(decimal) );
+  parsedFloat = (float)parsedDecimal / (float)powerOf10( (uint8_t)strlen(decimal) );
   parsedFloat += (float)parsedInteger;
   return parsedFloat;
 };
@@ -114,3 +114,10 @@ static inline uint8_t charToDec( char ch )
   ch -= 48;   // char - 48 => integer represented by char
   return ( ch < 0 || ch > 9 ) ? 0 : ch; // if char is not representing number => returning 0
 }; 
+
+static inline uint32_t powerOf10( uint8_t n )
+{
+  uint32_t power = 1;
+  for( int i = 0; i < n; i++  ) power *= 10;
+  return power;
+}

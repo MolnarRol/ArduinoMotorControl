@@ -9,7 +9,6 @@ extern "C" {
 void PulseCaptureConfig();
 void PeriodicInterruptConfig();
 void PwmConfig();
-void SetPwmDuty( float dutyPerc );  // 100% = 1000 promile
 
 #ifdef __cplusplus
 }

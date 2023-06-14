@@ -39,6 +39,8 @@ void loop() {
   Serial.print(">> ");
   while( Serial.available() == 0 ){};                     // Wait for input
   String msg = Serial.readStringUntil( '\n' );
+  Serial.println(msg);
   if( msg.length() > 0 ) msgToCommand( msg );
   else Serial.println();
 }
+

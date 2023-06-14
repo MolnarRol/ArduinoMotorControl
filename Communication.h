@@ -9,10 +9,11 @@
 #define MAX_WORDS_IN_PROMPT 5
 
 void msgToCommand( String msg );
-float parseFloat( String strNum );
-static uint8_t charToDec( char ch ); 
 uint8_t stringToWords( String msg, String words[6] );
+float parseFloat( String strNum );
 
+static uint8_t charToDec( char ch ); 
+static inline uint32_t powerOf10( uint8_t n );
 
 
 
