@@ -1,3 +1,6 @@
+#ifndef _COMMUNICATION_H_
+#define _COMMUNICATION_H_
+
 #include "Arduino.h"
 #include "Commands.h"
 
@@ -12,23 +15,9 @@ void msgToCommand( String msg );
 uint8_t stringToWords( String msg, String words[6] );
 float parseFloat( String strNum );
 
-static uint8_t charToDec( char ch ); 
-static inline uint32_t powerOf10( uint8_t n );
-
-
-
-// struct CommandGroup
-// {
-//   String GroupName;
-//   Command CommandList[];
-// }
-
-// struct Command
-// {
-//   String cmd;  
-//   void (*p_function)( String msg );
-//   String help;
-// };
+uint8_t charToDec( char ch ); 
+uint32_t charStrToDec( char* numStr );
+uint32_t powerOf10( uint8_t n );
 
 #ifdef __cplusplus
 extern "C" {
@@ -36,4 +25,5 @@ extern "C" {
 
 #ifdef __cplusplus
 }
+#endif
 #endif

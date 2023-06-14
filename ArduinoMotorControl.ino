@@ -24,7 +24,7 @@
 
 ISR( TIMER2_COMPA_vect )
 {
-
+  // Regulation each 2 ms
 }
 
 void setup() {
@@ -33,6 +33,8 @@ void setup() {
   PeriodicInterruptConfig();  // Generation periodic interrupt each 2 ms
   Serial.begin(115200);
   clearTerminal( "" );
+  SetPwmDuty( 0.0f );
+  pinMode(2, OUTPUT);
 }
 
 void loop() {
