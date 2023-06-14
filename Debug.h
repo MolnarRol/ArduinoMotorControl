@@ -3,13 +3,13 @@
 #include "Arduino.h"
 
 #ifdef __cplusplus
-extern "C"{
+extern "C" {
 #endif
 /*
   Using Arduino pin D2 as debug pin
 */
-inline void setPin();
-inline void clearPin();
+void setPin();
+void clearPin();
 #ifdef __cplusplus
 }
 #endif

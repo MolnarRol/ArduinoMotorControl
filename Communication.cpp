@@ -76,7 +76,9 @@ float parseFloat( String strNum )
   uint32_t parsedDecimal = charStrToDec( decimal ); // integer representation of decimal part
 
   float parsedFloat = 0.0f;
+  setPin();
   parsedFloat = (float)parsedDecimal / (float)powerOf10( (uint8_t)strlen(decimal) );
+  clearPin();
   parsedFloat += (float)parsedInteger;
   return parsedFloat;
 };

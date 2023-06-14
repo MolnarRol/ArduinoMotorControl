@@ -1,8 +1,10 @@
+
 #ifndef _COMMUNICATION_H_
 #define _COMMUNICATION_H_
 
 #include "Arduino.h"
 #include "Commands.h"
+#include "Debug.h"
 
 #include <stdio.h>
 #include <string.h>

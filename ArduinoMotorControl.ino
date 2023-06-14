@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include "Communication.h"
 #include "TimerConfig.h"
+#include "Debug.h"
 
 ISR( TIMER2_COMPA_vect )
 {
