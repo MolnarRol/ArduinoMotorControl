@@ -2,25 +2,26 @@
 
 void PWM_duty_Callback( String msg )
 {
-  if( msg.length() > 0 ) 
-  {
-    SetPwmDuty( parseFloat( msg ) );
-  }
-  else 
+  if( msg.length() > 0 ) SetPwmDuty( parseFloat( msg ) );
+  else
   {
     Serial.print("PWM duty: ");
-    Serial.println(GetPwmDuty());
-  }
+    Serial.print( GetPwmDuty() );
+    Serial.println("%");
+  } 
 };
 
 void PWM_on_Callback( String msg )
 {
+  if( msg.length() > 0 ) SetPwmDuty( parseFloat(msg) );
+  DisablePWM_HiZ();
   EnablePWM();
 };
 
 void PWM_off_Callback( String msg )
 {
-  if( msg.length() == 0 ) DisablePWM();
+  EnablePWM_HiZ();
+  DisablePWM();  
 };
 
 // void helper( String msg )

@@ -52,7 +52,6 @@ void msgToCommand( String msg )
   {
     if( MiscCommands[idx].cmd == words[0] )
     {
-      //Serial.println(words[0]);
       MiscCommands[idx].p_function("");
       return;
     }

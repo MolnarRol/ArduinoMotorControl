@@ -32,9 +32,10 @@ void setup() {
   PulseCaptureConfig();       // Rotary encoder capture
   PwmConfig();                // Output PWM signal
   PeriodicInterruptConfig();  // Generation periodic interrupt each 2 ms
+
   Serial.begin(115200);
   clearTerminal( "" );
-  SetPwmDuty( 0.0f );
+  
   pinMode(2, OUTPUT);
 }
 
