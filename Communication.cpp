@@ -2,18 +2,57 @@
 
 char UART_buff[UART_BUFF_LEN];
 
+CommandTypeDef PWM_commands[] = 
+{
+  { "duty", &PWM_duty_Callback, "Clear output terminal" },
+  { "__End__", NULL }
+};
+
+CommandGroupTypeDef PWM = 
+{
+  "pwm",
+  "Commands used for PWM manipulation",
+  PWM_commands
+};
+
+CommandGroupTypeDef TEST = 
+{
+  "TEST",
+  "TEST",
+  NULL
+};
+
+CommandGroupTypeDef* CommandGroupArr[] = 
+{
+  &PWM,
+  &TEST,
+  NULL
+};
+
 void msgToCommand( String msg )
 {
-  static uint8_t group_idx = 255; 
-  String words[MAX_WORDS_IN_PROMPT];
-  const uint8_t n_words = stringToWords( msg, words );
+  static uint8_t group_idx = 255;   // Sellected group index -> 255 = no sellection
+  String words[MAX_WORDS_IN_PROMPT];  // Input parsed to words
+  const uint8_t n_words = stringToWords( msg, words );  // Number of words
+
   if( n_words == 1 )
   {
-    // if
+    uint8_t idx = 0;
+    while( CommandGroupArr[idx] != NULL )
+    {
+      if( CommandGroupArr[idx]->identity == words[0] )
+      {
+        group_idx = idx;
+        break;
+      }
+      idx++;
+    }
+
   }
 
 
-  PWM_duty_Callback( words[0] );
+  Serial.println( group_idx );
+  //PWM_duty_Callback( words[0] );
 
 // PWM Test
   // String words[MAX_WORDS_IN_PROMPT];

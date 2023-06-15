@@ -9,10 +9,7 @@ void PWM_duty_Callback( String msg )
 {
   if( msg.length() > 0 ) 
   {
-    float a = parseFloat( msg );
-    setPin();
-    SetPwmDuty( a );
-    clearPin();
+    SetPwmDuty( parseFloat( msg ) );
   }
   else 
   {
@@ -33,21 +30,5 @@ void PWM_duty_Callback( String msg )
 //   }  
 // };
 
-CommandTypeDef PWM_commands[] = 
-{
-  { "duty", &PWM_duty_Callback, "Clear output terminal" },
-  { "__End__", NULL }
-};
 
-CommandGroupTypeDef PWM = 
-{
-  "PWM",
-  "Commands used for PWM manipulation",
-  PWM_commands
-};
 
-CommandGroupTypeDef* CommandGroupArr[] = 
-{
-  &PWM,
-  NULL
-};

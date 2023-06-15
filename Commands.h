@@ -6,6 +6,11 @@
 #include "Communication.h"
 #include "TimerConfig.h"
 
+void clearTerminal( String msg );
+void helper( String msg );
+
+void PWM_duty_Callback( String msg );
+
 typedef struct Command
 {
   String cmd;                         // command string
@@ -19,10 +24,5 @@ typedef struct CommandGroup
   String descript;                    // description in help command
   CommandTypeDef* List;               // List of used commands
 } CommandGroupTypeDef;
-
-void clearTerminal( String msg );
-void helper( String msg );
-
-void PWM_duty_Callback( String msg );
 
 #endif
