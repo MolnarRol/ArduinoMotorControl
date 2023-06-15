@@ -1,6 +1,5 @@
 # Adding custom function group
 
-Adding command groups and functions>
 1.) Define new command group (communication.cpp):
 
       CommandGroupTypeDef <name> = 
