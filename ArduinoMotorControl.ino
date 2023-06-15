@@ -39,11 +39,13 @@ void setup() {
 }
 
 void loop() {
-  Serial.print(">> ");
-  while( Serial.available() == 0 ){};                     // Wait for input
-  String msg = Serial.readStringUntil( '\n' );
-  Serial.println(msg);
-  if( msg.length() > 0 ) msgToCommand( msg );
+  printHeader();
+  String msg = getStringUART();
+  if( msg.length() > 0 )
+  {
+    Serial.println( msg );
+    msgToCommand( msg );
+  }
   else Serial.println();
 }
 

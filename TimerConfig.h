@@ -7,18 +7,32 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-void SetPwmDuty( float dutyPerc );
-float GetPwmDuty();
 
+/*
+  Config functions
+*/
 void PulseCaptureConfig();
 void PeriodicInterruptConfig();
 void PwmConfig();
 
-static void DisablePWM();
-static void EnablePWM();
-static float GetStepPWM( const uint16_t TOP );
+/*
+  PWM duty setter/getter
+*/
 void SetPwmDuty( float dutyPerc );
 float GetPwmDuty();
+
+/*
+  PWM on/off
+*/
+void DisablePWM();
+void EnablePWM();
+
+/*
+  Misc functions
+*/
+float GetStepPWM( const uint16_t TOP );
+
+
 
 #ifdef __cplusplus
 }

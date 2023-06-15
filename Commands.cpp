@@ -1,10 +1,5 @@
 #include "Commands.h"
 
-void clearTerminal( String msg )
-{
-  for( uint8_t i; i < 50; i++ ) Serial.println();
-};
-
 void PWM_duty_Callback( String msg )
 {
   if( msg.length() > 0 ) 
@@ -16,6 +11,16 @@ void PWM_duty_Callback( String msg )
     Serial.print("PWM duty: ");
     Serial.println(GetPwmDuty());
   }
+};
+
+void PWM_on_Callback( String msg )
+{
+  EnablePWM();
+};
+
+void PWM_off_Callback( String msg )
+{
+  if( msg.length() == 0 ) DisablePWM();
 };
 
 // void helper( String msg )

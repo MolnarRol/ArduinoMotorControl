@@ -6,10 +6,11 @@
 #include "Communication.h"
 #include "TimerConfig.h"
 
-void clearTerminal( String msg );
 void helper( String msg );
 
 void PWM_duty_Callback( String msg );
+void PWM_on_Callback( String msg );
+void PWM_off_Callback( String msg );
 
 typedef struct Command
 {

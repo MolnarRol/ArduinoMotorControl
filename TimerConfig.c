@@ -21,8 +21,7 @@ void SetPwmDuty( float dutyPerc )
 };
 
 float GetPwmDuty(){
-  const uint16_t TOP = OCR1A;
-  return ( (float)TOP + 1.0f ) / GetStepPWM(TOP); 
+  return ( (float)OCR1A + 1.0f ) / (float)ICR1; 
 };
 
 void PulseCaptureConfig()
@@ -56,18 +55,18 @@ void PeriodicInterruptConfig()
   TCNT2 = 0;
 };
 
-static inline void DisablePWM()
+void DisablePWM()
 {
   TCCR1A &= ~(1 << 7 );   // Turn of PWM
   PORTB &= ~(1 << 1 );    // set port to logic low
 };
-
-static inline void EnablePWM()
+void EnablePWM()
 {
   TCCR1A |= (1 << 7 );    // turn on PWM
 };
 
-static inline float GetStepPWM( const uint16_t TOP )
+// Fix exact duty
+float GetStepPWM( const uint16_t TOP )
 {
-  return ((float)TOP + 1.0f ) / 100.0f;
+  return (float)TOP / 100.0f;
 };

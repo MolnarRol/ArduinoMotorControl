@@ -4,7 +4,9 @@ char UART_buff[UART_BUFF_LEN];
 
 CommandTypeDef PWM_commands[] = 
 {
-  { "duty", &PWM_duty_Callback, "Clear output terminal" },
+  { "duty", &PWM_duty_Callback, "" },
+  { "on", &PWM_on_Callback, "" },
+  { "off", &PWM_off_Callback, "" },
   { "__End__", NULL }
 };
 
@@ -29,29 +31,63 @@ CommandGroupTypeDef* CommandGroupArr[] =
   NULL
 };
 
+CommandTypeDef MiscCommands[] =
+{
+  { "clear", &clearTerminal, "Clear output terminal" },
+  { "back", &resetGroup, "" },
+  { "__End__", NULL }
+};
+
+uint8_t g_group_idx = 255;  // Sellected group index -> 255 = no sellection
+
 void msgToCommand( String msg )
 {
-  static uint8_t group_idx = 255;   // Sellected group index -> 255 = no sellection
-  String words[MAX_WORDS_IN_PROMPT];  // Input parsed to words
+  String words[MAX_WORDS_IN_PROMPT] = {""};  // Input parsed to words
   const uint8_t n_words = stringToWords( msg, words );  // Number of words
 
-  if( n_words == 1 )
+  // if( n_words == 1 )
+  // {
+  uint8_t idx = 0;
+  while( MiscCommands[idx].cmd != "__End__" )
   {
-    uint8_t idx = 0;
-    while( CommandGroupArr[idx] != NULL )
+    if( MiscCommands[idx].cmd == words[0] )
     {
-      if( CommandGroupArr[idx]->identity == words[0] )
+      //Serial.println(words[0]);
+      MiscCommands[idx].p_function("");
+      return;
+    }
+    idx++;
+  } 
+
+  idx = 0;
+  if( g_group_idx != 255 )
+  {    
+    while( CommandGroupArr[g_group_idx]->List[idx].cmd != "__End__" )
+    {
+      if( CommandGroupArr[g_group_idx]->List[idx].cmd == words[0] )
       {
-        group_idx = idx;
-        break;
+        CommandGroupArr[g_group_idx]->List[idx].p_function(words[1]);
+        return;
       }
       idx++;
+    }    
+  }
+  
+  idx = 0;
+  while( CommandGroupArr[idx] != NULL )
+  {
+    if( CommandGroupArr[idx]->identity == words[0] )
+    {
+      g_group_idx = idx;
+      return;
     }
-
+    idx++;
   }
 
+     
+  // }
 
-  Serial.println( group_idx );
+
   //PWM_duty_Callback( words[0] );
 
 // PWM Test
@@ -59,6 +95,15 @@ void msgToCommand( String msg )
   // const uint8_t n_words = stringToWords( msg, words );
   // float numFromStr = parseFloat(words[0]);
   // if( numFromStr != -1.0f ) SetPwmDuty( numFromStr );
+};
+
+void printHeader()
+{
+ Serial.print(">> ");
+  if( g_group_idx != 255 )
+  {
+    Serial.print( CommandGroupArr[g_group_idx]->identity + " >> ");
+  }
 };
 
 
@@ -123,6 +168,12 @@ float parseFloat( String strNum )
   return parsedFloat;
 };
 
+String getStringUART()
+{
+  while( Serial.available() == 0 ){};                     // Wait for input
+  return Serial.readStringUntil( '\n' );
+};
+
 uint32_t charStrToDec( char* numStr)
 {
   uint32_t num = 0;
@@ -145,4 +196,14 @@ uint32_t powerOf10( uint8_t n )
   uint32_t power = 1;
   for( int i = 0; i < n; i++  ) power *= 10;
   return power;
+};
+
+void clearTerminal( String msg )
+{
+  for( uint8_t i; i < 50; i++ ) Serial.println();
+};
+
+void resetGroup( String msg )
+{
+  g_group_idx = 255;
 };
