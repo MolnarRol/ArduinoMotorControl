@@ -35,8 +35,10 @@ void setup() {
 
   Serial.begin(115200);
   clearTerminal( "" );
-  
-  pinMode(2, OUTPUT);
+
+  pinMode(2, OUTPUT);         // Debug pin
+  pinMode(8, OUTPUT);         // Brake pin
+  pinMode(7, OUTPUT);         // Direction pin
 }
 
 void loop() {

@@ -1,5 +1,4 @@
 #include "Communication.h"
-char UART_buff[UART_BUFF_LEN];
 
 CommandTypeDef PWM_commands[] = 
 {
@@ -18,8 +17,8 @@ CommandGroupTypeDef PWM =
 
 CommandTypeDef BRAKE_commands[] = 
 {
-  // { "on", &BRAKE_on_Callback, "" },
-  // { "off", &BRAKE_off_Callback, "" },
+  { "on", &BRAKE_on_Callback, "" },
+  { "off", &BRAKE_off_Callback, "" },
   { "__End__", NULL }
 };
 
@@ -30,10 +29,26 @@ CommandGroupTypeDef BRAKE =
   BRAKE_commands
 };
 
+CommandTypeDef DIR_commands[] = 
+{
+  { "cw", &DIR_1_Callback, "" },
+  { "ccw", &DIR_2_Callback, "" },
+  { "chDir", &DIR_change_Callback, "" },
+  { "__End__", NULL }
+};
+
+CommandGroupTypeDef DIR = 
+{
+  "dir",
+  "dir",
+  DIR_commands
+};
+
 CommandGroupTypeDef* CommandGroupArr[] = 
 {
   &PWM,
   &BRAKE,
+  &DIR,
   NULL
 };
 
