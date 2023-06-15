@@ -1,5 +1,4 @@
 #include "Communication.h"
-
 char UART_buff[UART_BUFF_LEN];
 
 CommandTypeDef PWM_commands[] = 
@@ -17,17 +16,24 @@ CommandGroupTypeDef PWM =
   PWM_commands
 };
 
-CommandGroupTypeDef TEST = 
+CommandTypeDef BRAKE_commands[] = 
 {
-  "TEST",
-  "TEST",
-  NULL
+  // { "on", &BRAKE_on_Callback, "" },
+  // { "off", &BRAKE_off_Callback, "" },
+  { "__End__", NULL }
+};
+
+CommandGroupTypeDef BRAKE = 
+{
+  "brake",
+  "brake",
+  BRAKE_commands
 };
 
 CommandGroupTypeDef* CommandGroupArr[] = 
 {
   &PWM,
-  &TEST,
+  &BRAKE,
   NULL
 };
 
@@ -45,8 +51,6 @@ void msgToCommand( String msg )
   String words[MAX_WORDS_IN_PROMPT] = {""};  // Input parsed to words
   const uint8_t n_words = stringToWords( msg, words );  // Number of words
 
-  // if( n_words == 1 )
-  // {
   uint8_t idx = 0;
   while( MiscCommands[idx].cmd != "__End__" )
   {
@@ -82,18 +86,6 @@ void msgToCommand( String msg )
     }
     idx++;
   }
-
-     
-  // }
-
-
-  //PWM_duty_Callback( words[0] );
-
-// PWM Test
-  // String words[MAX_WORDS_IN_PROMPT];
-  // const uint8_t n_words = stringToWords( msg, words );
-  // float numFromStr = parseFloat(words[0]);
-  // if( numFromStr != -1.0f ) SetPwmDuty( numFromStr );
 };
 
 void printHeader()
@@ -122,6 +114,7 @@ uint8_t stringToWords( String msg, String words[MAX_WORDS_IN_PROMPT] )
   {
     if( msg[idx] != delimiter ) 
     {
+      if( (idx_word + 1) == COMMAND_MAX_CHAR ) break;
       tmp_word[idx_word++] = msg[idx];
     }
     else
@@ -206,3 +199,22 @@ void resetGroup( String msg )
 {
   g_group_idx = 255;
 };
+
+// void helper( String msg )
+// {
+//   Serial.println("All possible commands:");
+//   uint8_t id = 0;  
+
+//   while( CommandList[id].cmd != "__End__"  )
+//   {
+//     Serial.println("\t- " + CommandList[id].cmd + ":\t\t" + CommandList[id].help );
+//     id++;
+//   }  
+// };
+
+// PWM Test
+// String words[MAX_WORDS_IN_PROMPT];
+// const uint8_t n_words = stringToWords( msg, words );
+// float numFromStr = parseFloat(words[0]);
+// if( numFromStr != -1.0f ) SetPwmDuty( numFromStr );
+//PWM_duty_Callback( words[0] );

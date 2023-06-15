@@ -11,7 +11,7 @@
 
 #define UART_BUFF_LEN 32
 #define COMMAND_MAX_CHAR 16
-#define MAX_WORDS_IN_PROMPT 5
+#define MAX_WORDS_IN_PROMPT 2
 
 String getStringUART();
 void printHeader();
@@ -25,12 +25,4 @@ void resetGroup( String msg );
 uint8_t charToDec( char ch ); 
 uint32_t charStrToDec( char* numStr );
 uint32_t powerOf10( uint8_t n );
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#ifdef __cplusplus
-}
-#endif
 #endif
