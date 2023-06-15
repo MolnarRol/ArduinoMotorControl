@@ -9,7 +9,10 @@ void PWM_duty_Callback( String msg )
 {
   if( msg.length() > 0 ) 
   {
-    SetPwmDuty( parseFloat( msg ));
+    float a = parseFloat( msg );
+    setPin();
+    SetPwmDuty( a );
+    clearPin();
   }
   else 
   {

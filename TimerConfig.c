@@ -1,32 +1,28 @@
 #include "TimerConfig.h"
 
+
+/*
+  TODO>> Limit use of floating point numbers
+*/
 void SetPwmDuty( float dutyPerc )
 {
   if( dutyPerc > 100.0f || dutyPerc < 0.0f ) return;
-  /* 
-  The timer resolution can be adjusted in descrete steps by 0.125% 
-  if we provide lower value than 0.125 than we turn of the PWM and set port to output logic LOW 
 
+  const uint16_t TOP = ICR1;
+  const float DUTY_STEP = GetStepPWM( TOP );
+  const float DUTY_STEP_PERC = 1.0f / DUTY_STEP;
 
-  TODO>
-    - fix rozsah
-    - upravit tak aby mohlo menit frekvenciu
-  */
-  if( dutyPerc < 0.125f )   
-  {
-    TCCR1A &= ~(1 << 7 );   // Turn of PWM
-    PORTB &= ~(1 << 1 );    // set port to logic low
-    return;
-  }
+  if( dutyPerc < DUTY_STEP_PERC ) DisablePWM();
   else
   {
-    TCCR1A |= (1 << 7 );    // turn on PWM
-  }  
-  OCR1A = (uint16_t)( 8.0f * dutyPerc ) - 1;
+    OCR1A = (uint16_t)( DUTY_STEP * dutyPerc - 1.0f);
+    EnablePWM();
+  }   
 };
 
 float GetPwmDuty(){
-  return ( (float)OCR1A + 1.0f ) / 8.0f; 
+  const uint16_t TOP = OCR1A;
+  return ( (float)TOP + 1.0f ) / GetStepPWM(TOP); 
 };
 
 void PulseCaptureConfig()
@@ -60,3 +56,18 @@ void PeriodicInterruptConfig()
   TCNT2 = 0;
 };
 
+static inline void DisablePWM()
+{
+  TCCR1A &= ~(1 << 7 );   // Turn of PWM
+  PORTB &= ~(1 << 1 );    // set port to logic low
+};
+
+static inline void EnablePWM()
+{
+  TCCR1A |= (1 << 7 );    // turn on PWM
+};
+
+static inline float GetStepPWM( const uint16_t TOP )
+{
+  return ((float)TOP + 1.0f ) / 100.0f;
+};

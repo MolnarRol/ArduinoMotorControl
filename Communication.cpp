@@ -5,17 +5,21 @@ char UART_buff[UART_BUFF_LEN];
 void msgToCommand( String msg )
 {
   static uint8_t group_idx = 255; 
-  // PWM Test
+  String words[MAX_WORDS_IN_PROMPT];
+  const uint8_t n_words = stringToWords( msg, words );
+  if( n_words == 1 )
+  {
+    // if
+  }
+
+
+  PWM_duty_Callback( words[0] );
+
+// PWM Test
   // String words[MAX_WORDS_IN_PROMPT];
   // const uint8_t n_words = stringToWords( msg, words );
   // float numFromStr = parseFloat(words[0]);
   // if( numFromStr != -1.0f ) SetPwmDuty( numFromStr );
-  
-
-  String words[MAX_WORDS_IN_PROMPT];
-  const uint8_t n_words = stringToWords( msg, words );
-  PWM_duty_Callback( words[1] );
-
 };
 
 
@@ -75,9 +79,7 @@ float parseFloat( String strNum )
   uint32_t parsedDecimal = charStrToDec( decimal ); // integer representation of decimal part
 
   float parsedFloat = 0.0f;
-  setPin();
   parsedFloat = (float)parsedDecimal / (float)powerOf10( (uint8_t)strlen(decimal) );
-  clearPin();
   parsedFloat += (float)parsedInteger;
   return parsedFloat;
 };
