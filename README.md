@@ -30,7 +30,6 @@ Adding command groups and functions>
 
       void yourFunction( String someString ); // Function needs to follow exact declaration
 5.) Implement yourFunction() in Commands.cpp
-Done
 
 # Useful commands
       - clear –> clears output terminal
