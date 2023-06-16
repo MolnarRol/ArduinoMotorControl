@@ -38,7 +38,7 @@ void setup() {
 
   pinMode(2, OUTPUT);         // Debug pin
   pinMode(7, OUTPUT);         // Brake pin
-  pinMode(5, OUTPUT);         // Direction pin
+  pinMode(5, OUTPUT);          // Direction pin[defective]
 }
 
 void loop() {
@@ -51,4 +51,3 @@ void loop() {
   }
   else Serial.println();
 }
-
