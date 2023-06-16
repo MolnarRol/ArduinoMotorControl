@@ -15,6 +15,13 @@ void SetPwmDuty( float dutyPerc )
   {
     OCR1A = 0;
     DisablePWM();
+    setPinLowPWM();
+  }
+  else if( dutyPerc > (100.0f - DUTY_STEP_PERC) )
+  {
+    OCR1A = TOP;
+    DisablePWM();
+    setPinHighPWM();
   }
   else
   {
@@ -58,14 +65,25 @@ void PeriodicInterruptConfig()
   TCNT2 = 0;
 };
 
-void DisablePWM()
+inline void DisablePWM()
 {
   TCCR1A &= ~(1 << 7 );   // Turn of PWM
-  PORTB &= ~(1 << 1 );    // set port to logic low
+  
 };
-void EnablePWM()
+
+inline void EnablePWM()
 {  
   TCCR1A |= (1 << 7 );    // turn on PWM
+};
+
+inline void setPinHighPWM()
+{
+  PORTB |= (1 << 1 );    // set port to logic low
+};
+
+inline void setPinLowPWM()
+{
+  PORTB &= ~(1 << 1 );    // set port to logic low
 };
 
 inline void EnablePWM_HiZ()

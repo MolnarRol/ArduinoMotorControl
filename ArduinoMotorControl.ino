@@ -37,8 +37,8 @@ void setup() {
   clearTerminal( "" );
 
   pinMode(2, OUTPUT);         // Debug pin
-  pinMode(8, OUTPUT);         // Brake pin
-  pinMode(7, OUTPUT);         // Direction pin
+  pinMode(7, OUTPUT);         // Brake pin
+  pinMode(5, OUTPUT);         // Direction pin
 }
 
 void loop() {

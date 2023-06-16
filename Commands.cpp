@@ -36,12 +36,12 @@ void PWM_off_Callback( String msg )
 */
 void BRAKE_on_Callback( String msg )
 {
-  digitalWrite( 8, 1 );
+  digitalWrite( 7, 1 );
 };
 
 void BRAKE_off_Callback( String msg )
 {
-  digitalWrite( 8, 0 );
+  digitalWrite( 7, 0 );
 };
 
 /*
@@ -49,17 +49,17 @@ void BRAKE_off_Callback( String msg )
 */
 void DIR_1_Callback( String msg )
 {
-  digitalWrite( 7, 1);
+  digitalWrite( 5, 1);
 };
 
 void DIR_2_Callback( String msg )
 {
-  digitalWrite( 7, 0);
+  digitalWrite( 5, 0);
 };
 
 void DIR_change_Callback( String msg )
 {
-  static uint8_t state = ( PORTD & ~(1 << 7) ) >> 7;    // PD7
+  static uint8_t state = ( PORTD & ~(1 << 5) ) >> 5;    // P5
   state = !state;
-  digitalWrite( 7, state );
+  digitalWrite( 5, state );
 };

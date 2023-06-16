@@ -26,6 +26,9 @@ float GetPwmDuty();
 */
 void DisablePWM();
 void EnablePWM();
+void setPinHighPWM();
+void setPinLowPWM();
+
 void DisablePWM_HiZ();
 void EnablePWM_HiZ();
 
