@@ -101,3 +101,10 @@ float GetStepPWM( const uint16_t TOP )
 {
   return ((float)TOP + 1.0f ) / 100.0f;
 };
+
+inline uint8_t readPulseCount()
+{
+  uint8_t pulseCount = TCNT0;
+  TCNT0 = 0;
+  return pulseCount;
+};
