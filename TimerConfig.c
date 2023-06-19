@@ -15,13 +15,13 @@ void SetPwmDuty( float dutyPerc )
   {
     OCR1A = 0;
     DisablePWM();
-    setPinLowPWM();
+    setPinHighPWM();    
   }
   else if( dutyPerc > (100.0f - DUTY_STEP_PERC) )
   {
     OCR1A = TOP;
     DisablePWM();
-    setPinHighPWM();
+    setPinLowPWM();
   }
   else
   {
@@ -67,13 +67,13 @@ void PeriodicInterruptConfig()
 
 inline void DisablePWM()
 {
-  TCCR1A &= ~(1 << 7 );   // Turn of PWM
+  TCCR1A &= ~(0b11000000);   // Turn of PWM
   
 };
 
 inline void EnablePWM()
 {  
-  TCCR1A |= (1 << 7 );    // turn on PWM
+  TCCR1A |= 0b11000000;    // turn on PWM
 };
 
 inline void setPinHighPWM()

@@ -36,12 +36,12 @@ void PWM_off_Callback( String msg )
 */
 void BRAKE_on_Callback( String msg )
 {
-  digitalWrite( 7, 1 );
+  digitalWrite( 7, 0 );
 };
 
 void BRAKE_off_Callback( String msg )
 {
-  digitalWrite( 7, 0 );
+  digitalWrite( 7, 1 );
 };
 
 /*

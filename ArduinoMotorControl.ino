@@ -38,7 +38,9 @@ void setup() {
 
   pinMode(2, OUTPUT);         // Debug pin
   pinMode(7, OUTPUT);         // Brake pin
-  pinMode(5, OUTPUT);          // Direction pin[defective]
+  pinMode(5, OUTPUT);         // Direction pin[defective]
+
+  SetPwmDuty(0);
 }
 
 void loop() {
