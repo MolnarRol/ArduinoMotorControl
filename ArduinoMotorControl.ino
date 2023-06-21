@@ -36,24 +36,17 @@ void setup() {
   pinMode(7, OUTPUT);         // Brake pin
   pinMode(5, OUTPUT);         // Direction pin[defective]
 
-  // DEBUG  
-  // BRAKE_off_Callback("");
-  // SetPwmDuty(5.0f);
-  // DisablePWM_HiZ();
-  // EnablePWM();
-  // TCNT0 = 0;
-  // while( TCNT0 != 100 ){};
-  // SetPwmDuty(0.0f);
+  SetPwmDuty(0);              // Set speed to 0
+  BRAKE_off_Callback("");     // Disengage brake
 }
 
 void loop() {
-  // printHeader();
-  // String msg = getStringUART();
-  // if( msg.length() > 0 )
-  // {
-  //   Serial.println( msg );
-  //   msgToCommand( msg );
-  // }
-  // else Serial.println();
-  // Serial.println(pulses);
+  printHeader();
+  String msg = getStringUART();
+  if( msg.length() > 0 )
+  {
+    Serial.println( msg );
+    msgToCommand( msg );
+  }
+  else Serial.println();
 }
