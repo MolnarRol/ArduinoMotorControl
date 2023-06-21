@@ -19,9 +19,14 @@
 #include "TimerConfig.h"
 #include "Debug.h"
 
+uint8_t n_pulses = 0;
+
+#define ENC_N_PULSES 100
+
 ISR( TIMER2_COMPA_vect )
 {
   // Regulation each 2 ms
+  n_pulses = readPulseCount();
 }
 
 void setup() {
@@ -49,4 +54,9 @@ void loop() {
     msgToCommand( msg );
   }
   else Serial.println();
+  
+  Serial.print("Pulse count: ");
+  Serial.println(n_pulses);
+  Serial.print("RPM: ");
+  Serial.println( calcRPM(n_pulses, 2) );
 }
