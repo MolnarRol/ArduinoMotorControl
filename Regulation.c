@@ -22,7 +22,7 @@ float updatePID( float setPoint, float y )
 inline float calcRPM( const uint8_t tim_cnt )
 {
   float deltaTime = (float)tim_cnt * TIM_STEP_us;
-  float cnt_per_rev = 6e6f / (float)( ENC_N_PULSES * deltaTime );
+  float cnt_per_rev = 60 / (float)( ENC_N_PULSES * deltaTime );
 
   return cnt_per_rev;
 };

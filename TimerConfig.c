@@ -51,9 +51,11 @@ void PulseCaptureConfig()
   /*
     Free running timer config
   */
+  TCCR0A = 0;
+  TCCR0B = 0;
   TCCR0A |= 0b00000010;      // CTC
   TCCR0B |= 0b00000001;    // Prescaling by 1
-  OCR0A = 254;
+  OCR0A = 255;
   TIMSK0 |= ( 1 << (OCIE0A) );
 
   /*

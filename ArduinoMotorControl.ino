@@ -76,7 +76,7 @@ void setup() {
   // BRAKE_off_Callback("");     // Disengage brake
 
   // DEBUG
-  SetPwmDuty(25.0f);
+  SetPwmDuty(15.0f);
   BRAKE_off_Callback("");     // Disengage brake
   DisablePWM_HiZ();
   EnablePWM();
@@ -95,6 +95,10 @@ void loop() {
 
 
   // Serial.print("Pulse count: ");
+  // if( n_pulses > 10 )
+  // {
+  //   Serial.println(calcTimCntAVG( pulses, n_pulses ));
+  // }
   Serial.println(DEBUG);
   // Serial.print("RPM: ");
   // Serial.println( calcRPM(n_pulses, 2) );
