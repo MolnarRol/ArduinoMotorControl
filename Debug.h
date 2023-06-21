@@ -1,6 +1,8 @@
 #ifndef _DEBUG_H_
 #define _DEBUG_H_
-#include "Arduino.h"
+
+#include <avr/io.h>
+#include <avr/interrupt.h>
 
 #ifdef __cplusplus
 extern "C" {

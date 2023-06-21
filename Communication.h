@@ -2,9 +2,11 @@
 #ifndef _COMMUNICATION_H_
 #define _COMMUNICATION_H_
 
-#include <stdio.h>
-#include <string.h>
+// #include <avr/io.h>
+// #include <avr/interrupt.h>
 #include "Arduino.h"
+
+#include <string.h>
 #include "Commands.h"
 #include "Debug.h"
 

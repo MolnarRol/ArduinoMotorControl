@@ -36,7 +36,7 @@ void EnablePWM_HiZ();
   Misc functions
 */
 float GetStepPWM( const uint16_t TOP );
-uint8_t readPulseCount();
+uint32_t readPulseCount();
 
 
 #ifdef __cplusplus

@@ -3,21 +3,27 @@
 
 #include "Arduino.h"
 
-// typedef struct param{
-//   float kp;
-//   float ki;
-//   float kd;
-// } paramTypeDef;
+typedef struct param{
+  float kp;
+  float ki;
+  float kd;
+} paramTypeDef;
 
-// typedef struct PID{
-//   paramTypeDef params;
-// } PID_TypeDef;
+typedef struct integrator{
+  float value;
+
+} integratorTypeDef;
+
+typedef struct PID{
+  paramTypeDef params;
+} PID_TypeDef;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-uint16_t calcRPM( const uint8_t tim_cnt, const uint8_t sampling_period_ms );
+float calcRPM( const uint8_t tim_cnt );
+// uint16_t calcRPM( const uint8_t tim_cnt, const uint8_t sampling_period_ms );
 float updatePID( float setPoint, float y );
 
 #ifdef __cplusplus
