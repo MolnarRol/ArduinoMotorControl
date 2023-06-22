@@ -17,7 +17,6 @@
 #include "Communication.h"
 #include "Regulation.h"
 #include "TimerConfig.h"
-#include "Debug.h"
 
 extern uint16_t g_TIM0_ov;
 extern PID_TypeDef PID_controller;
