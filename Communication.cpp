@@ -2,9 +2,9 @@
 
 CommandTypeDef REG_commands[] = 
 {
-  { "rpm", &RPM_Callback, "" },
-  { "on", &REG_on_Callback, "" },
-  { "off", &REG_off_Callback, "" },
+  { "rpm", &RPM_Callback, "Read/Write rpm. rpm <new>" },
+  { "on", &REG_on_Callback, "Regulation off." },
+  { "off", &REG_off_Callback, "Regulation on" },
   { "__End__", NULL }
 };
 
@@ -18,8 +18,8 @@ CommandGroupTypeDef REG =
 CommandTypeDef PWM_commands[] = 
 {
   { "duty", &PWM_duty_Callback, "" },
-  { "on", &PWM_on_Callback, "" },
-  { "off", &PWM_off_Callback, "" },
+  { "on", &PWM_on_Callback, "" }, //Turn on pwm modulation. Usage: on <duty> – if no duty is specified, then the last saved will be used.
+  { "off", &PWM_off_Callback, "Turn off pwm modulation. Sets PWM to 0 duty." },
   { "__End__", NULL }
 };
 
@@ -40,7 +40,7 @@ CommandTypeDef BRAKE_commands[] =
 CommandGroupTypeDef BRAKE = 
 {
   "brake",
-  "brake",
+  "Brake control",
   BRAKE_commands
 };
 
@@ -55,16 +55,16 @@ CommandTypeDef DIR_commands[] =
 CommandGroupTypeDef DIR = 
 {
   "dir",
-  "dir",
+  "Direction control",
   DIR_commands
 };
 
 CommandGroupTypeDef* CommandGroupArr[] = 
 {
-  &PWM,
-  &BRAKE,
-  &DIR,
   &REG,
+  &PWM,
+  &DIR, 
+  &BRAKE,
   NULL
 };
 
@@ -72,8 +72,29 @@ CommandTypeDef MiscCommands[] =
 {
   { "clear", &clearTerminal, "Clear output terminal" },
   { "back", &resetGroup, "" },
+  // { "help", &helper, "" },
   { "__End__", NULL }
 };
+
+// void helper( String msg )
+// {
+//   Serial.println("All possible commands:");
+//   for( uint8_t i = 0; CommandGroupArr[i] != NULL; i++)
+//   {
+//     Serial.println();
+//     Serial.print( CommandGroupArr[i]->descript );
+//     Serial.println(":");
+//     Serial.println("==============================================================================");
+
+//     for( uint8_t j = 0; CommandGroupArr[i]->List[j].cmd != "__End__"; j++ )
+//     {
+//         Serial.print(" \t – ");
+//         Serial.print( CommandGroupArr[i]->List[j].cmd );
+//         Serial.print(" \t ");
+//         Serial.println( CommandGroupArr[i]->List[j].help );
+//     }
+//   }
+// };
 
 uint8_t g_group_idx = 255;  // Sellected group index -> 255 = no sellection
 
@@ -230,22 +251,3 @@ void resetGroup( String msg )
 {
   g_group_idx = 255;
 };
-
-// void helper( String msg )
-// {
-//   Serial.println("All possible commands:");
-//   uint8_t id = 0;  
-
-//   while( CommandList[id].cmd != "__End__"  )
-//   {
-//     Serial.println("\t- " + CommandList[id].cmd + ":\t\t" + CommandList[id].help );
-//     id++;
-//   }  
-// };
-
-// PWM Test
-// String words[MAX_WORDS_IN_PROMPT];
-// const uint8_t n_words = stringToWords( msg, words );
-// float numFromStr = parseFloat(words[0]);
-// if( numFromStr != -1.0f ) SetPwmDuty( numFromStr );
-//PWM_duty_Callback( words[0] );
