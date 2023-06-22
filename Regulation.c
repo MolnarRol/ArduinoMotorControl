@@ -1,27 +1,74 @@
 #include "Regulation.h"
 
-#define ENC_N_PULSES 100
+PID_TypeDef PID_controller = {
+  .params = {
+    .kp = Kp,
+    .ki = Ki,
+    .kd = Kd
+  },
+  .limits = {
+    .out_max = 100.0f,
+    .out_min = 0.0f
+  },
+  .setPoint = SETPOINT_DEFAULT,
+  .T_ms = 2.0f,
+  .integrator = 0.0f,
+  .prevE = 0.0f,
+  .scalingFactor = 60.0f,
+  .enable = 0
+};
 
-
-// typedef struct param {
-//   float kp;
-//   float ki;
-//   float kd;
-// } paramTypeDef;
-
-// typedef struct PID {
-//   struct param 
-// } PID_TypeDef;
-
-// float updatePID( float setPoint, float y )
-// {
-//   const float E = setPoint - y;
-
-
-// };
-
-inline uint16_t calcRPM( const uint8_t tim_cnt, const uint8_t sampling_period_ms )
+/*
+  TODO: ARW
+*/
+float updatePID( PID_TypeDef* handler, float y )
 {
-  const uint8_t samplingRate = 1000 / sampling_period_ms;
-  return ( ENC_N_PULSES * 60 ) / ( tim_cnt * samplingRate);
+  if( !handler->enable ) return 0.0f;
+
+  float U = 0;
+  float P = 0;
+  float I = 0;
+  float D = 0;
+
+  const float T = handler->T_ms / 1000.0f;
+  const float E = ( handler->setPoint - y ) / handler->scalingFactor;
+
+  P = E * handler->params.kp;
+
+  handler->integrator += E;
+  I = handler->params.ki * handler->integrator ;
+
+  D = handler->params.kd * ( ( E - handler->prevE ) ); 
+  handler->prevE = E;
+
+  U =  P + I + D;  
+
+  /*
+    Clamp output to defined interval
+  */
+  if( U > handler->limits.out_max )
+  {
+    U = handler->limits.out_max;
+  }
+  else if( U < handler->limits.out_min ) U = handler->limits.out_min;
+
+  return U;
+};
+
+void changeSetPoint( PID_TypeDef* handler, float newSetPoint )
+{
+  if( newSetPoint >= RPM_MIN && newSetPoint <= RPM_MAX ) handler->setPoint = newSetPoint;
+}
+
+void startRegulation( PID_TypeDef* handler )
+{
+  handler->enable = 1;
+};
+
+void stopRegulation( PID_TypeDef* handler )
+{
+  handler->enable = 0;
+  handler->integrator = 0.0f;
+  handler->prevE = 0.0f;
+  handler->setPoint = SETPOINT_DEFAULT;
 };

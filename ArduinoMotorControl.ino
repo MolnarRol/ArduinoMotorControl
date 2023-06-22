@@ -3,7 +3,7 @@
 
   Timer config:
     - Timer 0 (8-bit): Pulse counter of the roatary encoder - interupt on compare match
-    - Timer 1 (16-BIT): PWM for regulation output
+    - Timer 1 (16-bit): PWM for regulation output
     - Timer 2 (8-bit): ISR for calling regulation function every 2 ms
 
   Input/Output pins:
@@ -17,11 +17,29 @@
 #include "Communication.h"
 #include "Regulation.h"
 #include "TimerConfig.h"
-#include "Debug.h"
+
+extern uint16_t g_TIM0_ov;
+extern PID_TypeDef PID_controller;
+extern pulseBuffersTypeDef PulseBuffers;
+
+float RPM;
 
 ISR( TIMER2_COMPA_vect )
 {
-  // Regulation each 2 ms
+  sei();                                              // Reenable interrupts –> nesting interrupts
+  switchPulseBuff();                                  // Switch pulse buffer
+  RPM =  getRPMfromPulses();
+  SetPwmDuty( updatePID( &PID_controller, RPM ) );
+}
+
+ISR( PCINT2_vect )
+{
+  writePulseBuff ( 2 * readPulseCount() );
+}
+
+ISR( TIMER0_COMPA_vect )
+{
+  g_TIM0_ov++;
 }
 
 void setup() {
@@ -34,10 +52,11 @@ void setup() {
 
   pinMode(2, OUTPUT);         // Debug pin
   pinMode(7, OUTPUT);         // Brake pin
-  pinMode(5, OUTPUT);         // Direction pin[defective]
-
-  SetPwmDuty(0);              // Set speed to 0
+  pinMode(5, OUTPUT);         // Direction pin
+  
   BRAKE_off_Callback("");     // Disengage brake
+  DisablePWM_HiZ();
+  EnablePWM();
 }
 
 void loop() {
@@ -48,5 +67,5 @@ void loop() {
     Serial.println( msg );
     msgToCommand( msg );
   }
-  else Serial.println();
+  else Serial.println(); 
 }

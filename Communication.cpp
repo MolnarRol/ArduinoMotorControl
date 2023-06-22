@@ -1,5 +1,20 @@
 #include "Communication.h"
 
+CommandTypeDef REG_commands[] = 
+{
+  { "rpm", &RPM_Callback, "" },
+  { "on", &REG_on_Callback, "" },
+  { "off", &REG_off_Callback, "" },
+  { "__End__", NULL }
+};
+
+CommandGroupTypeDef REG =
+{
+  "reg",
+  "Commands for regulation",
+  REG_commands
+};
+
 CommandTypeDef PWM_commands[] = 
 {
   { "duty", &PWM_duty_Callback, "" },
@@ -49,6 +64,7 @@ CommandGroupTypeDef* CommandGroupArr[] =
   &PWM,
   &BRAKE,
   &DIR,
+  &REG,
   NULL
 };
 
