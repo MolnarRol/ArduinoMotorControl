@@ -3,15 +3,10 @@
 
 #include <stdint.h>
 #include "Arduino.h"
-
+#include "config.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#define ENC_N_PULSES 100
-#define TIM_STEP_us 0.0625f
-
-#define PULSES_MAX 40
 
 typedef struct pulseStruct {
   uint32_t pulses[PULSES_MAX];

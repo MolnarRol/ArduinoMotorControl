@@ -1,12 +1,33 @@
 #include "Commands.h"
 
 /*
+  Regulation Callback functions
+*/
+void RPM_Callback( String msg )
+{
+  if( msg.length() > 0 ) 
+  {
+    changeSetPoint( &PID_controller, parseFloat( msg ) );
+  }
+};
+
+void REG_on_Callback( String msg )
+{
+  startRegulation( &PID_controller );
+};
+
+void REG_off_Callback( String msg )
+{
+  stopRegulation( &PID_controller );
+};
+
+/*
   PWM Callback functions
 */
 
 void PWM_duty_Callback( String msg )
 {
-  if( msg.length() > 0 ) SetPwmDuty( parseFloat( msg ) );   // Bug: on 0
+  if( msg.length() > 0 ) SetPwmDuty( parseFloat( msg ) ); 
   else
   {
     Serial.print("PWM duty: ");
@@ -36,11 +57,13 @@ void PWM_off_Callback( String msg )
 */
 void BRAKE_on_Callback( String msg )
 {
+  startRegulation( &PID_controller );
   digitalWrite( 7, 0 );
 };
 
 void BRAKE_off_Callback( String msg )
 {
+  stopRegulation( &PID_controller );
   digitalWrite( 7, 1 );
 };
 

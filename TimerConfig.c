@@ -31,7 +31,7 @@ float getRPMfromPulses()
 
   uint32_t cnt_avg = calcTimCntAVG( PulseBuffers.buffer[ buff_i ].pulses, PulseBuffers.buffer[ buff_i ].pulseIdx );
 
-  uint32_t cnt_filtered = filter_1stOrder_r32( cnt_avg, l_val, 2.0f , 10.0f );
+  uint32_t cnt_filtered = filter_1stOrder_r32( cnt_avg, l_val, 2.0f , FIR_TIME );
   l_val = cnt_filtered;
 
   PulseBuffers.buffer[ buff_i ].pulseIdx = 0;

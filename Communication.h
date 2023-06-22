@@ -1,17 +1,11 @@
-
 #ifndef _COMMUNICATION_H_
 #define _COMMUNICATION_H_
 
-// #include <avr/io.h>
-// #include <avr/interrupt.h>
 #include "Arduino.h"
-
 #include <string.h>
 #include "Commands.h"
 #include "Debug.h"
-
-#define COMMAND_MAX_CHAR 16     // Maximum number of characters in a single word
-#define MAX_WORDS_IN_PROMPT 2   // Maximum number of words that can be processed
+#include "config.h"
 
 /*
   String manipulation and function calling

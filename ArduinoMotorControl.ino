@@ -19,24 +19,20 @@
 #include "TimerConfig.h"
 #include "Debug.h"
 
-float Error;
-
 extern uint16_t g_TIM0_ov;
 extern PID_TypeDef PID_controller;
 extern pulseBuffersTypeDef PulseBuffers;
 
-uint32_t DEBUG = 0;
 float RPM;
 
 ISR( TIMER2_COMPA_vect )
 {
-  sei();   // Reenable interrupts
-  switchPulseBuff();
-  RPM = getRPMfromPulses();
-  SetPwmDuty( updatePID( &PID_controller, (RPM / 60.0f) ) );
+  sei();                                              // Reenable interrupts –> nesting interrupts
+  switchPulseBuff();                                  // Switch pulse buffer
+  RPM =  getRPMfromPulses();
+  SetPwmDuty( updatePID( &PID_controller, RPM ) );
 }
 
-uint8_t test = 0;
 ISR( PCINT2_vect )
 {
   writePulseBuff ( 2 * readPulseCount() );
@@ -59,31 +55,19 @@ void setup() {
   pinMode(7, OUTPUT);         // Brake pin
   pinMode(5, OUTPUT);         // Direction pin
 
-  // SetPwmDuty(0);              // Set speed to 0
-  // BRAKE_off_Callback("");     // Disengage brake
-
-  // DEBUG
-  // SetPwmDuty(5.0f);
   BRAKE_off_Callback("");     // Disengage brake
   DisablePWM_HiZ();
   EnablePWM();
 }
 
 void loop() {
-  // printHeader();
-  // String msg = getStringUART();
-  // if( msg.length() > 0 )
-  // {
-  //   Serial.println( msg );
-  //   msgToCommand( msg );
-  // }
-  // else Serial.println();
-
-  Serial.print(0);
-  Serial.print(" ");
-  Serial.print( 10.0f * GetPwmDuty() );
-  Serial.print(" ");
-  Serial.println(RPM);
-  
+  printHeader();
+  String msg = getStringUART();
+  if( msg.length() > 0 )
+  {
+    Serial.println( msg );
+    msgToCommand( msg );
+  }
+  else Serial.println();  
 }
 

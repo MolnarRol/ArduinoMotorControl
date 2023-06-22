@@ -2,11 +2,15 @@
 #ifndef _COMMANDS_H_
 #define _COMMANDS_H_
 
-// #include <avr/io.h>
-// #include <avr/interrupt.h>
 #include "Arduino.h"
 #include "Communication.h"
 #include "TimerConfig.h"
+#include "Regulation.h"
+
+extern PID_TypeDef PID_controller;
+void RPM_Callback( String msg );
+void REG_on_Callback( String msg );
+void REG_off_Callback( String msg );
 
 /*
   Direction Callback functions
