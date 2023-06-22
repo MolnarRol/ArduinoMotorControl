@@ -53,7 +53,7 @@ void setup() {
   pinMode(2, OUTPUT);         // Debug pin
   pinMode(7, OUTPUT);         // Brake pin
   pinMode(5, OUTPUT);         // Direction pin
-
+  
   BRAKE_off_Callback("");     // Disengage brake
   DisablePWM_HiZ();
   EnablePWM();
@@ -67,6 +67,5 @@ void loop() {
     Serial.println( msg );
     msgToCommand( msg );
   }
-  else Serial.println();  
+  else Serial.println(); 
 }
-
