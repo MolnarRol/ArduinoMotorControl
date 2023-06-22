@@ -9,22 +9,31 @@ typedef struct param{
   float kd;
 } paramTypeDef;
 
-typedef struct integrator{
-  float value;
-
-} integratorTypeDef;
+typedef struct limits{
+  float out_max;
+  float out_min;
+} limitsTypeDef;
 
 typedef struct PID{
   paramTypeDef params;
+  limitsTypeDef limits;
+  
+  float setPoint;
+  float T_ms;
+  float integrator;
+  float prevE;  
+  
 } PID_TypeDef;
+
+
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-float calcRPM( const uint8_t tim_cnt );
+float updatePID( PID_TypeDef* handler, float y );
 // uint16_t calcRPM( const uint8_t tim_cnt, const uint8_t sampling_period_ms );
-float updatePID( float setPoint, float y );
+
 
 #ifdef __cplusplus
 }

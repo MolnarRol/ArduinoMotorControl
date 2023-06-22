@@ -19,40 +19,27 @@
 #include "TimerConfig.h"
 #include "Debug.h"
 
+float Error;
+
 extern uint16_t g_TIM0_ov;
+extern PID_TypeDef PID_controller;
+extern pulseBuffersTypeDef PulseBuffers;
 
-uint8_t pulses[40];
-uint8_t n_pulses = 0; // DEBUG variable
 uint32_t DEBUG = 0;
-uint8_t pulseReadBlock = 0;
-
-uint8_t calcTimCntAVG( uint8_t* values, uint8_t len );
+float RPM;
 
 ISR( TIMER2_COMPA_vect )
 {
   sei();   // Reenable interrupts
-  // pulseReadBlock = 1;
-  // uint8_t avg = calcTimCntAVG(pulses, n_pulses);
-  // n_pulses = 0;
-  // pulseReadBlock = 0;
-  // uint16_t rpm = calcRPM(avg); //calcRPM(
-
-  // n_pulses = 0;
-  // Serial.print("AVG: ");
-  //Serial.println(rpm);
+  switchPulseBuff();
+  RPM = getRPMfromPulses();
+  SetPwmDuty( updatePID( &PID_controller, (RPM / 60.0f) ) );
 }
 
-boolean test = 0;
-
+uint8_t test = 0;
 ISR( PCINT2_vect )
 {
-  // if( !pulseReadBlock )
-  // {
-  //   if( ( PORTD & ~(1 << PORTD4) ) > 0 ) {
-      // pulses[n_pulses++] = readPulseCount();
-      DEBUG = 2 * readPulseCount();
-  //   }
-  // }  
+  writePulseBuff ( 2 * readPulseCount() );
 }
 
 ISR( TIMER0_COMPA_vect )
@@ -76,7 +63,7 @@ void setup() {
   // BRAKE_off_Callback("");     // Disengage brake
 
   // DEBUG
-  SetPwmDuty(15.0f);
+  // SetPwmDuty(5.0f);
   BRAKE_off_Callback("");     // Disengage brake
   DisablePWM_HiZ();
   EnablePWM();
@@ -92,25 +79,11 @@ void loop() {
   // }
   // else Serial.println();
 
-
-
-  // Serial.print("Pulse count: ");
-  // if( n_pulses > 10 )
-  // {
-  //   Serial.println(calcTimCntAVG( pulses, n_pulses ));
-  // }
-  Serial.println(DEBUG);
-  // Serial.print("RPM: ");
-  // Serial.println( calcRPM(n_pulses, 2) );
+  Serial.print(0);
+  Serial.print(" ");
+  Serial.print( 10.0f * GetPwmDuty() );
+  Serial.print(" ");
+  Serial.println(RPM);
+  
 }
 
-uint8_t calcTimCntAVG( uint8_t* values, uint8_t len )
-{
-  if( len == 0 ) return 0;
-  uint16_t sum = 0;
-  for( uint8_t i = 0; i < len; i++ )
-  {
-    sum += values[i];
-  }
-  return sum / len;
-};
