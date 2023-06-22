@@ -21,6 +21,7 @@
 extern uint16_t g_TIM0_ov;
 extern PID_TypeDef PID_controller;
 extern pulseBuffersTypeDef PulseBuffers;
+float testInitVal = 25.0f;
 
 float RPM;
 
