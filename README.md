@@ -1,3 +1,7 @@
+# Configuration and manual
+  Configuration is done by modifying the config.h file.
+  For commands information read the software manual.
+
 # Adding custom function group
 
 1.) Define new command group (Commands.cpp):
