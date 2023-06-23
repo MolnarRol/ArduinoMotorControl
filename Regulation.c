@@ -65,9 +65,24 @@ float updatePID( PID_TypeDef* handler, float y )
   if( U > handler->limits.out_max )
   {
     U = handler->limits.out_max;
-    handler->integrator -= E;         // Anti reset windup
   }
-  else if( U < handler->limits.out_min ) U = handler->limits.out_min;
+  else if( U < handler->limits.out_min ) 
+  {
+    U = handler->limits.out_min;
+  };
+
+    /*
+    Anti reset windup – issue
+  */
+
+  // if( handler->integrator > handler->limits.out_max ) 
+  // {
+  //   handler->integrator = handler->limits.out_max;
+  // } 
+  // else if( handler->integrator >  handler->limits.out_min ) 
+  // {
+  //   handler->integrator = handler->limits.out_min;
+  // }
 
   return U;
 };
@@ -79,13 +94,11 @@ void changeSetPoint( PID_TypeDef* handler, float newSetPoint )
 
 void startRegulation( PID_TypeDef* handler )
 {
+  handler->integrator = GetPwmDuty() / handler->params.ki;    // integrator preload
   handler->enable = 1;
 };
 
 void stopRegulation( PID_TypeDef* handler )
 {
   handler->enable = 0;
-  handler->integrator = 0.0f;
-  handler->prevE = 0.0f;
-  handler->setPoint = SETPOINT_DEFAULT;
 };

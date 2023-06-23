@@ -66,9 +66,15 @@ void setup() {
   pinMode(7, OUTPUT);         // Brake pin
   pinMode(5, OUTPUT);         // Direction pin
   
-  BRAKE_off_Callback("");     // Disengage brake
-  DisablePWM_HiZ();           // Disable high impedance state of PWM output pin
-  EnablePWM();                // Enabling PWM
+  #if PWM_ENABLED_ON_START == 1
+    BRAKE_off_Callback("");     // Disengage brake
+    DisablePWM_HiZ();           // Disable high impedance state of PWM output pin
+    EnablePWM();                // Enabling PWM
+  #endif
+
+  #if REGULATION_ENABLED_ON_START == 1
+    startRegulation( &PID_controller );
+  #endif
 }
 
 void loop() {                     // Handling serial communication

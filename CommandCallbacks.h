@@ -6,10 +6,10 @@
 #include "TimerConfig.h"
 #include "Regulation.h"
 
+extern PID_TypeDef PID_controller;
 /*
   PID controller Callback functions
 */
-extern PID_TypeDef PID_controller;
 void RPM_Callback( String msg );
 void REG_on_Callback( String msg );
 void REG_off_Callback( String msg );
