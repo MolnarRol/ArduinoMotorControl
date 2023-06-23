@@ -14,6 +14,8 @@ void printHeader();
 void msgToCommand( String msg );
 uint8_t stringToWords( String msg, String words[6] );
 float parseFloat( String strNum );
+uint8_t charToDec( char ch ); 
+uint32_t charStrToDec( char* numStr );
 
 /*
   Misc functions
@@ -21,8 +23,5 @@ float parseFloat( String strNum );
 void clearTerminal( String msg );
 void resetGroup( String msg );
 void helper( String msg );
-
-uint8_t charToDec( char ch ); 
-uint32_t charStrToDec( char* numStr );
 uint32_t powerOf10( uint8_t n );
 #endif

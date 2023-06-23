@@ -46,6 +46,9 @@ void EnablePWM();
 void setPinHighPWM();
 void setPinLowPWM();
 
+/*
+  High impedance on/off
+*/
 void DisablePWM_HiZ();
 void EnablePWM_HiZ();
 

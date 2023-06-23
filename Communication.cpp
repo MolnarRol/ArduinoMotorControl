@@ -1,80 +1,11 @@
 #include "Communication.h"
 
-CommandTypeDef REG_commands[] = 
-{
-  { "rpm", &RPM_Callback, "Read/Write rpm. rpm <new>" },
-  { "on", &REG_on_Callback, "Regulation off." },
-  { "off", &REG_off_Callback, "Regulation on" },
-  { "__End__", NULL }
-};
+extern CommandGroupTypeDef* CommandGroupArr[];
+extern CommandTypeDef MiscCommands[];
 
-CommandGroupTypeDef REG =
-{
-  "reg",
-  "Commands for regulation",
-  REG_commands
-};
-
-CommandTypeDef PWM_commands[] = 
-{
-  { "duty", &PWM_duty_Callback, "" },
-  { "on", &PWM_on_Callback, "" }, //Turn on pwm modulation. Usage: on <duty> – if no duty is specified, then the last saved will be used.
-  { "off", &PWM_off_Callback, "Turn off pwm modulation. Sets PWM to 0 duty." },
-  { "__End__", NULL }
-};
-
-CommandGroupTypeDef PWM = 
-{
-  "pwm",
-  "Commands used for PWM manipulation",
-  PWM_commands
-};
-
-CommandTypeDef BRAKE_commands[] = 
-{
-  { "on", &BRAKE_on_Callback, "" },
-  { "off", &BRAKE_off_Callback, "" },
-  { "__End__", NULL }
-};
-
-CommandGroupTypeDef BRAKE = 
-{
-  "brake",
-  "Brake control",
-  BRAKE_commands
-};
-
-CommandTypeDef DIR_commands[] = 
-{
-  { "cw", &DIR_1_Callback, "" },
-  { "ccw", &DIR_2_Callback, "" },
-  { "chDir", &DIR_change_Callback, "" },
-  { "__End__", NULL }
-};
-
-CommandGroupTypeDef DIR = 
-{
-  "dir",
-  "Direction control",
-  DIR_commands
-};
-
-CommandGroupTypeDef* CommandGroupArr[] = 
-{
-  &REG,
-  &PWM,
-  &DIR, 
-  &BRAKE,
-  NULL
-};
-
-CommandTypeDef MiscCommands[] =
-{
-  { "clear", &clearTerminal, "Clear output terminal" },
-  { "back", &resetGroup, "" },
-  // { "help", &helper, "" },
-  { "__End__", NULL }
-};
+/*
+  Help command -> Not working yet
+*/
 
 // void helper( String msg )
 // {
@@ -162,11 +93,11 @@ uint8_t stringToWords( String msg, String words[MAX_WORDS_IN_PROMPT] )
 
   const char delimiter = ' ';
 
-  for( idx; idx < msg.length(); idx++ )
+  for( idx; idx < msg.length(); idx++ )                     // Looping each character in msg string
   {
     if( msg[idx] != delimiter ) 
     {
-      if( (idx_word + 1) == COMMAND_MAX_CHAR ) break;
+      if( (idx_word + 1) == COMMAND_MAX_CHAR ) break;       // If we exceed the maximum command length ( in number of chars ) then we break tke loop
       tmp_word[idx_word++] = msg[idx];
     }
     else
@@ -182,6 +113,9 @@ uint8_t stringToWords( String msg, String words[MAX_WORDS_IN_PROMPT] )
   return ( wordCount );
 };
 
+/*
+  Function for parsing floating point or decimal numbers from the input string
+*/
 float parseFloat( String strNum )
 {
   uint8_t num_idx = 0;  // variable for indexing char in char string
@@ -193,7 +127,7 @@ float parseFloat( String strNum )
   uint8_t idx;
   for( idx = 0; idx < strNum.length(); idx++ )
   {
-    if( ( strNum[idx] < '0' || strNum[idx] > '9') &&  strNum[idx] != '.' ) return -1.0f;    // Return -1.0f if the string contains non number character withou
+    if( ( strNum[idx] < '0' || strNum[idx] > '9') &&  strNum[idx] != '.' ) return -1.0f;
     if( strNum[idx] == decimalPoint )
     {
       foundDecimalPoint = 1;
@@ -212,10 +146,13 @@ float parseFloat( String strNum )
   return parsedFloat;
 };
 
+/*
+  Blocking UART string read with newline character as the string end
+*/
 String getStringUART()
 {
   while( Serial.available() == 0 ){};                     // Wait for input
-  return Serial.readStringUntil( '\n' );
+  return Serial.readStringUntil( UART_TERMINATOR_CHAR );
 };
 
 uint32_t charStrToDec( char* numStr)

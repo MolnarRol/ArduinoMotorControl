@@ -1,88 +1,96 @@
 #include "Commands.h"
 
 /*
-  Regulation Callback functions
+  Commands for regulation
 */
-void RPM_Callback( String msg )
+
+CommandTypeDef REG_commands[] = 
 {
-  if( msg.length() > 0 ) 
-  {
-    changeSetPoint( &PID_controller, parseFloat( msg ) );
-  }
+  { "rpm", &RPM_Callback, "Read/Write rpm. rpm <new>" },
+  { "on", &REG_on_Callback, "Regulation off." },
+  { "off", &REG_off_Callback, "Regulation on" },
+  { "__End__", NULL }
 };
 
-void REG_on_Callback( String msg )
+CommandGroupTypeDef REG =
 {
-  startRegulation( &PID_controller );
-};
-
-void REG_off_Callback( String msg )
-{
-  stopRegulation( &PID_controller );
+  "reg",
+  "Commands for regulation",
+  REG_commands
 };
 
 /*
-  PWM Callback functions
+  Commands for PWM settings
 */
-
-void PWM_duty_Callback( String msg )
+CommandTypeDef PWM_commands[] = 
 {
-  if( msg.length() > 0 ) SetPwmDuty( parseFloat( msg ) ); 
-  else
-  {
-    Serial.print("PWM duty: ");
-    Serial.print( GetPwmDuty() );
-    Serial.println("%");
-  } 
+  { "duty", &PWM_duty_Callback, "" },
+  { "on", &PWM_on_Callback, "" }, //Turn on pwm modulation. Usage: on <duty> – if no duty is specified, then the last saved will be used.
+  { "off", &PWM_off_Callback, "Turn off pwm modulation. Sets PWM to 0 duty." },
+  { "__End__", NULL }
 };
 
-void PWM_on_Callback( String msg )
+CommandGroupTypeDef PWM = 
 {
-  if( msg.length() > 0 )
-  {
-    SetPwmDuty( parseFloat(msg) );
-  }
-  if( GetPwmDuty() != 0.0f ) EnablePWM();
-  DisablePWM_HiZ();
-};
-
-void PWM_off_Callback( String msg )
-{
-  EnablePWM_HiZ();
-  DisablePWM();  
+  "pwm",
+  "Commands used for PWM manipulation",
+  PWM_commands
 };
 
 /*
-  Brake Callback functions
+  Commands for brake on/off
 */
-void BRAKE_on_Callback( String msg )
+CommandTypeDef BRAKE_commands[] = 
 {
-  startRegulation( &PID_controller );
-  digitalWrite( 7, 0 );
+  { "on", &BRAKE_on_Callback, "" },
+  { "off", &BRAKE_off_Callback, "" },
+  { "__End__", NULL }
 };
 
-void BRAKE_off_Callback( String msg )
+CommandGroupTypeDef BRAKE = 
 {
-  stopRegulation( &PID_controller );
-  digitalWrite( 7, 1 );
+  "brake",
+  "Brake control",
+  BRAKE_commands
 };
 
 /*
-  Direction Callback functions
+  Commands for changing direction
 */
-void DIR_1_Callback( String msg )
+CommandTypeDef DIR_commands[] = 
 {
-  digitalWrite( 5, 1);
+  { "cw", &DIR_1_Callback, "" },
+  { "ccw", &DIR_2_Callback, "" },
+  { "chDir", &DIR_change_Callback, "" },
+  { "__End__", NULL }
 };
 
-void DIR_2_Callback( String msg )
+CommandGroupTypeDef DIR = 
 {
-  digitalWrite( 5, 0);
+  "dir",
+  "Direction control",
+  DIR_commands
 };
 
-void DIR_change_Callback( String msg )
+/*
+  Main array of command groups
+*/
+CommandGroupTypeDef* CommandGroupArr[] = 
 {
-  static uint8_t state = ( PORTD & ~(1 << 5) ) >> 5;    // P5
-  state = !state;
-  digitalWrite( 5, state );
+  &REG,
+  &PWM,
+  &DIR, 
+  &BRAKE,
+  NULL
+};
+
+/*
+  Misc commands
+*/
+CommandTypeDef MiscCommands[] =
+{
+  { "clear", &clearTerminal, "Clear output terminal" },
+  { "back", &resetGroup, "" },
+  // { "help", &helper, "" },
+  { "__End__", NULL }
 };
