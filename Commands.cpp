@@ -1,9 +1,10 @@
 #include "Commands.h"
 
+
+
 /*
   Commands for regulation
 */
-
 CommandTypeDef REG_commands[] = 
 {
   { "rpm", &RPM_Callback, "Read/Write rpm. rpm <new>" },

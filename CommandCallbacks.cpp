@@ -9,10 +9,18 @@ void RPM_Callback( String msg )
   {
     changeSetPoint( &PID_controller, parseFloat( msg ) );
   }
+  else
+  {
+    Serial.println( PID_controller.setPoint );
+  }
 };
 
 void REG_on_Callback( String msg )
 {
+  if( msg.length() > 0 )
+  {
+    PID_controller.setPoint = parseFloat( msg );
+  };
   startRegulation( &PID_controller );
 };
 
@@ -44,10 +52,14 @@ void PWM_on_Callback( String msg )
   }
   if( GetPwmDuty() != 0.0f ) EnablePWM();
   DisablePWM_HiZ();
+  startRegulation( &PID_controller );
 };
 
 void PWM_off_Callback( String msg )
 {
+  stopRegulation( &PID_controller );
+  PID_controller.integrator = 0.0f;
+  PID_controller.prevE = 0.0f;
   EnablePWM_HiZ();
   DisablePWM();  
 };
