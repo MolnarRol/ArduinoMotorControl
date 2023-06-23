@@ -8,38 +8,50 @@
 
   Input/Output pins:
     - D4: Rotary encoder input
+    - D5: Direction pin
+    - D7: Brake pin
     - D9: PWM output
 
   Additional info:  
     Documentation: https://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-7810-Automotive-Microcontrollers-ATmega328P_Datasheet.pdf
+
+  Serial communication:
+    - Set baud rate to 115200 baud
+    - Carriage return
+  
+  For adding custom functions read README.md.
+  Configuration file: config.h
 */
 
 #include "Communication.h"
+#include "CommandCallbacks.h"
 #include "Regulation.h"
 #include "TimerConfig.h"
+#include "config.h"
 
 extern uint16_t g_TIM0_ov;
 extern PID_TypeDef PID_controller;
 extern pulseBuffersTypeDef PulseBuffers;
 
-float RPM;
-
 ISR( TIMER2_COMPA_vect )
 {
   sei();                                              // Reenable interrupts –> nesting interrupts
   switchPulseBuff();                                  // Switch pulse buffer
-  RPM =  getRPMfromPulses();
-  SetPwmDuty( updatePID( &PID_controller, RPM ) );
+  if( PID_controller.enable ) 
+  {
+    SetPwmDuty( updatePID( &PID_controller, getRPMfromPulses() ) ); // PID speed regulation
+  }
 }
 
 ISR( PCINT2_vect )
 {
-  writePulseBuff ( 2 * readPulseCount() );
+  // Reading delta time between pin state change – times 2 for reading 1 period (ISR is called both on falling and rising edge)
+  writePulseBuff ( 2 * readPulseCount() );            
 }
 
 ISR( TIMER0_COMPA_vect )
 {
-  g_TIM0_ov++;
+  g_TIM0_ov++;  // On overflow the variable is incremented -> getting more resolution out of timer ( 8 + 16 bits )
 }
 
 void setup() {
@@ -47,7 +59,7 @@ void setup() {
   PwmConfig();                // Output PWM signal
   PeriodicInterruptConfig();  // Generation periodic interrupt each 2 ms
 
-  Serial.begin(115200);
+  Serial.begin( UART_BAUD );
   clearTerminal( "" );
 
   pinMode(2, OUTPUT);         // Debug pin
@@ -55,12 +67,12 @@ void setup() {
   pinMode(5, OUTPUT);         // Direction pin
   
   BRAKE_off_Callback("");     // Disengage brake
-  DisablePWM_HiZ();
-  EnablePWM();
+  DisablePWM_HiZ();           // Disable high impedance state of PWM output pin
+  EnablePWM();                // Enabling PWM
 }
 
-void loop() {
-  printHeader();
+void loop() {                     // Handling serial communication
+  printHeader();            
   String msg = getStringUART();
   if( msg.length() > 0 )
   {

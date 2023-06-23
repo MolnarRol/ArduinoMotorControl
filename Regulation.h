@@ -1,7 +1,7 @@
 #ifndef _REGULATION_H_
 #define _REGULATION_H_
 
-#include "Arduino.h"
+#include "TimerConfig.h"
 #include "config.h"
 
 typedef struct param {

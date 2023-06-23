@@ -1,6 +1,6 @@
 # Adding custom function group
 
-1.) Define new command group (communication.cpp):
+1.) Define new command group (Commands.cpp):
 
       CommandGroupTypeDef <name> = 
       {
@@ -8,14 +8,14 @@
         <descriptor>,       // brief description of command group (help command) [in progress]
         <array>             // pointer to array creted in 2.)
       }      
-2.) Define command array (communication.cpp):
+2.) Define command array (Commands.cpp):
       
       CommandTypeDef array[] =
       {
         { <command>, &functionCallbackPointer, <descriptor> },  // Command creation
         { "__End__", NULL }                                     // This array must end with this line
       }      
-3.) Write new pointer of 1.) to CommandGroupTypeDef* CommandGroupArr[] (communication.cpp)
+3.) Write new pointer of 1.) to CommandGroupTypeDef* CommandGroupArr[] (Commands.cpp)
 
       CommandGroupTypeDef* CommandGroupArr[] = 
       {
@@ -28,7 +28,7 @@
 4.) Declare function callbacks of commands [ 2.) functionCallbackPointer ] in Commands.h:
 
       void yourFunction( String someString ); // Function needs to follow exact declaration
-5.) Implement yourFunction() in Commands.cpp
+5.) Implement yourFunction() in CommandCallbacks.cpp
 
 # Useful commands
       - clear –> clears output terminal

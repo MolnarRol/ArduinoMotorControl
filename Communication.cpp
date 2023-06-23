@@ -1,79 +1,31 @@
 #include "Communication.h"
 
-CommandTypeDef REG_commands[] = 
-{
-  { "rpm", &RPM_Callback, "" },
-  { "on", &REG_on_Callback, "" },
-  { "off", &REG_off_Callback, "" },
-  { "__End__", NULL }
-};
+extern CommandGroupTypeDef* CommandGroupArr[];
+extern CommandTypeDef MiscCommands[];
 
-CommandGroupTypeDef REG =
-{
-  "reg",
-  "Commands for regulation",
-  REG_commands
-};
+/*
+  Help command -> Not working yet
+*/
 
-CommandTypeDef PWM_commands[] = 
-{
-  { "duty", &PWM_duty_Callback, "" },
-  { "on", &PWM_on_Callback, "" },
-  { "off", &PWM_off_Callback, "" },
-  { "__End__", NULL }
-};
+// void helper( String msg )
+// {
+//   Serial.println("All possible commands:");
+//   for( uint8_t i = 0; CommandGroupArr[i] != NULL; i++)
+//   {
+//     Serial.println();
+//     Serial.print( CommandGroupArr[i]->descript );
+//     Serial.println(":");
+//     Serial.println("==============================================================================");
 
-CommandGroupTypeDef PWM = 
-{
-  "pwm",
-  "Commands used for PWM manipulation",
-  PWM_commands
-};
-
-CommandTypeDef BRAKE_commands[] = 
-{
-  { "on", &BRAKE_on_Callback, "" },
-  { "off", &BRAKE_off_Callback, "" },
-  { "__End__", NULL }
-};
-
-CommandGroupTypeDef BRAKE = 
-{
-  "brake",
-  "brake",
-  BRAKE_commands
-};
-
-CommandTypeDef DIR_commands[] = 
-{
-  { "cw", &DIR_1_Callback, "" },
-  { "ccw", &DIR_2_Callback, "" },
-  { "chDir", &DIR_change_Callback, "" },
-  { "__End__", NULL }
-};
-
-CommandGroupTypeDef DIR = 
-{
-  "dir",
-  "dir",
-  DIR_commands
-};
-
-CommandGroupTypeDef* CommandGroupArr[] = 
-{
-  &PWM,
-  &BRAKE,
-  &DIR,
-  &REG,
-  NULL
-};
-
-CommandTypeDef MiscCommands[] =
-{
-  { "clear", &clearTerminal, "Clear output terminal" },
-  { "back", &resetGroup, "" },
-  { "__End__", NULL }
-};
+//     for( uint8_t j = 0; CommandGroupArr[i]->List[j].cmd != "__End__"; j++ )
+//     {
+//         Serial.print(" \t – ");
+//         Serial.print( CommandGroupArr[i]->List[j].cmd );
+//         Serial.print(" \t ");
+//         Serial.println( CommandGroupArr[i]->List[j].help );
+//     }
+//   }
+// };
 
 uint8_t g_group_idx = 255;  // Sellected group index -> 255 = no sellection
 
@@ -141,11 +93,11 @@ uint8_t stringToWords( String msg, String words[MAX_WORDS_IN_PROMPT] )
 
   const char delimiter = ' ';
 
-  for( idx; idx < msg.length(); idx++ )
+  for( idx; idx < msg.length(); idx++ )                     // Looping each character in msg string
   {
     if( msg[idx] != delimiter ) 
     {
-      if( (idx_word + 1) == COMMAND_MAX_CHAR ) break;
+      if( (idx_word + 1) == COMMAND_MAX_CHAR ) break;       // If we exceed the maximum command length ( in number of chars ) then we break tke loop
       tmp_word[idx_word++] = msg[idx];
     }
     else
@@ -161,6 +113,9 @@ uint8_t stringToWords( String msg, String words[MAX_WORDS_IN_PROMPT] )
   return ( wordCount );
 };
 
+/*
+  Function for parsing floating point or decimal numbers from the input string
+*/
 float parseFloat( String strNum )
 {
   uint8_t num_idx = 0;  // variable for indexing char in char string
@@ -172,7 +127,7 @@ float parseFloat( String strNum )
   uint8_t idx;
   for( idx = 0; idx < strNum.length(); idx++ )
   {
-    if( ( strNum[idx] < '0' || strNum[idx] > '9') &&  strNum[idx] != '.' ) return -1.0f;    // Return -1.0f if the string contains non number character withou
+    if( ( strNum[idx] < '0' || strNum[idx] > '9') &&  strNum[idx] != '.' ) return -1.0f;
     if( strNum[idx] == decimalPoint )
     {
       foundDecimalPoint = 1;
@@ -191,10 +146,13 @@ float parseFloat( String strNum )
   return parsedFloat;
 };
 
+/*
+  Blocking UART string read with newline character as the string end
+*/
 String getStringUART()
 {
   while( Serial.available() == 0 ){};                     // Wait for input
-  return Serial.readStringUntil( '\n' );
+  return Serial.readStringUntil( UART_TERMINATOR_CHAR );
 };
 
 uint32_t charStrToDec( char* numStr)
@@ -230,22 +188,3 @@ void resetGroup( String msg )
 {
   g_group_idx = 255;
 };
-
-// void helper( String msg )
-// {
-//   Serial.println("All possible commands:");
-//   uint8_t id = 0;  
-
-//   while( CommandList[id].cmd != "__End__"  )
-//   {
-//     Serial.println("\t- " + CommandList[id].cmd + ":\t\t" + CommandList[id].help );
-//     id++;
-//   }  
-// };
-
-// PWM Test
-// String words[MAX_WORDS_IN_PROMPT];
-// const uint8_t n_words = stringToWords( msg, words );
-// float numFromStr = parseFloat(words[0]);
-// if( numFromStr != -1.0f ) SetPwmDuty( numFromStr );
-//PWM_duty_Callback( words[0] );

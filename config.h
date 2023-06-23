@@ -25,3 +25,15 @@
 */
 #define COMMAND_MAX_CHAR 16     // Maximum number of characters in a single word
 #define MAX_WORDS_IN_PROMPT 2   // Maximum number of words that can be processed
+
+/*
+  UART settings
+*/
+
+#define UART_BAUD 115200             // UART baud rate
+#define UART_TERMINATOR_CHAR '\r'    // Carriage return. For new line - '\n'
+
+
+
+
+
