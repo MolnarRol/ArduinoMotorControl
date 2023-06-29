@@ -14,7 +14,7 @@
 /*
   Setpoint interval and default value
 */
-#define SETPOINT_DEFAULT 1440.0f      // Default regulation setpoint [RPM]
+#define SETPOINT_DEFAULT 2800.0f      // Default regulation setpoint [RPM]
 #define RPM_MIN 300.0f                // changeSetPoint() –> min and max values [rpm]           
 #define RPM_MAX 5500.0f
 
