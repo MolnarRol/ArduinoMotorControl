@@ -3,16 +3,20 @@
 
 #include <string.h>
 #include "Communication.h"
+#include "Commands.h"
 #include "TimerConfig.h"
 #include "Regulation.h"
 
 extern PID_TypeDef PID_controller;
-/*
-  PID controller Callback functions
-*/
+
+void MODE_Callback( String msg );
+void MOTOR_off_Callback( String msg );
+void MOTOR_on_Callback( String msg );
+void PWM_duty_Callback( String msg );
 void RPM_Callback( String msg );
-void REG_on_Callback( String msg );
-void REG_off_Callback( String msg );
+void SPEED_Callback( String msg );
+void SPEED_inc_Callback( String msg );
+void SPEED_dec_Callback( String msg );
 
 /*
   Direction Callback functions
@@ -26,12 +30,4 @@ void DIR_change_Callback( String msg );
 */
 void BRAKE_on_Callback( String msg );
 void BRAKE_off_Callback( String msg );
-
-/*
-  PWM Callback functions
-*/
-void PWM_duty_Callback( String msg );
-void PWM_on_Callback( String msg );
-void PWM_off_Callback( String msg );
-
 #endif

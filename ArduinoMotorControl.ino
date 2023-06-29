@@ -32,17 +32,13 @@ extern uint16_t g_TIM0_ov;
 extern PID_TypeDef PID_controller;
 extern pulseBuffersTypeDef PulseBuffers;
 
-
-float RPM = 0.0f;
-
 ISR( TIMER2_COMPA_vect )
 {
-  sei();                                              // Reenable interrupts –> nesting interrupts
-  switchPulseBuff();                                  // Switch pulse buffer
+  sei();                        // Reenable interrupts –> nesting interrupts                                                  
+  switchPulseBuff();            // Switch pulse buffer
   if( PID_controller.enable ) 
   {
-    RPM = getRPMfromPulses();
-    SetPwmDuty( updatePID( &PID_controller,  RPM) ); // PID speed regulation
+    SetPwmDuty( updatePID( &PID_controller,  getRPMfromPulses()) ); // PID speed regulation
   }
 }
 
@@ -69,8 +65,9 @@ void setup() {
   pinMode(7, OUTPUT);         // Brake pin
   pinMode(5, OUTPUT);         // Direction pin
   
+  digitalWrite( 7, 1 );       // Disengage brake
+  
   #if PWM_ENABLED_ON_START == 1
-    BRAKE_off_Callback("");     // Disengage brake
     DisablePWM_HiZ();           // Disable high impedance state of PWM output pin
     EnablePWM();                // Enabling PWM
   #endif
@@ -79,10 +76,6 @@ void setup() {
     PID_controller.motor_start = 1;
     startRegulation( &PID_controller );
   #endif
-  
-  // #if REGULATION_ENABLED_ON_START == 1
-  //   startRegulation( &PID_controller );
-  // #endif
 }
 
 void loop() {                     // Handling serial communication

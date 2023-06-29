@@ -1,10 +1,9 @@
 /*
   Software setup
 */
-#define VERSION 1                     // Software version
-#define PWM_ENABLED_ON_START 1        // Enable PWN at MCU startup
-#define REGULATION_ENABLED_ON_START 0 // Enable regulation at MCU startup with RPM = SETPOINT_DEFAULT (macro)
-#define REG_MOTOR_AUTOSTART 1
+#define VERSION 1.1                   // Software version
+#define PWM_ENABLED_ON_START 0        // Enable PWN at MCU startup
+#define REG_MOTOR_AUTOSTART 0
 /*
   PID parameters
 */
@@ -18,6 +17,11 @@
 #define SETPOINT_DEFAULT 1440.0f      // Default regulation setpoint [RPM]
 #define RPM_MIN 300.0f                // changeSetPoint() –> min and max values [rpm]           
 #define RPM_MAX 5500.0f
+
+/*
+  Speeds definitions
+*/
+#define SPEEDS { 1440, 1596, 2100, 2800 }   // Speeds can be called by "s [index+1]"" => for 1440: s 1
 
 /*
   TimerConfig.h Timing config veriables

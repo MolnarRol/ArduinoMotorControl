@@ -1,39 +1,26 @@
 #include "Commands.h"
 
 /*
-  Commands for regulation
+  Commands for motor controll
 */
-CommandTypeDef REG_commands[] = 
-{
-  { "rpm", &RPM_Callback, "Read/Write rpm. rpm <new>" },
-  { "on", &REG_on_Callback, "Regulation off." },
-  { "off", &REG_off_Callback, "Regulation on" },
-  { "__End__", NULL }
-};
-
-CommandGroupTypeDef REG =
-{
-  "reg",
-  "Commands for regulation",
-  REG_commands
-};
-
-/*
-  Commands for PWM settings
-*/
-CommandTypeDef PWM_commands[] = 
+CommandTypeDef CONTROL_commands[] = 
 {
   { "duty", &PWM_duty_Callback, "" },
-  { "on", &PWM_on_Callback, "" }, //Turn on pwm modulation. Usage: on <duty> – if no duty is specified, then the last saved will be used.
-  { "off", &PWM_off_Callback, "Turn off pwm modulation. Sets PWM to 0 duty." },
+  { "rpm", &RPM_Callback, "Read/Write rpm. rpm <new>" },
+  { "mode", &MODE_Callback },
+  { "s", &SPEED_Callback },
+  { "+", &SPEED_inc_Callback },
+  { "-", &SPEED_dec_Callback },
+  { "stop", &MOTOR_off_Callback, "" }, //Turn on pwm modulation. Usage: on <duty> – if no duty is specified, then the last saved will be used.
+  { "start", &MOTOR_on_Callback, "Turn off pwm modulation. Sets PWM to 0 duty." },
   { "__End__", NULL }
 };
 
-CommandGroupTypeDef PWM = 
+CommandGroupTypeDef CONTROL = 
 {
-  "pwm",
-  "Commands used for PWM manipulation",
-  PWM_commands
+  "ct",
+  "Commands used for motor control",
+  CONTROL_commands
 };
 
 /*
@@ -76,8 +63,7 @@ CommandGroupTypeDef DIR =
 */
 CommandGroupTypeDef* CommandGroupArr[] = 
 {
-  &REG,
-  &PWM,
+  &CONTROL,
   &DIR, 
   &BRAKE,
   NULL
