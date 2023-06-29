@@ -18,12 +18,23 @@ PID_TypeDef PID_controller = {
   .integrator = 0.0f,
   .prevE = 0.0f,
   .scalingFactor = 60.0f,
-  .enable = 0
+  .enable = 0,
+  .motor_start = 0
 
 };
 
 float updatePID( PID_TypeDef* handler, float y )
 {
+  if( handler->motor_start )
+  {
+    if( y >= handler->setPoint )
+    {
+      handler->motor_start = 0;
+      startRegulation( handler );
+    } 
+    else return 100.0f;
+  }
+
   if( !handler->enable )
   {
     return 0.0f;

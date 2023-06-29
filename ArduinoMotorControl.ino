@@ -12,15 +12,14 @@
     - D7: Brake pin
     - D9: PWM output
 
-  Additional info:  
-    Documentation: https://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-7810-Automotive-Microcontrollers-ATmega328P_Datasheet.pdf
-
   Serial communication:
     - Set baud rate to 115200 baud
     - Carriage return
-  
-  For adding custom functions read README.md.
-  Configuration file: config.h
+
+  Additional info:  
+    For adding custom functions read README.md.
+    Configuration file: config.h
+    MCU Documentation: https://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-7810-Automotive-Microcontrollers-ATmega328P_Datasheet.pdf
 */
 
 #include "Communication.h"
@@ -33,13 +32,17 @@ extern uint16_t g_TIM0_ov;
 extern PID_TypeDef PID_controller;
 extern pulseBuffersTypeDef PulseBuffers;
 
+
+float RPM = 0.0f;
+
 ISR( TIMER2_COMPA_vect )
 {
   sei();                                              // Reenable interrupts –> nesting interrupts
   switchPulseBuff();                                  // Switch pulse buffer
   if( PID_controller.enable ) 
   {
-    SetPwmDuty( updatePID( &PID_controller, getRPMfromPulses() ) ); // PID speed regulation
+    RPM = getRPMfromPulses();
+    SetPwmDuty( updatePID( &PID_controller,  RPM) ); // PID speed regulation
   }
 }
 
@@ -72,9 +75,14 @@ void setup() {
     EnablePWM();                // Enabling PWM
   #endif
 
-  #if REGULATION_ENABLED_ON_START == 1
+  #if REG_MOTOR_AUTOSTART == 1
+    PID_controller.motor_start = 1;
     startRegulation( &PID_controller );
   #endif
+  
+  // #if REGULATION_ENABLED_ON_START == 1
+  //   startRegulation( &PID_controller );
+  // #endif
 }
 
 void loop() {                     // Handling serial communication

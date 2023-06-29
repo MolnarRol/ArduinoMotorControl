@@ -4,6 +4,7 @@
 #define VERSION 1                     // Software version
 #define PWM_ENABLED_ON_START 1        // Enable PWN at MCU startup
 #define REGULATION_ENABLED_ON_START 0 // Enable regulation at MCU startup with RPM = SETPOINT_DEFAULT (macro)
+#define REG_MOTOR_AUTOSTART 1
 /*
   PID parameters
 */
@@ -14,7 +15,7 @@
 /*
   Setpoint interval and default value
 */
-#define SETPOINT_DEFAULT 2800.0f      // Default regulation setpoint [RPM]
+#define SETPOINT_DEFAULT 1440.0f      // Default regulation setpoint [RPM]
 #define RPM_MIN 300.0f                // changeSetPoint() –> min and max values [rpm]           
 #define RPM_MAX 5500.0f
 

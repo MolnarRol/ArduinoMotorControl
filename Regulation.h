@@ -25,6 +25,7 @@ typedef struct PID {
   float prevE;
   float scalingFactor;
   uint8_t enable;
+  uint8_t motor_start;
 } PID_TypeDef;
 
 #ifdef __cplusplus
