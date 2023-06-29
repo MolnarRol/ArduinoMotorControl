@@ -3,30 +3,6 @@
 extern CommandGroupTypeDef* CommandGroupArr[];
 extern CommandTypeDef MiscCommands[];
 
-/*
-  Help command -> Not working yet
-*/
-
-// void helper( String msg )
-// {
-//   Serial.println("All possible commands:");
-//   for( uint8_t i = 0; CommandGroupArr[i] != NULL; i++)
-//   {
-//     Serial.println();
-//     Serial.print( CommandGroupArr[i]->descript );
-//     Serial.println(":");
-//     Serial.println("==============================================================================");
-
-//     for( uint8_t j = 0; CommandGroupArr[i]->List[j].cmd != "__End__"; j++ )
-//     {
-//         Serial.print(" \t – ");
-//         Serial.print( CommandGroupArr[i]->List[j].cmd );
-//         Serial.print(" \t ");
-//         Serial.println( CommandGroupArr[i]->List[j].help );
-//     }
-//   }
-// };
-
 uint8_t g_group_idx = 255;  // Sellected group index -> 255 = no sellection
 
 void msgToCommand( String msg )
@@ -69,6 +45,9 @@ void msgToCommand( String msg )
     }
     idx++;
   }
+  Serial.print("Invalid command: \"");
+  Serial.print(msg);
+  Serial.println("\"");
 };
 
 void printHeader()

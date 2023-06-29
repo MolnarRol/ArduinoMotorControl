@@ -1,6 +1,91 @@
 #include "CommandCallbacks.h"
 
 /*
+  User predefined speeds
+*/
+float speeds[] = SPEEDS;
+const uint8_t speeds_len = sizeof(speeds) / sizeof(float);
+uint8_t speed_idx = 0;
+
+enum MODE {
+  manual,
+  regulation
+};
+
+enum MODE sellected_mode = regulation;
+
+void MODE_Callback( String msg )
+{
+  if( msg ==  "man")
+  {
+    sellected_mode = manual;
+    stopRegulation( &PID_controller );
+  }
+  else if( msg == "reg" )
+  {
+    sellected_mode = regulation;
+    startRegulation( &PID_controller );
+  }
+  else if( msg.length() == 0 )
+  {
+    Serial.print("Mode: ");
+    if( sellected_mode == regulation )
+    {
+      Serial.println("regulation");
+    }
+    else
+    {
+      Serial.println("manual");
+    }
+  }
+};
+
+void MOTOR_off_Callback( String msg )
+{
+  if( sellected_mode == regulation )
+  {
+    stopRegulation( &PID_controller );
+    PID_controller.enable = 0;
+    PID_controller.motor_start = 1;
+  }  
+  DisablePWM();
+  EnablePWM_HiZ();
+};
+
+void MOTOR_on_Callback( String msg )
+{
+  EnablePWM();
+  DisablePWM_HiZ();
+  if( sellected_mode == regulation )
+  {
+    PID_controller.motor_start = 1;
+    PID_controller.enable = 1;
+    startRegulation( &PID_controller );
+  }  
+};
+
+void SPEED_Callback( String msg )
+{
+  speed_idx = (uint16_t)parseFloat( msg ) - 1;
+  if( speed_idx >= speeds_len ) speed_idx = speeds_len - 1;
+  changeSetPoint( &PID_controller, speeds[speed_idx] );
+};
+
+void SPEED_inc_Callback( String msg )
+{
+  speed_idx++;
+  if( speed_idx == speeds_len ) speed_idx = speeds_len - 1;
+  changeSetPoint( &PID_controller, speeds[speed_idx] );
+};
+
+void SPEED_dec_Callback( String msg )
+{
+  speed_idx--;
+  if( speed_idx == 255 ) speed_idx = 0;
+  changeSetPoint( &PID_controller, speeds[speed_idx] );
+};
+
+/*
   Regulation Callback functions
 */
 void RPM_Callback( String msg )
@@ -15,24 +100,9 @@ void RPM_Callback( String msg )
   }
 };
 
-void REG_on_Callback( String msg )
-{
-  if( msg.length() > 0 )
-  {
-    PID_controller.setPoint = parseFloat( msg );
-  };
-  startRegulation( &PID_controller );
-};
-
-void REG_off_Callback( String msg )
-{
-  stopRegulation( &PID_controller );
-};
-
 /*
   PWM Callback functions
 */
-
 void PWM_duty_Callback( String msg )
 {
   if( msg.length() > 0 ) SetPwmDuty( parseFloat( msg ) ); 
@@ -44,38 +114,17 @@ void PWM_duty_Callback( String msg )
   } 
 };
 
-void PWM_on_Callback( String msg )
-{
-  if( msg.length() > 0 )
-  {
-    SetPwmDuty( parseFloat(msg) );
-  }
-  if( GetPwmDuty() != 0.0f ) EnablePWM();
-  DisablePWM_HiZ();
-  startRegulation( &PID_controller );
-};
-
-void PWM_off_Callback( String msg )
-{
-  stopRegulation( &PID_controller );
-  PID_controller.integrator = 0.0f;
-  PID_controller.prevE = 0.0f;
-  EnablePWM_HiZ();
-  DisablePWM();  
-};
-
 /*
   Brake Callback functions
 */
 void BRAKE_on_Callback( String msg )
 {
-  startRegulation( &PID_controller );
   digitalWrite( 7, 0 );
+  MOTOR_off_Callback("");
 };
 
 void BRAKE_off_Callback( String msg )
 {
-  stopRegulation( &PID_controller );
   digitalWrite( 7, 1 );
 };
 

@@ -24,7 +24,10 @@ typedef struct PID {
   float integrator;
   float prevE;
   float scalingFactor;
+
   uint8_t enable;
+  uint8_t motor_start;  // if "1" – motor starts from 0 rpm with 100% duty – regulation starts after achieving RPM defined by macro SETPOINT_DEFAULT (config.h)
+
 } PID_TypeDef;
 
 #ifdef __cplusplus

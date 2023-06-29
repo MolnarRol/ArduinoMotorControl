@@ -18,15 +18,30 @@ PID_TypeDef PID_controller = {
   .integrator = 0.0f,
   .prevE = 0.0f,
   .scalingFactor = 60.0f,
-  .enable = 0
-
+  
+  .enable = 0,
+  .motor_start = 1
 };
 
+/*
+  TODO: Still missing ARW
+*/
 float updatePID( PID_TypeDef* handler, float y )
 {
+
   if( !handler->enable )
   {
     return 0.0f;
+  }
+
+  if( handler->motor_start )
+  {
+    if( y >= handler->setPoint )
+    {
+      handler->motor_start = 0;
+      startRegulation( handler );
+    } 
+    else return 100.0f;
   }
 
   float U = 0;
@@ -71,20 +86,7 @@ float updatePID( PID_TypeDef* handler, float y )
     U = handler->limits.out_min;
   };
 
-    /*
-    Anti reset windup – issue
-  */
-
-  // if( handler->integrator > handler->limits.out_max ) 
-  // {
-  //   handler->integrator = handler->limits.out_max;
-  // } 
-  // else if( handler->integrator >  handler->limits.out_min ) 
-  // {
-  //   handler->integrator = handler->limits.out_min;
-  // }
-
-  return U;
+ return U;
 };
 
 void changeSetPoint( PID_TypeDef* handler, float newSetPoint )
