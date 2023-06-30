@@ -31,15 +31,17 @@ float updatePID( PID_TypeDef* handler, float y )
     return 0.0f;
   }
 
-  if( handler->motor_start )
-  {
-    if( y >= MOTOR_RPM_REG_START )
+  #if START_BOOST_EN == 1
+    if( handler->motor_start )
     {
-      handler->motor_start = 0;
-      startRegulation( handler );
-    } 
-    else return 100.0f;
-  }
+      if( y >= MOTOR_RPM_REG_START )
+      {
+        handler->motor_start = 0;
+        startRegulation( handler );
+      } 
+      else return 100.0f;
+    }
+  #endif
 
   float U = 0;
   float P = 0;

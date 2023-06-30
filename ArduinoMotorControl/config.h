@@ -6,7 +6,6 @@
 */
 #define VERSION 1.2                   // Software version  
 #define REG_MOTOR_AUTOSTART 0         // Enable PWN and regulation at MCU startup
-#define DEBUG_MODE 0
 
 /*
   PID parameters
@@ -15,11 +14,14 @@
 #define Ki 0.005f                     // Integral gain
 #define Kd 1.0f                       // Derivative gain
 #define ARW_EN 1                      // Enable ARW
-/*
-  Setpoint interval and default value
-*/
-#define MOTOR_RPM_REG_START 1600.0f
+
 #define SETPOINT_DEFAULT 1440.0f      // Default regulation setpoint [RPM]
+#define START_BOOST_EN 1              // Start motor with 100% until MOTOR_RPM_REG_START rpm is reached
+#define MOTOR_RPM_REG_START 1600.0f   // Start regulation after reaching defined RPM by this macro
+
+/*
+  Setpoint interval -> for rpm <new rpm> command
+*/
 #define RPM_MIN 300.0f                // changeSetPoint() –> min and max values [rpm]           
 #define RPM_MAX 5500.0f
 

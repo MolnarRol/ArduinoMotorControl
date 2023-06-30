@@ -57,6 +57,7 @@ void MOTOR_off_Callback( String msg )
     stopRegulation( &PID_controller );
     PID_controller.enable = 0;
     PID_controller.motor_start = 1;
+    SetPwmDuty(0.0f);
   }  
   DisablePWM();
   EnablePWM_HiZ();
