@@ -32,20 +32,41 @@ extern uint16_t g_TIM0_ov;
 extern PID_TypeDef PID_controller;
 extern pulseBuffersTypeDef PulseBuffers;
 
+float g_RPM = 0.0f;
+
+#if ENC_WDG_EN == 1
+  uint16_t ENC_WatchDog = 0;
+#endif
+
 ISR( TIMER2_COMPA_vect )
 {
-  sei();                        // Reenable interrupts –> nesting interrupts                                                  
+  sei();                        // Reenable interrupts –> nesting interrupts   
   switchPulseBuff();            // Switch pulse buffer
+  g_RPM = getRPMfromPulses();   // Read current RPM
   if( PID_controller.enable ) 
   {
-    SetPwmDuty( updatePID( &PID_controller,  getRPMfromPulses()) ); // PID speed regulation
+
+    #if ENC_WDG_EN == 1
+      ENC_WatchDog += 2;
+      if( ENC_WatchDog >= ENC_WDG_MS )
+      {
+        ENC_WatchDog = 0;
+        MOTOR_off_Callback("");
+      }
+    #endif
+
+    SetPwmDuty( updatePID( &PID_controller, g_RPM ) ); // PID speed regulation
   }
 }
 
 ISR( PCINT2_vect )
 {
   // Reading delta time between pin state change – times 2 for reading 1 period (ISR is called both on falling and rising edge)
-  writePulseBuff ( 2 * readPulseCount() );            
+  writePulseBuff ( 2 * readPulseCount() );    
+
+  #if ENC_WDG_EN == 1
+    if( PID_controller.enable ) ENC_WatchDog = 0;
+  #endif
 }
 
 ISR( TIMER0_COMPA_vect )
@@ -54,27 +75,33 @@ ISR( TIMER0_COMPA_vect )
 }
 
 void setup() {
+  /*
+    Timer setup functions
+  */
   PulseCaptureConfig();       // Rotary encoder capture
   PwmConfig();                // Output PWM signal
   PeriodicInterruptConfig();  // Generation periodic interrupt each 2 ms
 
+  /*
+    UART setup
+  */
   Serial.begin( UART_BAUD );
   clearTerminal( "" );
 
+  /*
+    Digital pin setup
+  */
   pinMode(2, OUTPUT);         // Debug pin
   pinMode(7, OUTPUT);         // Brake pin
   pinMode(5, OUTPUT);         // Direction pin
-  
   digitalWrite( 7, 1 );       // Disengage brake
-  
-  #if PWM_ENABLED_ON_START == 1
-    DisablePWM_HiZ();           // Disable high impedance state of PWM output pin
-    EnablePWM();                // Enabling PWM
-  #endif
 
   #if REG_MOTOR_AUTOSTART == 1
-    PID_controller.motor_start = 1;
-    startRegulation( &PID_controller );
+    DisablePWM_HiZ();           // Disable high impedance state of PWM output pin
+    EnablePWM();                // Enabling PWM
+    extern MODE sellected_mode;
+    sellected_mode = regulation;
+    MOTOR_on_Callback("");
   #endif
 }
 

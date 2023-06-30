@@ -23,9 +23,6 @@ PID_TypeDef PID_controller = {
   .motor_start = 1
 };
 
-/*
-  TODO: Still missing ARW
-*/
 float updatePID( PID_TypeDef* handler, float y )
 {
 
@@ -36,7 +33,7 @@ float updatePID( PID_TypeDef* handler, float y )
 
   if( handler->motor_start )
   {
-    if( y >= handler->setPoint )
+    if( y >= MOTOR_RPM_REG_START )
     {
       handler->motor_start = 0;
       startRegulation( handler );
@@ -62,6 +59,17 @@ float updatePID( PID_TypeDef* handler, float y )
   */
   handler->integrator += E;
   I = handler->params.ki * handler->integrator ;
+
+  #if ARW_EN == 1
+    if( I > handler->limits.out_max )
+    {
+      handler->integrator = handler->limits.out_max / Ki;
+    }
+    else if( I < handler->limits.out_min )
+    {
+      handler->integrator = handler->limits.out_min / Ki;
+    }
+  #endif
 
   /*
     Derivative term

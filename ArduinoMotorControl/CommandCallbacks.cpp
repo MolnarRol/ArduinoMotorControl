@@ -7,12 +7,22 @@ float speeds[] = SPEEDS;
 const uint8_t speeds_len = sizeof(speeds) / sizeof(float);
 uint8_t speed_idx = 0;
 
-enum MODE {
-  manual,
-  regulation
+enum MODE sellected_mode = regulation;
+
+void StatusCallback( String msg )
+{
+  Serial.print("Sellected mode: ");
+  if( sellected_mode == regulation ) Serial.println( "Regulation" );
+  else Serial.println( "Manual PWM" );
+  
+  Serial.print("Current RPM: ");
+  Serial.println(g_RPM);
+  PWM_duty_Callback("");
 };
 
-enum MODE sellected_mode = regulation;
+#if ENC_WDG_EN == 1
+  extern uint16_t ENC_WatchDog;
+#endif
 
 void MODE_Callback( String msg )
 {
