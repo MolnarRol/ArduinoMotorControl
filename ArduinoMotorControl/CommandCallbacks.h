@@ -1,5 +1,5 @@
 #ifndef _COMMAND_CALLBACKS_H_
-#define COMMAND_CALLBACKS_H_
+#define _COMMAND_CALLBACKS_H_
 
 #include <string.h>
 #include "Communication.h"
@@ -7,7 +7,13 @@
 #include "TimerConfig.h"
 #include "Regulation.h"
 
+enum MODE {
+  manual,
+  regulation
+};
+
 extern PID_TypeDef PID_controller;
+extern float g_RPM;
 
 void MODE_Callback( String msg );
 void MOTOR_off_Callback( String msg );
@@ -30,4 +36,6 @@ void DIR_change_Callback( String msg );
 */
 void BRAKE_on_Callback( String msg );
 void BRAKE_off_Callback( String msg );
+
+void StatusCallback( String msg );
 #endif
