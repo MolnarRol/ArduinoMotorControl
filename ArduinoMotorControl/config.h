@@ -1,11 +1,21 @@
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
 
+#include <stdint.h>
+
 /*
   Software setup
 */
 #define VERSION 1.2                   // Software version  
 #define REG_MOTOR_AUTOSTART 0         // Enable PWN and regulation at MCU startup
+
+/*
+  Output pin definitions
+*/
+#define   DEBUG_PIN   2               // Pin for guick debugging (D2)
+#define   DIR_PIN     5               // Pin for direction setup (D5)
+#define   BRK_PIN     7               // Pin for brake activation (D7)
+
 
 /*
   PID parameters
@@ -18,6 +28,7 @@
 #define SETPOINT_DEFAULT 1440.0f      // Default regulation setpoint [RPM]
 #define START_BOOST_EN 1              // Start motor with 100% until MOTOR_RPM_REG_START rpm is reached
 #define MOTOR_RPM_REG_START 1600.0f   // Start regulation after reaching defined RPM by this macro
+#define REG_PERIOD_MS 2               // Period of PID regulation output calculation
 
 /*
   Setpoint interval -> for rpm <new rpm> command
@@ -37,6 +48,7 @@
 #define FIR_TIME 1.0f                 // Filtration time constant
 #define TIM_STEP_us ( 1e6f / ( 16e6f * 1 )) // period of timer 0 for pulse measurement -> 1e6 / ( crystal_clock * prescaling )
 #define PULSES_MAX 40                 // maximum number of pulses that can be read
+#define US_IN_MIN 60e6f               // number of us in one minute
 
 /*
   Encoder pulse watchdog

@@ -130,13 +130,13 @@ void PWM_duty_Callback( String msg )
 */
 void BRAKE_on_Callback( String msg )
 {
-  digitalWrite( 7, 0 );
+  digitalWrite( BRK_PIN, 0 );
   MOTOR_off_Callback("");
 };
 
 void BRAKE_off_Callback( String msg )
 {
-  digitalWrite( 7, 1 );
+  digitalWrite( BRK_PIN, 1 );
 };
 
 /*
@@ -144,17 +144,17 @@ void BRAKE_off_Callback( String msg )
 */
 void DIR_1_Callback( String msg )
 {
-  digitalWrite( 5, 1);
+  digitalWrite( DIR_PIN, 1);
 };
 
 void DIR_2_Callback( String msg )
 {
-  digitalWrite( 5, 0);
+  digitalWrite( DIR_PIN, 0);
 };
 
 void DIR_change_Callback( String msg )
 {
-  static uint8_t state = ( PORTD & ~(1 << 5) ) >> 5;    // P5
+  static uint8_t state = ( PORTD & ~(1 << DIR_PIN) ) >> DIR_PIN;    // P5
   state = !state;
-  digitalWrite( 5, state );
+  digitalWrite( DIR_PIN, state );
 };

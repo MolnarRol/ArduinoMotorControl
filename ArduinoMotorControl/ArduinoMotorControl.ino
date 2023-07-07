@@ -22,11 +22,13 @@
     MCU Documentation: https://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-7810-Automotive-Microcontrollers-ATmega328P_Datasheet.pdf
 */
 
-#include "Communication.h"
+#include "config.h"
+#include "Commands.h"
 #include "CommandCallbacks.h"
+#include "Communication.h"
 #include "Regulation.h"
 #include "TimerConfig.h"
-#include "config.h"
+#include "TimingUtils.h"
 
 extern uint16_t g_TIM0_ov;
 extern PID_TypeDef PID_controller;
@@ -46,8 +48,8 @@ ISR( TIMER2_COMPA_vect )
   if( PID_controller.enable ) 
   {
 
-    #if ENC_WDG_EN == 1
-      ENC_WatchDog += 2;
+    #if ( ENC_WDG_EN == 1 )
+      ENC_WatchDog += REG_PERIOD_MS;
       if( ENC_WatchDog >= ENC_WDG_MS )
       {
         ENC_WatchDog = 0;
@@ -64,7 +66,7 @@ ISR( PCINT2_vect )
   // Reading delta time between pin state change – times 2 for reading 1 period (ISR is called both on falling and rising edge)
   writePulseBuff ( 2 * readPulseCount() );    
 
-  #if ENC_WDG_EN == 1
+  #if ( ENC_WDG_EN == 1 )
     if( PID_controller.enable ) ENC_WatchDog = 0;
   #endif
 }
@@ -91,12 +93,12 @@ void setup() {
   /*
     Digital pin setup
   */
-  pinMode(2, OUTPUT);         // Debug pin
-  pinMode(7, OUTPUT);         // Brake pin
-  pinMode(5, OUTPUT);         // Direction pin
-  digitalWrite( 7, 1 );       // Disengage brake
+  pinMode(DEBUG_PIN, OUTPUT);       // Debug pin
+  pinMode(BRK_PIN, OUTPUT);         // Brake pin
+  pinMode(DIR_PIN, OUTPUT);         // Direction pin
+  digitalWrite( BRK_PIN, 1 );       // Disengage brake
 
-  #if REG_MOTOR_AUTOSTART == 1
+  #if ( REG_MOTOR_AUTOSTART == 1 )
     DisablePWM_HiZ();           // Disable high impedance state of PWM output pin
     EnablePWM();                // Enabling PWM
     extern MODE sellected_mode;

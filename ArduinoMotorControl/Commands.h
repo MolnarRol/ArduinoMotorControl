@@ -1,9 +1,9 @@
 #ifndef _COMMANDS_H_
 #define _COMMANDS_H_
 
-#include <String.h>
+#include "config.h"
+#include <string.h>
 #include "CommandCallbacks.h"
-#include "Arduino.h"
 
 /*
   Commands and command group declaration

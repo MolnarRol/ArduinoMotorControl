@@ -3,8 +3,10 @@
 
 #include "Arduino.h"
 #include <string.h>
-#include "Commands.h"
+
 #include "config.h"
+#include "CommandCallbacks.h"
+
 
 /*
   String manipulation and function calling

@@ -1,8 +1,8 @@
 #ifndef _REGULATION_H_
 #define _REGULATION_H_
 
-#include "TimerConfig.h"
 #include "config.h"
+#include "TimerConfig.h"
 
 typedef struct param {
   float kp;
