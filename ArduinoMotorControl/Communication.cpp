@@ -167,3 +167,33 @@ void resetGroup( String msg )
 {
   g_group_idx = 255;
 };
+
+void helper( String msg )
+{
+  Serial.println(F(
+    "CONTROL <ct>\n"
+    "------------\n"
+    "  -> mode <new mode> – If second argument is given(optional: mode), then it specifies desired mode. Options:\n"
+    "    - reg – regulation mode\n"
+    "    - man – manual mode\n"
+    "  -> start – Starts the motor from 0 RPM.\n"
+    "  -> stop – Stops the motor.\n"
+    "  -> duty <new duty> – Prints out currently set duty. If second argument is given(optional: number),\n "
+    "     then it specifies new duty. (man mode)\n"
+    "  -> rpm <new rpm> – Prints out currently set RPM. If second argument is given(optional: number),\n" 
+    "     then it specifies desired RPM. (reg mode)\n"
+    "  -> s <n> – Sets speed saved in: (#define SPEEDS { 1440, 1596, 2100, 2800 } – config.h), where n is\n"
+    "     array index + 1. (reg mode)\n"
+    "  -> '+' – Increases speed from current speed index n. (reg mode)\n"
+    "  -> '-' – Decreases speed from current speed index n. (reg mode)\n\n"
+    "Brake <brake>\n"
+    "-------------\n"
+    "  -> on – Brake is activated.\n"
+    "  -> off - Brake is deactivated.\n\n"
+    "Direction <dir>\n"
+    "---------------\n"
+    "  -> cw – Motor is set to turn clockwise.\n"
+    "  -> ccw – Motor is set to turn counter clockwise.\n"
+    "  -> chDir – Motor is set to turn counter clockwise.\n"
+    ));
+};

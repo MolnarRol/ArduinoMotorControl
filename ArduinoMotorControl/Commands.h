@@ -3,6 +3,7 @@
 
 #include <String.h>
 #include "CommandCallbacks.h"
+#include "Arduino.h"
 
 /*
   Commands and command group declaration

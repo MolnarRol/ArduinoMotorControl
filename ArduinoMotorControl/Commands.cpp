@@ -77,6 +77,6 @@ CommandTypeDef MiscCommands[] =
   { "clear", &clearTerminal, "Clear output terminal" },
   { "back", &resetGroup, "" },
   { "status", &StatusCallback, "" },
-  // { "help", &helper, "" },
+  { "help", &helper, "" },
   { "__End__", NULL }
 };
