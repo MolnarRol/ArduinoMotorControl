@@ -50,6 +50,12 @@
 #define PULSES_MAX 40                 // maximum number of pulses that can be read
 #define US_IN_MIN 60e6f               // number of us in one minute
 
+#define EDGE_RISING 0
+#define EDGE_FALLING 1
+#define EDGE_BOTH 2
+
+#define PULSE_DELTA_READ EDGE_RISING
+
 /*
   Encoder pulse watchdog
 */

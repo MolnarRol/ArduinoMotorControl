@@ -64,7 +64,13 @@ ISR( TIMER2_COMPA_vect )
 ISR( PCINT2_vect )
 {
   // Reading delta time between pin state change – times 2 for reading 1 period (ISR is called both on falling and rising edge)
-  writePulseBuff ( 2 * readPulseCount() );    
+  #if ( PULSE_DELTA_READ == EDGE_BOTH )
+    writePulseBuff ( 2 * readPulseCount() );    
+  #elif ( PULSE_DELTA_READ == EDGE_RISING )
+    
+  #elif ( PULSE_DELTA == EDGE_FALLING )
+
+  #endif
 
   #if ( ENC_WDG_EN == 1 )
     if( PID_controller.enable ) ENC_WatchDog = 0;
