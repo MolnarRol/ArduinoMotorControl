@@ -48,15 +48,6 @@ ISR( TIMER2_COMPA_vect )
 */
 ISR( PCINT2_vect )
 {
-<<<<<<< HEAD
-  // Reading delta time between pin state change – times 2 for reading 1 period (ISR is called both on falling and rising edge)
-  #if ( PULSE_DELTA_READ == EDGE_BOTH )
-    writePulseBuff ( 2 * readPulseCount() );    
-  #elif ( PULSE_DELTA_READ == EDGE_RISING )
-    
-  #elif ( PULSE_DELTA == EDGE_FALLING )
-
-=======
   /* 
     Measuring delta time between pin state change 
   */
@@ -78,7 +69,6 @@ ISR( PCINT2_vect )
     if( !encoderPinHigh() ) writePulseBuff ( readPulseCount() );
   #else
     #error "[PULSE_DELTA_READ] <?> Specified macro is not defined!!!"
->>>>>>> d4517cc (Added initial doxygen documentation)
   #endif
 
   /*

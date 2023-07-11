@@ -76,14 +76,6 @@
   @{
 */
 
-<<<<<<< HEAD
-#define EDGE_RISING 0
-#define EDGE_FALLING 1
-#define EDGE_BOTH 2
-
-#define PULSE_DELTA_READ EDGE_RISING
-
-=======
 /// Rotary encoder steps per rotation
 #define ENC_N_PULSES 100    
 
@@ -99,7 +91,6 @@
 #define PULSES_MAX 40    
 /// number of us in one minute             
 #define US_IN_MIN 60e6f              
->>>>>>> d4517cc (Added initial doxygen documentation)
 /*
   Encoder pulse watchdog
 */
