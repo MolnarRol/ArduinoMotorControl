@@ -49,10 +49,12 @@ command group use the **back** command.
       >> [command group] >> [command] [argument]
 
 ## Global commands
-- **clear** – Clears output terminal.
-- **back** – Exits current command group.
-- **status** – Prints out sellected mode. Current(real) RPM and PWM duty cycle.
-- **help** - Prints out all available commands.
+command     | Description
+:---------: | -----------------------------------------------------------------------------------------
+**clear**   | Clears output terminal.
+**back**    | Exits current command group.
+**status**  | Prints out sellected mode. Current(real) RPM and PWM duty cycle.
+**help**    | Prints out all available commands.
 
 ## Command groups
 

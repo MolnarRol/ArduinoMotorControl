@@ -150,12 +150,18 @@ Software manual</h1>
 </pre><p> After command group sellection you can type desired command with argument (if specified). To exit the command group use the <b>back</b> command. </p><pre class="fragment">  &gt;&gt; [command group] &gt;&gt; [command] [argument]
 </pre> <h2><a class="anchor" id="autotoc_md6"></a>
 Global commands</h2>
-<ul>
-<li><b>clear</b> – Clears output terminal.</li>
-<li><b>back</b> – Exits current command group.</li>
-<li><b>status</b> – Prints out sellected mode. Current(real) RPM and PWM duty cycle.</li>
-<li><b>help</b> - Prints out all available commands.</li>
-</ul>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadCenter">command   </th><th class="markdownTableHeadNone">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter"><b>clear</b>   </td><td class="markdownTableBodyNone">Clears output terminal.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyCenter"><b>back</b>   </td><td class="markdownTableBodyNone">Exits current command group.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter"><b>status</b>   </td><td class="markdownTableBodyNone">Prints out sellected mode. Current(real) RPM and PWM duty cycle.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyCenter"><b>help</b>   </td><td class="markdownTableBodyNone">Prints out all available commands.   </td></tr>
+</table>
 <h2><a class="anchor" id="autotoc_md7"></a>
 Command groups</h2>
 <h3><a class="anchor" id="autotoc_md8"></a>
@@ -174,9 +180,9 @@ CONTROL &lt;ct&gt;</h3>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyCenter">s   </td><td class="markdownTableBodyCenter">&lt;n&gt;   </td><td class="markdownTableBodyNone">Sets speed saved in SPEEDS, where n is array index + 1. (reg mode)    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyCenter">+   </td><td class="markdownTableBodyCenter">-   </td><td class="markdownTableBodyNone">Increases speed from current speed index n. (reg mode)    </td></tr>
+<td class="markdownTableBodyCenter">"+"   </td><td class="markdownTableBodyCenter">-   </td><td class="markdownTableBodyNone">Increases speed from current speed index n. (reg mode)    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyCenter">-   </td><td class="markdownTableBodyCenter">-   </td><td class="markdownTableBodyNone">Decreases speed from current speed index n. (reg mode)   </td></tr>
+<td class="markdownTableBodyCenter">"-"   </td><td class="markdownTableBodyCenter">-   </td><td class="markdownTableBodyNone">Decreases speed from current speed index n. (reg mode)   </td></tr>
 </table>
 <h3><a class="anchor" id="autotoc_md9"></a>
 BRAKE &lt;brake&gt;</h3>
