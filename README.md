@@ -64,8 +64,8 @@ start       | -                           | Starts the motor from 0 RPM.
 stop        | -                           | Stops the motor.
 duty        | <new duty>                  | Prints out currently set RPM. If second argument is given(optional: number), then it specifies desired RPM. (reg mode)
 s           | <n>                         | Sets speed saved in SPEEDS, where n is array index + 1. (reg mode)
-+           | -                           | Increases speed from current speed index n. (reg mode)
--           | -                           | Decreases speed from current speed index n. (reg mode)
+"+"         | -                           | Increases speed from current speed index n. (reg mode)
+"-"         | -                           | Decreases speed from current speed index n. (reg mode)
 
 ### BRAKE <brake>
 
