@@ -1,10 +1,10 @@
 var annotated_dup =
 [
-    [ "Command", "structCommand.html", "structCommand" ],
-    [ "CommandGroup", "structCommandGroup.html", "structCommandGroup" ],
+    [ "Command", "struct_command.html", "struct_command" ],
+    [ "CommandGroup", "struct_command_group.html", "struct_command_group" ],
     [ "limits", "structlimits.html", "structlimits" ],
-    [ "PID_paramTypeDef", "structPID__paramTypeDef.html", "structPID__paramTypeDef" ],
-    [ "PID_TypeDef", "structPID__TypeDef.html", "structPID__TypeDef" ],
-    [ "pulseBuffers", "structpulseBuffers.html", "structpulseBuffers" ],
-    [ "pulseStruct", "structpulseStruct.html", "structpulseStruct" ]
+    [ "PID_paramTypeDef", "struct_p_i_d__param_type_def.html", "struct_p_i_d__param_type_def" ],
+    [ "PID_TypeDef", "struct_p_i_d___type_def.html", "struct_p_i_d___type_def" ],
+    [ "pulseBuffers", "structpulse_buffers.html", "structpulse_buffers" ],
+    [ "pulseStruct", "structpulse_struct.html", "structpulse_struct" ]
 ];

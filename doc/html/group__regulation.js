@@ -1,7 +1,7 @@
 var group__regulation =
 [
     [ "PID default parameters", "group__pid__default.html", "group__pid__default" ],
-    [ "PID_TypeDef", "structPID__TypeDef.html", [
+    [ "PID_TypeDef", "struct_p_i_d___type_def.html", [
       [ "enable", "group__regulation.html#ga324d63698d720716b386efb308337af8", null ],
       [ "integrator", "group__regulation.html#gaddf39e250aa6aa6bca3a27ce350b85de", null ],
       [ "limits", "group__regulation.html#ga8d0f5e32cfb4bc7dbdab4f2cfc97e98e", null ],

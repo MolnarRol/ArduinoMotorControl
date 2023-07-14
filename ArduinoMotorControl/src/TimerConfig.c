@@ -49,24 +49,33 @@ float GetPwmDuty(){
   @brief Function that configures Timer 0 and D4 GPIO pin as pin change interrupt.
   Timer 0 is free running and is reseted only by readPulseCount(). Function readPulseCount()
   is called in ISR( PCINT2_vect ), which reacts to pin change event.
+  
+  Free running 8-bit timer config. We are not using counter overflow interrupt - is binded 
+  to Arduino library and has issues compiling. Same functionality is achieved by output compare,
+  where compare value is equal the TOP.
 */
 void PulseCaptureConfig()
 {
   /*
-    Free running timer config
+    Register reset.
   */
   TCCR0A = 0;
   TCCR0B = 0;
-  TCCR0A |= 0b00000010;    // CTC
-  TCCR0B |= 0b00000001;    // Prescaling by 1
-  OCR0A = 255;
-  TIMSK0 |= ( 1 << (OCIE0A) );
 
   /*
-    Pinchange interrupt on D4 (PORTD 4) PCINT20
+    Clear timer on compare match(CTC). Top is defined by OCRA register.
+    No prescaling(prescaling by 1).
   */
-  PCICR |= 1 << (PCIE2);
-  PCMSK2 |= 1 << (PCINT20);
+  TCCR0A |= 0b00000010;
+  TCCR0B |= 0b00000001;
+  OCR0A = 255;                  // Setting the top to timer max.
+  TIMSK0 |= ( 1 << (OCIE0A) );  // Enabling output compare interrupt.
+
+  /*
+    Pinchange interrupt on D4 (PORTD 4) PCINT20.
+  */
+  PCICR |= 1 << (PCIE2);    // Pin Change Interrupt Enable 2.
+  PCMSK2 |= 1 << (PCINT20); // Enable pin change interrupt on PCINT20.
 };
 
 /**

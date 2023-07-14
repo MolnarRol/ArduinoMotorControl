@@ -1,9 +1,9 @@
 var dir_cb0db6c430a538ffe7869769b6ed0938 =
 [
-    [ "CommandCallbacks.h", "CommandCallbacks_8h.html", "CommandCallbacks_8h" ],
-    [ "Commands.h", "Commands_8h.html", "Commands_8h" ],
-    [ "Communication.h", "Communication_8h.html", "Communication_8h" ],
-    [ "Regulation.h", "Regulation_8h.html", "Regulation_8h" ],
-    [ "TimerConfig.h", "TimerConfig_8h.html", "TimerConfig_8h" ],
-    [ "TimingUtils.h", "TimingUtils_8h.html", "TimingUtils_8h" ]
+    [ "CommandCallbacks.h", "_command_callbacks_8h.html", "_command_callbacks_8h" ],
+    [ "Commands.h", "_commands_8h.html", "_commands_8h" ],
+    [ "Communication.h", "_communication_8h.html", "_communication_8h" ],
+    [ "Regulation.h", "_regulation_8h.html", "_regulation_8h" ],
+    [ "TimerConfig.h", "_timer_config_8h.html", "_timer_config_8h" ],
+    [ "TimingUtils.h", "_timing_utils_8h.html", "_timing_utils_8h" ]
 ];

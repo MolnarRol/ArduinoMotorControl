@@ -1,9 +1,9 @@
 var dir_9efaab377bd46f18918cd378f8c52fed =
 [
-    [ "CommandCallbacks.cpp", "CommandCallbacks_8cpp.html", "CommandCallbacks_8cpp" ],
-    [ "Commands.cpp", "Commands_8cpp.html", "Commands_8cpp" ],
-    [ "Communication.cpp", "Communication_8cpp.html", "Communication_8cpp" ],
-    [ "Regulation.c", "Regulation_8c.html", "Regulation_8c" ],
-    [ "TimerConfig.c", "TimerConfig_8c.html", "TimerConfig_8c" ],
-    [ "TimingUtils.c", "TimingUtils_8c.html", "TimingUtils_8c" ]
+    [ "CommandCallbacks.cpp", "_command_callbacks_8cpp.html", "_command_callbacks_8cpp" ],
+    [ "Commands.cpp", "_commands_8cpp.html", "_commands_8cpp" ],
+    [ "Communication.cpp", "_communication_8cpp.html", "_communication_8cpp" ],
+    [ "Regulation.c", "_regulation_8c.html", "_regulation_8c" ],
+    [ "TimerConfig.c", "_timer_config_8c.html", "_timer_config_8c" ],
+    [ "TimingUtils.c", "_timing_utils_8c.html", "_timing_utils_8c" ]
 ];

@@ -52,8 +52,8 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"ArduinoMotorControl_8ino.html",
-"structCommandGroup.html"
+"_arduino_motor_control_8ino.html",
+"struct_command_group.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

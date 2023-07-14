@@ -9,7 +9,7 @@
 
 Timer            | Function 
 :--------------: | -----------------------------------------------------------------
-Timer 0 (8-bit)  | Pulse counter of the roatary encoder - interrupt on compare match
+Timer 0 (8-bit)  | Pulse counter of the rotary encoder - interrupt on compare match
 Timer 1 (16-bit) | PWM for regulation output
 Timer 2 (8-bit)  | ISR for calling regulation function every 2 ms
 

@@ -109,7 +109,7 @@ Timers</h2>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadCenter">Timer   </th><th class="markdownTableHeadNone">Function    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyCenter">Timer 0 (8-bit)   </td><td class="markdownTableBodyNone">Pulse counter of the roatary encoder - interrupt on compare match    </td></tr>
+<td class="markdownTableBodyCenter">Timer 0 (8-bit)   </td><td class="markdownTableBodyNone">Pulse counter of the rotary encoder - interrupt on compare match    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyCenter">Timer 1 (16-bit)   </td><td class="markdownTableBodyNone">PWM for regulation output    </td></tr>
 <tr class="markdownTableRowOdd">
@@ -208,18 +208,18 @@ Direction &lt;dir&gt;</h3>
 </table>
 <h2><a class="anchor" id="autotoc_md11"></a>
 Adding custom functionality</h2>
-<p>1.) Define new command group in <a class="el" href="Commands_8cpp.html">Commands.cpp</a>: </p><pre class="fragment">  CommandGroupTypeDef &lt;name&gt; = 
+<p>1.) Define new command group in <a class="el" href="_commands_8cpp.html">Commands.cpp</a>: </p><pre class="fragment">  CommandGroupTypeDef &lt;name&gt; = 
   {
     &lt;identity&gt;,         // string compared
     &lt;descriptor&gt;,       // brief description of command group (help command) [in progress]
     &lt;array&gt;             // pointer to array creted in 2.)
   }      
-</pre><p> 2.) Define command array in <a class="el" href="Commands_8cpp.html">Commands.cpp</a>: </p><pre class="fragment">  CommandTypeDef array[] =
+</pre><p> 2.) Define command array in <a class="el" href="_commands_8cpp.html">Commands.cpp</a>: </p><pre class="fragment">  CommandTypeDef array[] =
   {
     { &lt;command&gt;, &amp;functionCallbackPointer, &lt;descriptor&gt; },  // Command creation
     { "__End__", NULL }                                     // This array must end with this line
   }      
-</pre><p> 3.) Write new pointer of 1.) to CommandGroupTypeDef* CommandGroupArr[] <a class="el" href="Commands_8cpp.html">Commands.cpp</a> </p><pre class="fragment">  CommandGroupTypeDef* CommandGroupArr[] = 
+</pre><p> 3.) Write new pointer of 1.) to CommandGroupTypeDef* CommandGroupArr[] <a class="el" href="_commands_8cpp.html">Commands.cpp</a> </p><pre class="fragment">  CommandGroupTypeDef* CommandGroupArr[] = 
   {
     &amp;CONTROL,
     &amp;BRAKE,
@@ -227,8 +227,8 @@ Adding custom functionality</h2>
     &amp;&lt;name&gt;,
     NULL
   };
-</pre><p> 4.) Declare function callbacks of commands [ 2.) functionCallbackPointer ] in <a class="el" href="Commands_8h.html">Commands.h</a>: </p><pre class="fragment">  void yourFunction( String someString ); // Function needs to follow exact declaration
-</pre><p> 5.) Implement <code>yourFunction()</code> in <a class="el" href="CommandCallbacks_8cpp.html">CommandCallbacks.cpp</a> </p>
+</pre><p> 4.) Declare function callbacks of commands [ 2.) functionCallbackPointer ] in <a class="el" href="_commands_8h.html">Commands.h</a>: </p><pre class="fragment">  void yourFunction( String someString ); // Function needs to follow exact declaration
+</pre><p> 5.) Implement <code>yourFunction()</code> in <a class="el" href="_command_callbacks_8cpp.html">CommandCallbacks.cpp</a> </p>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 </div><!-- doc-content -->
