@@ -61,8 +61,36 @@ ISR( TIMER2_COMPA_vect )
 
 ISR( PCINT2_vect )
 {
+<<<<<<< Updated upstream
   // Reading delta time between pin state change – times 2 for reading 1 period (ISR is called both on falling and rising edge)
   writePulseBuff ( 2 * readPulseCount() );    
+=======
+  /* 
+    Measuring delta time between pin state change 
+  */
+  #if ( PULSE_DELTA_READ == EDGE_BOTH )
+    /* 
+      Aproximating number of pulses. 
+      Possible only when duty cycle of the signal is 50%!!! 
+    */
+    writePulseBuff ( 2 * readPulseCount() );                
+  #elif ( PULSE_DELTA_READ == EDGE_RISING )
+    /* 
+      Writing buffer only on rising edge -> encoder pin is high. 
+    */
+    if( digitalRead( 4 ) ) 
+    {
+      writePulseBuff ( readPulseCount() );
+    }
+  #elif ( PULSE_DELTA == EDGE_FALLING )
+    /* 
+      Writing buffer only on rising edge -> encoder pin is low. 
+    */
+    if( !encoderPinHigh() ) writePulseBuff ( readPulseCount() );
+  #else
+    #error "[PULSE_DELTA_READ] <?> Specified macro is not defined!!!"
+  #endif
+>>>>>>> Stashed changes
 
   #if ENC_WDG_EN == 1
     if( PID_controller.enable ) ENC_WatchDog = 0;
@@ -96,8 +124,17 @@ void setup() {
   pinMode(5, OUTPUT);         // Direction pin
   digitalWrite( 7, 1 );       // Disengage brake
 
+<<<<<<< Updated upstream
   #if REG_MOTOR_AUTOSTART == 1
     DisablePWM_HiZ();           // Disable high impedance state of PWM output pin
+=======
+  pinMode(9, OUTPUT );
+  EnablePWM();
+  SetPwmDuty(0);
+
+  #if ( REG_MOTOR_AUTOSTART == 1 )
+    // DisablePWM_HiZ();           // Disable high impedance state of PWM output pin
+>>>>>>> Stashed changes
     EnablePWM();                // Enabling PWM
     extern MODE sellected_mode;
     sellected_mode = regulation;

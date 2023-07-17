@@ -26,17 +26,17 @@ float getRPMfromPulses();
 float calcRPM( const uint32_t cnt );
 
 /*
+  PWM duty setter/getter
+*/
+void SetPwmDuty( float dutyPerc );
+float GetPwmDuty();
+
+/*
   Config functions
 */
 void PulseCaptureConfig();
 void PeriodicInterruptConfig();
 void PwmConfig();
-
-/*
-  PWM duty setter/getter
-*/
-void SetPwmDuty( float dutyPerc );
-float GetPwmDuty();
 
 /*
   PWM on/off

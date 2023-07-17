@@ -59,13 +59,11 @@ void MOTOR_off_Callback( String msg )
     PID_controller.motor_start = 1;
   }  
   DisablePWM();
-  EnablePWM_HiZ();
 };
 
 void MOTOR_on_Callback( String msg )
 {
   EnablePWM();
-  DisablePWM_HiZ();
   if( sellected_mode == regulation )
   {
     PID_controller.motor_start = 1;

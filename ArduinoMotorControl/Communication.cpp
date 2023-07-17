@@ -3,7 +3,17 @@
 extern CommandGroupTypeDef* CommandGroupArr[];
 extern CommandTypeDef MiscCommands[];
 
-uint8_t g_group_idx = 255;  // Sellected group index -> 255 = no sellection
+/**
+ * \defgroup CLI Command Line Interface (CLI)
+ * @{
+*/
+
+/** 
+ * @brief Global variable holding current command group sellected.
+ * If index is `255` then no command group is sellected.
+*/
+uint8_t g_group_idx = 255;  
+
 
 void msgToCommand( String msg )
 {
@@ -59,11 +69,151 @@ void printHeader()
   }
 };
 
-
-/*
-  Add exeption for two or more spaces !
+/**
+  * @brief Function for parsing floating point or decimal numbers from the input string
+  * @param strNum String containing number (Floating or integer)
+  * @return Parsed floating point number from the input sring
 */
-uint8_t stringToWords( String msg, String words[MAX_WORDS_IN_PROMPT] )
+float parseFloat( String strNum )
+{
+  uint8_t num_idx = 0;  // variable for indexing char in char string
+  const char decimalPoint = '.';  
+  boolean foundDecimalPoint = 0;  // flag for reading decimal part of string
+  char integer[16] = {0};   // char string containing integer part
+  char decimal[16] = {0};   // char string containing decimal part
+
+  uint8_t idx;
+  /* iterate each string character */
+  for( idx = 0; idx < strNum.length(); idx++ )
+  {
+    /* Check if character is representing number or dot */
+    if( ( strNum[idx] < '0' || strNum[idx] > '9') &&  strNum[idx] != '.' ) return -1.0f;
+    if( strNum[idx] == decimalPoint )
+    {
+      foundDecimalPoint = 1;
+      num_idx = 0;
+      continue;
+    }
+    if( foundDecimalPoint ) decimal[num_idx++] = strNum[idx];
+    else integer[num_idx++] = strNum[idx];
+  }
+  uint32_t parsedInteger = charStrToDec( integer ); // integer representation of integer part
+  uint32_t parsedDecimal = charStrToDec( decimal ); // integer representation of decimal part
+
+  float parsedFloat = 0.0f;
+  parsedFloat = (float)parsedDecimal / (float)powerOf10( (uint8_t)strlen(decimal) );
+  parsedFloat += (float)parsedInteger;
+  return parsedFloat;
+};
+
+/**
+  * @brief UART string read with UART_TERMINATOR_CHAR character as the string end.
+  */
+String getStringUART()
+{
+  while( Serial.available() == 0 ){};                     // Wait for input
+  return Serial.readStringUntil( UART_TERMINATOR_CHAR );
+};
+
+void resetGroup( String msg )
+{
+  g_group_idx = 255;
+};
+
+/**
+ * \defgroup GlobalCommands Global Commands
+ * @{
+*/
+
+/**
+ * @brief Clears serial terminal by adding 50 new lines.
+ * @param msg Doesn't do anything.
+*/
+void clearTerminal( String msg )
+{
+  for( uint8_t i; i < 50; i++ ) Serial.println();
+};
+
+<<<<<<< Updated upstream:ArduinoMotorControl/Communication.cpp
+void resetGroup( String msg )
+{
+  g_group_idx = 255;
+};
+=======
+
+void helper( String msg )
+{
+  Serial.println(F(
+    "CONTROL <ct>\r\n"
+    "------------\r\n"
+    "  -> mode <new mode> - If second argument is given(optional: mode), then it specifies desired mode. Options:\r\n"
+    "    - reg - regulation mode\r\n"
+    "    - man - manual mode\r\n"
+    "  -> start - Starts the motor from 0 RPM.\r\n"
+    "  -> stop - Stops the motor.\r\n"
+    "  -> duty <new duty> - Prints out currently set duty. If second argument is given(optional: number),\r\n "
+    "     then it specifies new duty. (man mode)\r\n"
+    "  -> rpm <new rpm> - Prints out currently set RPM. If second argument is given(optional: number),\r\n" 
+    "     then it specifies desired RPM. (reg mode)\r\n"
+    "  -> s <n> - Sets speed saved in: (#define SPEEDS { 1440, 1596, 2100, 2800 } - config.h), where n is\r\n"
+    "     array index + 1. (reg mode)\r\n"
+    "  -> '+' - Increases speed from current speed index n. (reg mode)\r\n"
+    "  -> '-' - Decreases speed from current speed index n. (reg mode)\r\n\n"
+    "Brake <brake>\r\n"
+    "-------------\r\n"
+    "  -> on - Brake is activated.\r\n"
+    "  -> off - Brake is deactivated.\r\n\n"
+    "Direction <dir>\r\n"
+    "---------------\r\n"
+    "  -> cw - Motor is set to turn clockwise.\r\n"
+    "  -> ccw - Motor is set to turn counter clockwise.\r\n"
+    "  -> chDir - Motor is set to turn counter clockwise.\r\n"
+    ));
+};
+
+/**
+ * @}
+*/
+
+/**
+ * @}
+*/
+
+/**
+ * \defgroup Communication_Static Static functions
+ * \ingroup CLI
+ * @{
+*/
+
+/**
+ * @brief Function converts character representing single digit number to unsigned integer. 
+ * @param ch Character that is goint to be converted to uint8_t.
+ * @return uint8_t value from 0-9. If the input parameter ch is not a character from interval <'0'-'9'> -> returns 0.
+*/
+static uint8_t charToDec( char ch )
+{
+  ch -= 48;   // char - 48 => integer represented by char
+  return ( ch < 0 || ch > 9 ) ? 0 : ch; // if char is not representing number => returning 0
+}; 
+
+static uint32_t charStrToDec( char* numStr)
+{
+  uint32_t num = 0;
+  for( uint8_t idx = 0; idx < strlen(numStr); idx++ )
+  {
+    num *= 10;
+    num += charToDec( numStr[idx] );
+  }
+  return num;
+};
+
+/**
+ * @brief Parse one continious string to more words divided by space character.
+ * @param msg Input string containing words.
+ * @param words Array of strings – single words.
+ * @return Number of parsed words
+*/
+static uint8_t stringToWords( String msg, String words[MAX_WORDS_IN_PROMPT] )
 {
   uint8_t wordCount = 0;              // Number of words in string msg
   uint8_t idx = 0;                    // Current char of string msg
@@ -92,78 +242,16 @@ uint8_t stringToWords( String msg, String words[MAX_WORDS_IN_PROMPT] )
   return ( wordCount );
 };
 
-/*
-  Function for parsing floating point or decimal numbers from the input string
+/**
+ * @brief Function calculates n-th power of 10.
 */
-float parseFloat( String strNum )
-{
-  uint8_t num_idx = 0;  // variable for indexing char in char string
-  const char decimalPoint = '.';  
-  boolean foundDecimalPoint = 0;  // flag for reading decimal part of string
-  char integer[16] = {0};   // char string containing integer part
-  char decimal[16] = {0};   // char string containing decimal part
-
-  uint8_t idx;
-  for( idx = 0; idx < strNum.length(); idx++ )
-  {
-    if( ( strNum[idx] < '0' || strNum[idx] > '9') &&  strNum[idx] != '.' ) return -1.0f;
-    if( strNum[idx] == decimalPoint )
-    {
-      foundDecimalPoint = 1;
-      num_idx = 0;
-      continue;
-    }
-    if( foundDecimalPoint ) decimal[num_idx++] = strNum[idx];
-    else integer[num_idx++] = strNum[idx];
-  }
-  uint32_t parsedInteger = charStrToDec( integer ); // integer representation of integer part
-  uint32_t parsedDecimal = charStrToDec( decimal ); // integer representation of decimal part
-
-  float parsedFloat = 0.0f;
-  parsedFloat = (float)parsedDecimal / (float)powerOf10( (uint8_t)strlen(decimal) );
-  parsedFloat += (float)parsedInteger;
-  return parsedFloat;
-};
-
-/*
-  Blocking UART string read with newline character as the string end
-*/
-String getStringUART()
-{
-  while( Serial.available() == 0 ){};                     // Wait for input
-  return Serial.readStringUntil( UART_TERMINATOR_CHAR );
-};
-
-uint32_t charStrToDec( char* numStr)
-{
-  uint32_t num = 0;
-  for( uint8_t idx = 0; idx < strlen(numStr); idx++ )
-  {
-    num *= 10;
-    num += charToDec( numStr[idx] );
-  }
-  return num;
-};
-
-uint8_t charToDec( char ch )
-{
-  ch -= 48;   // char - 48 => integer represented by char
-  return ( ch < 0 || ch > 9 ) ? 0 : ch; // if char is not representing number => returning 0
-}; 
-
-uint32_t powerOf10( uint8_t n )
+static uint32_t powerOf10( const uint8_t n )
 {
   uint32_t power = 1;
   for( int i = 0; i < n; i++  ) power *= 10;
   return power;
 };
-
-void clearTerminal( String msg )
-{
-  for( uint8_t i; i < 50; i++ ) Serial.println();
-};
-
-void resetGroup( String msg )
-{
-  g_group_idx = 255;
-};
+/**
+ * @}
+*/
+>>>>>>> Stashed changes:ArduinoMotorControl/src/Communication.cpp

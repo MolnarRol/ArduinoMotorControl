@@ -12,16 +12,20 @@
 String getStringUART();
 void printHeader();
 void msgToCommand( String msg );
-uint8_t stringToWords( String msg, String words[6] );
+void resetGroup( String msg );
 float parseFloat( String strNum );
-uint8_t charToDec( char ch ); 
-uint32_t charStrToDec( char* numStr );
 
 /*
-  Misc functions
+  Global functions
 */
 void clearTerminal( String msg );
-void resetGroup( String msg );
 void helper( String msg );
-uint32_t powerOf10( uint8_t n );
+
+/**
+ * Static functions
+*/
+static uint32_t charStrToDec( char* numStr );
+static uint8_t charToDec( char ch ); 
+static uint8_t stringToWords( String msg, String words[6] );
+static uint32_t powerOf10( const uint8_t n );
 #endif
