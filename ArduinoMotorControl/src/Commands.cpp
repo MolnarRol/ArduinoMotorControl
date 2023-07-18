@@ -1,4 +1,4 @@
-#include "Commands.h"
+#include "../inc/Commands.h"
 
 /*
   Commands for motor controll
@@ -77,11 +77,7 @@ CommandTypeDef MiscCommands[] =
   { "clear", &clearTerminal, "Clear output terminal" },
   { "back", &resetGroup, "" },
   { "status", &StatusCallback, "" },
-<<<<<<< Updated upstream:ArduinoMotorControl/Commands.cpp
-  // { "help", &helper, "" },
-=======
   { "help", &helper, "" },
   { "t", &test, "" },
->>>>>>> Stashed changes:ArduinoMotorControl/src/Commands.cpp
   { "__End__", NULL }
 };

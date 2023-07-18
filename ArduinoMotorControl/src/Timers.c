@@ -90,9 +90,9 @@ inline void setPinLowPWM()
   PORTB &= ~(1 << 1);    // set port to logic low
 };
 
-// /**
-//   @brief Function sets PWM output to high impedance state.
-// */
+/**
+  @brief Function sets PWM output to high impedance state.
+*/
 // inline void EnablePWM_HiZ()
 // {
 //   DDRB &= ~( 1 << DDB1 );

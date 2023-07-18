@@ -1,15 +1,15 @@
-#include "CommandCallbacks.h"
+#include "../inc/CommandCallbacks.h"
 
 /*
   User predefined speeds
 */
-float speeds[] = SPEEDS;
+const float speeds[] = SPEEDS;
 const uint8_t speeds_len = sizeof(speeds) / sizeof(float);
 uint8_t speed_idx = 0;
 
 enum MODE sellected_mode = regulation;
 
-void StatusCallback( String msg )
+void StatusCallback( const String msg )
 {
   Serial.print("Sellected mode: ");
   if( sellected_mode == regulation ) Serial.println( "Regulation" );
@@ -24,7 +24,10 @@ void StatusCallback( String msg )
   extern uint16_t ENC_WatchDog;
 #endif
 
-void MODE_Callback( String msg )
+/**
+  TEST
+*/
+void MODE_Callback( const String msg )
 {
   if( msg ==  "man")
   {
@@ -50,26 +53,20 @@ void MODE_Callback( String msg )
   }
 };
 
-void MOTOR_off_Callback( String msg )
+void MOTOR_off_Callback( const String msg )
 {
   if( sellected_mode == regulation )
   {
     stopRegulation( &PID_controller );
     PID_controller.motor_start = 1;
+    SetPwmDuty(0.0f);
   }  
   DisablePWM();
-<<<<<<< Updated upstream:ArduinoMotorControl/CommandCallbacks.cpp
-=======
   // EnablePWM_HiZ();
->>>>>>> Stashed changes:ArduinoMotorControl/src/CommandCallbacks.cpp
 };
 
-void MOTOR_on_Callback( String msg )
+void MOTOR_on_Callback( const String msg )
 {
-<<<<<<< Updated upstream:ArduinoMotorControl/CommandCallbacks.cpp
-  EnablePWM();
-=======
->>>>>>> Stashed changes:ArduinoMotorControl/src/CommandCallbacks.cpp
   if( sellected_mode == regulation )
   {
     PID_controller.motor_start = 1;
@@ -79,21 +76,21 @@ void MOTOR_on_Callback( String msg )
   // DisablePWM_HiZ();
 };
 
-void SPEED_Callback( String msg )
+void SPEED_Callback( const String msg )
 {
   speed_idx = (uint16_t)parseFloat( msg ) - 1;
   if( speed_idx >= speeds_len ) speed_idx = speeds_len - 1;
   changeSetPoint( &PID_controller, speeds[speed_idx] );
 };
 
-void SPEED_inc_Callback( String msg )
+void SPEED_inc_Callback( const String msg )
 {
   speed_idx++;
   if( speed_idx == speeds_len ) speed_idx = speeds_len - 1;
   changeSetPoint( &PID_controller, speeds[speed_idx] );
 };
 
-void SPEED_dec_Callback( String msg )
+void SPEED_dec_Callback( const String msg )
 {
   speed_idx--;
   if( speed_idx == 255 ) speed_idx = 0;
@@ -103,7 +100,7 @@ void SPEED_dec_Callback( String msg )
 /*
   Regulation Callback functions
 */
-void RPM_Callback( String msg )
+void RPM_Callback( const String msg )
 {
   if( msg.length() > 0 ) 
   {
@@ -118,7 +115,7 @@ void RPM_Callback( String msg )
 /*
   PWM Callback functions
 */
-void PWM_duty_Callback( String msg )
+void PWM_duty_Callback( const String msg )
 {
   if( msg.length() > 0 ) SetPwmDuty( parseFloat( msg ) ); 
   else
@@ -132,33 +129,33 @@ void PWM_duty_Callback( String msg )
 /*
   Brake Callback functions
 */
-void BRAKE_on_Callback( String msg )
+void BRAKE_on_Callback( const String msg )
 {
-  digitalWrite( 7, 0 );
+  digitalWrite( BRK_PIN, 0 );
   MOTOR_off_Callback("");
 };
 
-void BRAKE_off_Callback( String msg )
+void BRAKE_off_Callback( const String msg )
 {
-  digitalWrite( 7, 1 );
+  digitalWrite( BRK_PIN, 1 );
 };
 
 /*
   Direction Callback functions
 */
-void DIR_1_Callback( String msg )
+void DIR_1_Callback( const String msg )
 {
-  digitalWrite( 5, 1);
+  digitalWrite( DIR_PIN, 1);
 };
 
-void DIR_2_Callback( String msg )
+void DIR_2_Callback( const String msg )
 {
-  digitalWrite( 5, 0);
+  digitalWrite( DIR_PIN, 0);
 };
 
-void DIR_change_Callback( String msg )
+void DIR_change_Callback( const String msg )
 {
-  static uint8_t state = ( PORTD & ~(1 << 5) ) >> 5;    // P5
+  static uint8_t state = ( PORTD & ~(1 << DIR_PIN) ) >> DIR_PIN;    // P5
   state = !state;
-  digitalWrite( 5, state );
+  digitalWrite( DIR_PIN, state );
 };

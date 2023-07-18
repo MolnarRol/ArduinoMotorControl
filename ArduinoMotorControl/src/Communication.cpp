@@ -1,19 +1,9 @@
-#include "Communication.h"
+#include "../inc/Communication.h"
 
 extern CommandGroupTypeDef* CommandGroupArr[];
 extern CommandTypeDef MiscCommands[];
 
-/**
- * \defgroup CLI Command Line Interface (CLI)
- * @{
-*/
-
-/** 
- * @brief Global variable holding current command group sellected.
- * If index is `255` then no command group is sellected.
-*/
-uint8_t g_group_idx = 255;  
-
+uint8_t g_group_idx = 255;  // Sellected group index -> 255 = no sellection
 
 void msgToCommand( String msg )
 {
@@ -69,10 +59,41 @@ void printHeader()
   }
 };
 
-/**
-  * @brief Function for parsing floating point or decimal numbers from the input string
-  * @param strNum String containing number (Floating or integer)
-  * @return Parsed floating point number from the input sring
+
+/*
+  Add exeption for two or more spaces !
+*/
+uint8_t stringToWords( String msg, String words[MAX_WORDS_IN_PROMPT] )
+{
+  uint8_t wordCount = 0;              // Number of words in string msg
+  uint8_t idx = 0;                    // Current char of string msg
+  uint8_t idx_word = 0;               // Current char of string[word_count][idx_word]
+  char tmp_word[COMMAND_MAX_CHAR];    // Temporary word buffer char string
+
+  const char delimiter = ' ';
+
+  for( idx; idx < msg.length(); idx++ )                     // Looping each character in msg string
+  {
+    if( msg[idx] != delimiter ) 
+    {
+      if( (idx_word + 1) == COMMAND_MAX_CHAR ) break;       // If we exceed the maximum command length ( in number of chars ) then we break tke loop
+      tmp_word[idx_word++] = msg[idx];
+    }
+    else
+    {
+      tmp_word[idx_word] = '\0';     // End the char string
+      idx_word = 0;
+      words[wordCount++] = tmp_word;
+    }
+  }   
+  tmp_word[idx_word] = '\0';
+  words[wordCount++] = tmp_word;
+
+  return ( wordCount );
+};
+
+/*
+  Function for parsing floating point or decimal numbers from the input string
 */
 float parseFloat( String strNum )
 {
@@ -83,10 +104,8 @@ float parseFloat( String strNum )
   char decimal[16] = {0};   // char string containing decimal part
 
   uint8_t idx;
-  /* iterate each string character */
   for( idx = 0; idx < strNum.length(); idx++ )
   {
-    /* Check if character is representing number or dot */
     if( ( strNum[idx] < '0' || strNum[idx] > '9') &&  strNum[idx] != '.' ) return -1.0f;
     if( strNum[idx] == decimalPoint )
     {
@@ -106,40 +125,48 @@ float parseFloat( String strNum )
   return parsedFloat;
 };
 
-/**
-  * @brief UART string read with UART_TERMINATOR_CHAR character as the string end.
-  */
+/*
+  Blocking UART string read with newline character as the string end
+*/
 String getStringUART()
 {
   while( Serial.available() == 0 ){};                     // Wait for input
   return Serial.readStringUntil( UART_TERMINATOR_CHAR );
 };
 
-void resetGroup( String msg )
+uint32_t charStrToDec( char* numStr)
 {
-  g_group_idx = 255;
+  uint32_t num = 0;
+  for( uint8_t idx = 0; idx < strlen(numStr); idx++ )
+  {
+    num *= 10;
+    num += charToDec( numStr[idx] );
+  }
+  return num;
 };
 
-/**
- * \defgroup GlobalCommands Global Commands
- * @{
-*/
+uint8_t charToDec( char ch )
+{
+  ch -= 48;   // char - 48 => integer represented by char
+  return ( ch < 0 || ch > 9 ) ? 0 : ch; // if char is not representing number => returning 0
+}; 
 
-/**
- * @brief Clears serial terminal by adding 50 new lines.
- * @param msg Doesn't do anything.
-*/
+uint32_t powerOf10( uint8_t n )
+{
+  uint32_t power = 1;
+  for( int i = 0; i < n; i++  ) power *= 10;
+  return power;
+};
+
 void clearTerminal( String msg )
 {
   for( uint8_t i; i < 50; i++ ) Serial.println();
 };
 
-<<<<<<< Updated upstream:ArduinoMotorControl/Communication.cpp
 void resetGroup( String msg )
 {
   g_group_idx = 255;
 };
-=======
 
 void helper( String msg )
 {
@@ -171,96 +198,9 @@ void helper( String msg )
     ));
 };
 
-<<<<<<< Updated upstream:ArduinoMotorControl/Communication.cpp
-/**
- * @}
-*/
-
-/**
- * @}
-*/
-
-/**
- * \defgroup Communication_Static Static functions
- * \ingroup CLI
- * @{
-*/
-
-/**
- * @brief Function converts character representing single digit number to unsigned integer. 
- * @param ch Character that is goint to be converted to uint8_t.
- * @return uint8_t value from 0-9. If the input parameter ch is not a character from interval <'0'-'9'> -> returns 0.
-*/
-static uint8_t charToDec( char ch )
-{
-  ch -= 48;   // char - 48 => integer represented by char
-  return ( ch < 0 || ch > 9 ) ? 0 : ch; // if char is not representing number => returning 0
-}; 
-
-static uint32_t charStrToDec( char* numStr)
-{
-  uint32_t num = 0;
-  for( uint8_t idx = 0; idx < strlen(numStr); idx++ )
-  {
-    num *= 10;
-    num += charToDec( numStr[idx] );
-  }
-  return num;
-};
-
-/**
- * @brief Parse one continious string to more words divided by space character.
- * @param msg Input string containing words.
- * @param words Array of strings – single words.
- * @return Number of parsed words
-*/
-static uint8_t stringToWords( String msg, String words[MAX_WORDS_IN_PROMPT] )
-{
-  uint8_t wordCount = 0;              // Number of words in string msg
-  uint8_t idx = 0;                    // Current char of string msg
-  uint8_t idx_word = 0;               // Current char of string[word_count][idx_word]
-  char tmp_word[COMMAND_MAX_CHAR];    // Temporary word buffer char string
-
-  const char delimiter = ' ';
-
-  for( idx; idx < msg.length(); idx++ )                     // Looping each character in msg string
-  {
-    if( msg[idx] != delimiter ) 
-    {
-      if( (idx_word + 1) == COMMAND_MAX_CHAR ) break;       // If we exceed the maximum command length ( in number of chars ) then we break tke loop
-      tmp_word[idx_word++] = msg[idx];
-    }
-    else
-    {
-      tmp_word[idx_word] = '\0';     // End the char string
-      idx_word = 0;
-      words[wordCount++] = tmp_word;
-    }
-  }   
-  tmp_word[idx_word] = '\0';
-  words[wordCount++] = tmp_word;
-
-  return ( wordCount );
-};
-
-/**
- * @brief Function calculates n-th power of 10.
-*/
-static uint32_t powerOf10( const uint8_t n )
-{
-  uint32_t power = 1;
-  for( int i = 0; i < n; i++  ) power *= 10;
-  return power;
-};
-/**
- * @}
-*/
->>>>>>> Stashed changes:ArduinoMotorControl/src/Communication.cpp
-=======
 void test( String msg )
 {
   digitalWrite(9, 0);
   PeriodicInterruptEnable();
   PulseCaptureEnable();
 };
->>>>>>> Stashed changes:ArduinoMotorControl/src/Communication.cpp

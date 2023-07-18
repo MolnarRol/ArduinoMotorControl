@@ -1,11 +1,11 @@
-#include "Regulation.h"
+#include "../inc/Regulation.h"
 
 PID_TypeDef PID_controller = {
 
   .params = {
-    .kp = Kp,
-    .ki = Ki,
-    .kd = Kd
+    .kp = KP,
+    .ki = KI,
+    .kd = KD
   },
 
   .limits = {
@@ -23,27 +23,13 @@ PID_TypeDef PID_controller = {
   .motor_start = 1
 };
 
+/**
+  @param handler PID regulation struct that is used to calculate the regulation output.
+  @param y Regulated system output variable.
+  @return Regulator output for controlled system.
+*/
 float updatePID( PID_TypeDef* handler, float y )
 {
-<<<<<<< Updated upstream:ArduinoMotorControl/Regulation.c
-
-  if( !handler->enable )
-  {
-    return 0.0f;
-  }
-
-  if( handler->motor_start )
-  {
-    if( y >= MOTOR_RPM_REG_START )
-    {
-      handler->motor_start = 0;
-      startRegulation( handler );
-    } 
-    else return 100.0f;
-  }
-
-=======
->>>>>>> Stashed changes:ArduinoMotorControl/src/Regulation.c
   float U = 0;
   float P = 0;
   float I = 0;
@@ -66,11 +52,11 @@ float updatePID( PID_TypeDef* handler, float y )
   #if ARW_EN == 1
     if( I > handler->limits.out_max )
     {
-      handler->integrator = handler->limits.out_max / Ki;
+      handler->integrator = handler->limits.out_max / KI;
     }
     else if( I < handler->limits.out_min )
     {
-      handler->integrator = handler->limits.out_min / Ki;
+      handler->integrator = handler->limits.out_min / KI;
     }
   #endif
 

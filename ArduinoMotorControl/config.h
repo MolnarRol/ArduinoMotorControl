@@ -1,8 +1,15 @@
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
 
-/*
-  Software setup
+#include <stdint.h>
+
+#define DEBUG
+
+/**
+  \defgroup config Configuration macros
+  Configuration is done by modifying config.h file macros.
+  Inside the config.h are defined all the relevant - project specific constants.
+  @{
 */
 
 /// Software version  
@@ -46,14 +53,14 @@
 /// Start motor with 100% until MOTOR_RPM_REG_START rpm is reached
 #define START_BOOST_EN 1             
 /// Start regulation after reaching defined RPM by this macro 
-#define MOTOR_RPM_REG_START 800.0f   
-/**
+#define MOTOR_RPM_REG_START 1600.0f   
+/** 
   Period of PID regulation output calculation
 */
 #define REG_PERIOD_MS 2              
 
 /*
-  PID parameters
+  Setpoint interval -> for rpm <new rpm> command
 */
 
 /// changeSetPoint() maximum value [rpm] 
@@ -64,18 +71,18 @@
 /*
   Speeds definitions
 */
-#define SPEEDS { 1440, 1596, 2100, 2800 }   // Speeds can be called by "s [index+1]"" => for 1440: s 1
+/// Speeds can be called by "s [index+1]"" => for 1440: s 1
+#define SPEEDS { 1440, 1596, 2100, 2800 }   
+/// @}
 
-/*
-  TimerConfig.h Timing config veriables
+/**
+  \defgroup timer_config Timing related macros
+  TimerConfig.h Timing config macros
+  @{
 */
-#define ENC_N_PULSES 100              // Rotary encoder steps per rotation
-#define FIR_TIME 1.0f                 // Filtration time constant
-#define TIM_STEP_us ( 1e6f / ( 16e6f * 1 )) // period of timer 0 for pulse measurement -> 1e6 / ( crystal_clock * prescaling )
-#define PULSES_MAX 40                 // maximum number of pulses that can be read
 
 /// Rotary encoder steps per rotation
-#define ENC_N_PULSES 60    
+#define ENC_N_PULSES 100    
 
 /**
   Filtration time constant     
@@ -92,21 +99,47 @@
 /*
   Encoder pulse watchdog
 */
-#define ENC_WDG_EN 1                  // Enable encover pulse watchdog functionality
-#define ENC_WDG_MS 20                 // Wait for n [ms] for encoder impulse. If no pulse will be detected in this time –> motor stop
-
-/*
-  Communication.h setup variables
+/**
+  \defgroup enc_watchdog  Watchdog for missing encoder signal
+  @{
 */
-#define COMMAND_MAX_CHAR 16           // Maximum number of characters in a single word
-#define MAX_WORDS_IN_PROMPT 2         // Maximum number of words that can be processed
 
 /// Enable encover pulse watchdog functionality
-#define ENC_WDG_EN 01         
+#define ENC_WDG_EN 1          
 /** Wait for n [ms] for encoder impulse. If no pulse will be detected in this time –> motor stop        
   ISR( TIMER2_COMPA_vect )
 */
-#define UART_BAUD 115200              // UART baud rate
-#define UART_TERMINATOR_CHAR '\r'     // Carriage return. For new line - '\n'
+#define ENC_WDG_MS 20   
 
+/// @}
+
+/**
+  \defgroup enc_pulse_detection Encoder pulse detection - edge sellection
+  @{
+*/
+#define EDGE_RISING 0
+#define EDGE_FALLING 1
+#define EDGE_BOTH 2
+
+/// Sellected edge detection mode
+#define PULSE_DELTA_READ EDGE_RISING
+/// @}
+/// @}
+
+/**
+  \defgroup uart_settings UART/Communication settings
+  Serial communication macro settings
+  @{
+*/
+/// UART baud rate
+#define UART_BAUD 115200       
+/// Carriage return. For new line - '\n'       
+#define UART_TERMINATOR_CHAR '\r'   
+
+/// Maximum number of characters in a single word
+#define COMMAND_MAX_CHAR 16        
+/// Maximum number of words that can be processed   
+#define MAX_WORDS_IN_PROMPT 2   
+/// @}
+/// @}
 #endif
