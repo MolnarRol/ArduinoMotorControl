@@ -25,6 +25,7 @@ PID_TypeDef PID_controller = {
 
 float updatePID( PID_TypeDef* handler, float y )
 {
+<<<<<<< Updated upstream:ArduinoMotorControl/Regulation.c
 
   if( !handler->enable )
   {
@@ -41,6 +42,8 @@ float updatePID( PID_TypeDef* handler, float y )
     else return 100.0f;
   }
 
+=======
+>>>>>>> Stashed changes:ArduinoMotorControl/src/Regulation.c
   float U = 0;
   float P = 0;
   float I = 0;
@@ -102,13 +105,13 @@ void changeSetPoint( PID_TypeDef* handler, float newSetPoint )
   if( newSetPoint >= RPM_MIN && newSetPoint <= RPM_MAX ) handler->setPoint = newSetPoint;
 }
 
-void startRegulation( PID_TypeDef* handler )
+inline void startRegulation( PID_TypeDef* handler )
 {
   handler->integrator = GetPwmDuty() / handler->params.ki;    // integrator preload
   handler->enable = 1;
 };
 
-void stopRegulation( PID_TypeDef* handler )
+inline void stopRegulation( PID_TypeDef* handler )
 {
   handler->enable = 0;
 };

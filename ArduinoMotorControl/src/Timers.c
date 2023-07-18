@@ -1,9 +1,22 @@
-#include "../inc/TimerConfig.h"
+#include "../inc/Timers.h"
 
 /// Timer 0 overflow counter global variable.
 /// Variable is used to increase limited timer resolution to more then 8 bits. Value is incremented by ISR( TIMER0_COMPA_vect ).
 /// Variable is read and written to 0 by readPulseCount() function.
 uint16_t g_TIM0_ov = 0;
+
+/**
+  @brief Function that configures Timer 1 as PWM output with fixed frequency(20kHz).
+*/
+void PwmConfig()
+{
+  TCCR1A = 0;
+  TCCR1B = 0;
+  TCCR1A |= 0b00000010; // Enable fast PWM on channel A
+  TCCR1B |= 0b00011001; // Enable fast PWM with no prescaling
+  ICR1 = 799;           /*magic number, use define with frequency and another that will calculate this value */
+  OCR1A = 0;
+};
 
 /**
   @brief Function for setting PWM duty cycle
@@ -46,72 +59,11 @@ float GetPwmDuty(){
 };
 
 /**
-  @brief Function that configures Timer 0 and D4 GPIO pin as pin change interrupt.
-  Timer 0 is free running and is reseted only by readPulseCount(). Function readPulseCount()
-  is called in ISR( PCINT2_vect ), which reacts to pin change event.
-  
-  Free running 8-bit timer config. We are not using counter overflow interrupt - is binded 
-  to Arduino library and has issues compiling. Same functionality is achieved by output compare,
-  where compare value is equal the TOP.
-*/
-void PulseCaptureConfig()
-{
-  /*
-    Register reset.
-  */
-  TCCR0A = 0;
-  TCCR0B = 0;
-
-  /*
-    Clear timer on compare match(CTC). Top is defined by OCRA register.
-    No prescaling(prescaling by 1).
-  */
-  TCCR0A |= 0b00000010;
-  TCCR0B |= 0b00000001;
-  OCR0A = 255;                  // Setting the top to timer max.
-  TIMSK0 |= ( 1 << (OCIE0A) );  // Enabling output compare interrupt.
-
-  /*
-    Pinchange interrupt on D4 (PORTD 4) PCINT20.
-  */
-  PCICR |= 1 << (PCIE2);    // Pin Change Interrupt Enable 2.
-  PCMSK2 |= 1 << (PCINT20); // Enable pin change interrupt on PCINT20.
-};
-
-/**
-  @brief Function that configures Timer 1 as PWM output with fixed frequency(20kHz).
-*/
-void PwmConfig()
-{
-  TCCR1A = 0;
-  TCCR1B = 0;
-  TCCR1A |= 0b00000010; // Enable fast PWM on channel A
-  TCCR1B |= 0b00011001; // Enable fast PWM with no prescaling
-  ICR1 = 799;           /*magic number, use define with frequency and another that will calculate this value */
-  OCR1A = 0;
-};
-
-/**
-  @brief Function that configures Timer 2 to generate interrupt ISR( TIMER2_COMPA_vect ) each 2 ms.
-  Interrupt is used for calling updatePID() and to increment global variable ENC_WatchDog.
-*/
-void PeriodicInterruptConfig()
-{
-  TCCR2A = 0;
-  TCCR2B = 0;
-  TCCR2A |= 0b00000010;   // Enable Clear Timer on Compare Match
-  TCCR2B |= 0b00000101;   // Enable CTC and set prescaler to 128
-  TIMSK2 |= 0b00000010;   // Enable interupt from compare match –> timer reset
-  OCR2A = 249;            /*magic number, use define with frequency and another that will calculate this value */
-  TCNT2 = 0;
-};
-
-/**
   @brief Function that stops PWM generation.
 */
 inline void DisablePWM()
 {
-  TCCR1A &= ~(0b11000000);   // Turn of PWM
+  TCCR1A = 0;   // Turn of PWM
 };
 
 /**
@@ -119,7 +71,7 @@ inline void DisablePWM()
 */
 inline void EnablePWM()
 {  
-  TCCR1A |= 0b11000000;    // turn on PWM
+  TCCR1A |= 0b11000010;    // turn on PWM
 };
 
 /**
@@ -165,6 +117,77 @@ float GetStepPWM( const uint16_t TOP )
 };
 
 /**
+  @brief Function that configures Timer 2 to generate interrupt ISR( TIMER2_COMPA_vect ) each 2 ms.
+  Interrupt is used for calling updatePID() and to increment global variable ENC_WatchDog.
+*/
+void PeriodicInterruptConfig()
+{
+  TCCR2A = 0;
+  TCCR2B = 0;
+  OCR2A = 249;            /*magic number, use define with frequency and another that will calculate this value */
+  TCNT2 = 0;
+};
+
+void PeriodicInterruptEnable()
+{
+  TCCR2A |= 0b00000010;   // Enable Clear Timer on Compare Match
+  TCCR2B |= 0b00000101;   // Enable CTC and set prescaler to 128
+  TIMSK2 |= 0b00000010;   // Enable interupt from compare match –> timer reset
+}
+
+void PeriodicInterruptDisable()
+{
+  TCCR2A = 0;
+  TCCR2B = 0;
+  TIMSK2 = 0;
+}
+
+/**
+  @brief Function that configures Timer 0 and D4 GPIO pin as pin change interrupt.
+  Timer 0 is free running and is reseted only by readPulseCount(). Function readPulseCount()
+  is called in ISR( PCINT2_vect ), which reacts to pin change event.
+  
+  Free running 8-bit timer config. We are not using counter overflow interrupt - is binded 
+  to Arduino library and has issues compiling. Same functionality is achieved by output compare,
+  where compare value is equal the TOP.
+*/
+void PulseCaptureConfig()
+{
+  /*
+    Register reset.
+  */
+  TCCR0A = 0;
+  TCCR0B = 0;
+  OCR0A = 255;                  // Setting the top to timer max.
+
+  /*
+    Clear timer on compare match(CTC). Top is defined by OCRA register.
+    No prescaling(prescaling by 1).
+  */
+  TCCR0A |= 0b00000010;
+  TCCR0B |= 0b00000001;
+  
+  /*
+    Pinchange interrupt on D4 (PORTD 4) PCINT20.
+  */
+  PCICR |= 1 << (PCIE2);    // Pin Change Interrupt Enable 2.
+  PCMSK2 |= 1 << (PCINT20); // Enable pin change interrupt on PCINT20.
+};
+
+void PulseCaptureEnable()
+{
+  TIMSK0 |= ( 1 << (OCIE0A) );  // Enabling output compare interrupt.
+  TCNT0 = 0;
+}
+
+void PulseCaptureDisable()
+{
+  TCCR0A = 0;
+  // TCCR0B = 0;
+  TIMSK0 &= ~( 1 << (OCIE0A) );  // Enabling output compare interrupt.
+}
+
+/**
   @brief Function reads timer count between ISR( PCINT2_vect ) pin change interrupts.
   @return "Virtual" timer count.
   Function used global variable g_TIM0_ov and current timer count to calculate 
@@ -186,5 +209,6 @@ inline uint32_t readPulseCount()
 */
 inline uint8_t encoderPinHigh()
 {
-  return PORTD & ( 1 << PORTD4 );
+  // return PORTD & ( 1 << PORTD4 );
+  return digitalRead( 4 );
 };

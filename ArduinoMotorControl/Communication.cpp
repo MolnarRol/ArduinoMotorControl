@@ -171,6 +171,7 @@ void helper( String msg )
     ));
 };
 
+<<<<<<< Updated upstream:ArduinoMotorControl/Communication.cpp
 /**
  * @}
 */
@@ -254,4 +255,12 @@ static uint32_t powerOf10( const uint8_t n )
 /**
  * @}
 */
+>>>>>>> Stashed changes:ArduinoMotorControl/src/Communication.cpp
+=======
+void test( String msg )
+{
+  digitalWrite(9, 0);
+  PeriodicInterruptEnable();
+  PulseCaptureEnable();
+};
 >>>>>>> Stashed changes:ArduinoMotorControl/src/Communication.cpp

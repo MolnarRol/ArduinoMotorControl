@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 /*
   Test motor controll MCU project.
 
@@ -101,20 +102,27 @@ ISR( TIMER0_COMPA_vect )
 {
   g_TIM0_ov++;  // On overflow the variable is incremented -> getting more resolution out of timer ( 8 + 16 bits )
 }
+=======
+#include "inc/main.h"
+>>>>>>> Stashed changes
 
 void setup() {
+  /*
+    UART setup
+  */
+  Serial.begin( UART_BAUD );
+  clearTerminal( "" );
+
+  #ifdef DEBUG
+    Serial.println( F("[MCU reset]") );
+  #endif
+
   /*
     Timer setup functions
   */
   PulseCaptureConfig();       // Rotary encoder capture
   PwmConfig();                // Output PWM signal
   PeriodicInterruptConfig();  // Generation periodic interrupt each 2 ms
-
-  /*
-    UART setup
-  */
-  Serial.begin( UART_BAUD );
-  clearTerminal( "" );
 
   /*
     Digital pin setup
@@ -132,6 +140,10 @@ void setup() {
   EnablePWM();
   SetPwmDuty(0);
 
+  // DisablePWM_HiZ();
+  pinMode( 9, OUTPUT );
+  setPinHighPWM();
+
   #if ( REG_MOTOR_AUTOSTART == 1 )
     // DisablePWM_HiZ();           // Disable high impedance state of PWM output pin
 >>>>>>> Stashed changes
@@ -140,9 +152,21 @@ void setup() {
     sellected_mode = regulation;
     MOTOR_on_Callback("");
   #endif
+
+  #ifdef DEBUG
+    Serial.println( F("[Setup complete]") );
+  #endif
 }
 
+<<<<<<< Updated upstream
 void loop() {                     // Handling serial communication
+=======
+/**
+ * Main code loop
+ * This loop handles all UART communication
+*/
+void loop() {                    
+>>>>>>> Stashed changes
   printHeader();            
   String msg = getStringUART();
   if( msg.length() > 0 )
@@ -151,4 +175,13 @@ void loop() {                     // Handling serial communication
     msgToCommand( msg );
   }
   else Serial.println(); 
+}
+
+
+void halt( void )
+{
+  DisablePWM();
+  setPinHighPWM();
+  cli();
+  while(1);
 }

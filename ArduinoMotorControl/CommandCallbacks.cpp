@@ -55,21 +55,28 @@ void MOTOR_off_Callback( String msg )
   if( sellected_mode == regulation )
   {
     stopRegulation( &PID_controller );
-    PID_controller.enable = 0;
     PID_controller.motor_start = 1;
   }  
   DisablePWM();
+<<<<<<< Updated upstream:ArduinoMotorControl/CommandCallbacks.cpp
+=======
+  // EnablePWM_HiZ();
+>>>>>>> Stashed changes:ArduinoMotorControl/src/CommandCallbacks.cpp
 };
 
 void MOTOR_on_Callback( String msg )
 {
+<<<<<<< Updated upstream:ArduinoMotorControl/CommandCallbacks.cpp
   EnablePWM();
+=======
+>>>>>>> Stashed changes:ArduinoMotorControl/src/CommandCallbacks.cpp
   if( sellected_mode == regulation )
   {
     PID_controller.motor_start = 1;
-    PID_controller.enable = 1;
-    startRegulation( &PID_controller );
   }  
+  PulseCaptureEnable();
+  PeriodicInterruptEnable();
+  // DisablePWM_HiZ();
 };
 
 void SPEED_Callback( String msg )
