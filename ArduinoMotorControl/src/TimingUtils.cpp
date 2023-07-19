@@ -1,17 +1,14 @@
 #include "../inc/TimingUtils.h"
 
-pulseBuffersTypeDef PulseBuffers = {
-  .idx = 0,
-  .buffer[0].pulseIdx = 0,
-  .buffer[1].pulseIdx = 0
-};
+pulseBuffersTypeDef PulseBuffers = {0};
+//  = {
+//   .idx = 0,
+//   .buffer[0].pulseIdx = 0,
+//   .buffer[1].pulseIdx = 0
+// };
 
-inline void switchPulseBuff()
-{
-  PulseBuffers.idx ^= 1;
-};
 
-inline void writePulseBuff( uint32_t val )
+void writePulseBuff( uint32_t val )
 {
   pulseTypeDef* p_buff = &PulseBuffers.buffer[ PulseBuffers.idx ];
   p_buff->pulses[ p_buff->pulseIdx++ ] = val;
@@ -38,18 +35,15 @@ float filter_1stOrder_r32(float r32ActualValue, float r32SmoothedValue, float r3
 
 }
 
-float getRPMfromPulses()
+float getRPMfromPulses( void )
 {
-  const uint8_t buff_i = PulseBuffers.idx;
-  PulseBuffers.idx ^= 1;
+  const uint8_t buff_i = PulseBuffers.idx ^ 1;
   static float l_val = 0.0f;
-
   uint32_t cnt_avg = calcTimCntAVG( PulseBuffers.buffer[ buff_i ].pulses, PulseBuffers.buffer[ buff_i ].pulseIdx );
-  uint32_t cnt_filtered = filter_1stOrder_r32( cnt_avg, l_val, (float) REG_PERIOD_MS, FIR_TIME );
-  l_val = cnt_filtered;
-
+  // l_val = filter_1stOrder_r32( cnt_avg, l_val, (float) REG_PERIOD_MS, FIR_TIME );
+  l_val = cnt_avg;
   PulseBuffers.buffer[ buff_i ].pulseIdx = 0;
-  return calcRPM( cnt_filtered );
+  return calcRPM( l_val );
 };
 
 inline float calcRPM( const uint32_t cnt )

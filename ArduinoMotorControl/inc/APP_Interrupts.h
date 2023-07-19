@@ -5,5 +5,4 @@
 #include "Regulation.h"
 #include "TimingUtils.h"
 
-
 #endif

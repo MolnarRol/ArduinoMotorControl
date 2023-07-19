@@ -2,12 +2,15 @@
 
 /*
   User predefined speeds
+  --------------------------------------------------------------------------------
 */
 const float speeds[] = SPEEDS;
 const uint8_t speeds_len = sizeof(speeds) / sizeof(float);
 uint8_t speed_idx = 0;
-
+/* ------------------------------------------------------------------------------- */
 enum MODE sellected_mode = regulation;
+// extern pulseBuffersTypeDef PulseBuffers;
+
 
 void StatusCallback( const String msg )
 {
@@ -37,7 +40,7 @@ void MODE_Callback( const String msg )
   else if( msg == "reg" )
   {
     sellected_mode = regulation;
-    startRegulation( &PID_controller );
+    // startRegulation( &PID_controller );
   }
   else if( msg.length() == 0 )
   {
@@ -55,25 +58,24 @@ void MODE_Callback( const String msg )
 
 void MOTOR_off_Callback( const String msg )
 {
+  DisablePWM();
+  SetPwmDuty(0.0f);
+  // EnablePWM_HiZ();
+  PulseCaptureDisable();
+  PeriodicInterruptDisable();
   if( sellected_mode == regulation )
   {
     stopRegulation( &PID_controller );
     PID_controller.motor_start = 1;
-    SetPwmDuty(0.0f);
-  }  
-  DisablePWM();
-  // EnablePWM_HiZ();
+  }    
 };
 
 void MOTOR_on_Callback( const String msg )
 {
-  if( sellected_mode == regulation )
-  {
-    PID_controller.motor_start = 1;
-  }  
+  if( sellected_mode == regulation ) PID_controller.motor_start = 1;
   PulseCaptureEnable();
   PeriodicInterruptEnable();
-  // DisablePWM_HiZ();
+  EnablePWM();  // ?
 };
 
 void SPEED_Callback( const String msg )
@@ -115,9 +117,12 @@ void RPM_Callback( const String msg )
 /*
   PWM Callback functions
 */
-void PWM_duty_Callback( const String msg )
+void PWM_duty_Callback( String msg )
 {
-  if( msg.length() > 0 ) SetPwmDuty( parseFloat( msg ) ); 
+  if( msg.length() > 0 ) 
+  {
+    SetPwmDuty( parseFloat( msg ) ); 
+  }
   else
   {
     Serial.print("PWM duty: ");

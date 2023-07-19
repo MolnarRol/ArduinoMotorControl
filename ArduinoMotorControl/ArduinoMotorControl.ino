@@ -27,17 +27,12 @@ void setup() {
   pinMode(DIR_PIN, OUTPUT);         // Direction pin
   digitalWrite( BRK_PIN, 1 );       // Disengage brake
 
+
   // DisablePWM_HiZ();
   pinMode( 9, OUTPUT );
-  setPinHighPWM();
-
-  #if ( REG_MOTOR_AUTOSTART == 1 )
-    DisablePWM_HiZ();           // Disable high impedance state of PWM output pin
-    EnablePWM();                // Enabling PWM
-    extern MODE sellected_mode;
-    sellected_mode = regulation;
-    MOTOR_on_Callback("");
-  #endif
+  SetPwmDuty( 0.0f );               // PWM is turned off
+  // setPinHighPWM();
+  pinMode( 4, INPUT ); // _PULLUP
 
   #ifdef DEBUG
     Serial.println( F("[Setup complete]") );
@@ -59,11 +54,13 @@ void loop() {
   else Serial.println(); 
 }
 
-
+/**
+ * Function that stops MCU operation.
+ * Can be called where the behavior of code can result to unexpected/bad behaviour. 
+*/
 void halt( void )
 {
-  DisablePWM();
-  setPinHighPWM();
-  cli();
-  while(1);
+  SetPwmDuty(0.0f);     // Disable PWM
+  cli();                // Globally disable interrupts
+  while(1) {};          // Endless loop
 }

@@ -5,6 +5,7 @@
 #include "Communication.h"
 #include "Commands.h"
 #include "Timers.h"
+#include "TimingUtils.h"
 #include "Regulation.h"
 
 /**

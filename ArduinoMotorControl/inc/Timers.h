@@ -8,25 +8,36 @@
 extern "C" {
 #endif
 
-void PeriodicInterruptEnable();
-void PulseCaptureEnable();
+static float GetStepPWM( const uint16_t TOP );
+
+
+void PeriodicInterruptEnable( void );
+void PeriodicInterruptDisable( void );
+
+void PulseCaptureEnable( void );
+void PulseCaptureDisable( void );
 
 /*
   Config functions
 */
-void PulseCaptureConfig();
-void PeriodicInterruptConfig();
-void PwmConfig();
+void PulseCaptureConfig( void );
+void PeriodicInterruptConfig( void );
+void PwmConfig( void );
 
 /*
   PWM duty setter/getter
 */
 void SetPwmDuty( float dutyPerc );
-float GetPwmDuty();
+float GetPwmDuty( void );
 
 /*
   PWM on/off
 */
+// void DisablePWM( void );
+// void EnablePWM( void );
+// void setPinHighPWM( void );
+// void setPinLowPWM( void );
+
 void DisablePWM();
 void EnablePWM();
 void setPinHighPWM();
@@ -41,10 +52,10 @@ void setPinLowPWM();
 /*
   Misc functions
 */
-float GetStepPWM( const uint16_t TOP );
-uint32_t readPulseCount();
 
+uint32_t readPulseCount();
 uint8_t encoderPinHigh();
+
 #ifdef __cplusplus
 }
 #endif

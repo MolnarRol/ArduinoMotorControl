@@ -67,7 +67,7 @@ extern "C" {
   void changeSetPoint(PID_TypeDef* handler, float newSetPoint);
   void startRegulation( PID_TypeDef* handler );
   void stopRegulation( PID_TypeDef* handler );
-  
+  void boostStartHandler( PID_TypeDef* handler, const float RPM );
 #ifdef __cplusplus
 }
 /// @}

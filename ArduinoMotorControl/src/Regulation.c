@@ -101,3 +101,16 @@ inline void stopRegulation( PID_TypeDef* handler )
 {
   handler->enable = 0;
 };
+
+inline boostStartHandler( PID_TypeDef* handler, const float RPM )
+{
+  if(  handler->motor_start )
+  {
+    if( RPM > MOTOR_RPM_REG_START ) 
+    {
+      handler->motor_start = 0;
+      startRegulation( handler );
+    }
+    else SetPwmDuty( 100.0f );
+  }
+};

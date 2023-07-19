@@ -19,6 +19,16 @@ void PwmConfig()
 };
 
 /**
+  @brief Function calculates minimum possible step of duty cycle[%].
+  @param TOP Maximum value of timer counter before overflow or timer counter reset.
+  @return Minimum possible step of duty cycle[%].
+*/
+static float GetStepPWM( const uint16_t TOP )
+{
+  return ((float)TOP + 1.0f ) / 100.0f;
+};
+
+/**
   @brief Function for setting PWM duty cycle
   @param dutyPerc Desired PWM duty cycle [%]
 */
@@ -107,16 +117,6 @@ inline void setPinLowPWM()
 // };
 
 /**
-  @brief Function calculates minimum possible step of duty cycle[%].
-  @param TOP Maximum value of timer counter before overflow or timer counter reset.
-  @return Minimum possible step of duty cycle[%].
-*/
-float GetStepPWM( const uint16_t TOP )
-{
-  return ((float)TOP + 1.0f ) / 100.0f;
-};
-
-/**
   @brief Function that configures Timer 2 to generate interrupt ISR( TIMER2_COMPA_vect ) each 2 ms.
   Interrupt is used for calling updatePID() and to increment global variable ENC_WatchDog.
 */
@@ -128,14 +128,14 @@ void PeriodicInterruptConfig()
   TCNT2 = 0;
 };
 
-void PeriodicInterruptEnable()
+inline void PeriodicInterruptEnable()
 {
   TCCR2A |= 0b00000010;   // Enable Clear Timer on Compare Match
   TCCR2B |= 0b00000101;   // Enable CTC and set prescaler to 128
   TIMSK2 |= 0b00000010;   // Enable interupt from compare match –> timer reset
 }
 
-void PeriodicInterruptDisable()
+inline void PeriodicInterruptDisable()
 {
   TCCR2A = 0;
   TCCR2B = 0;
@@ -170,20 +170,20 @@ void PulseCaptureConfig()
   /*
     Pinchange interrupt on D4 (PORTD 4) PCINT20.
   */
-  PCICR |= 1 << (PCIE2);    // Pin Change Interrupt Enable 2.
-  PCMSK2 |= 1 << (PCINT20); // Enable pin change interrupt on PCINT20.
+  PCICR = 0;
+  PCMSK2 = 0;
+  PCICR |= ( 1 << PCIE2 );    // Pin Change Interrupt Enable 2.
+  PCMSK2 |= ( 1 << PCINT20 ); // Enable pin change interrupt on PCINT20.
 };
 
-void PulseCaptureEnable()
+inline void PulseCaptureEnable()
 {
   TIMSK0 |= ( 1 << (OCIE0A) );  // Enabling output compare interrupt.
   TCNT0 = 0;
 }
 
-void PulseCaptureDisable()
+inline void PulseCaptureDisable()
 {
-  TCCR0A = 0;
-  // TCCR0B = 0;
   TIMSK0 &= ~( 1 << (OCIE0A) );  // Enabling output compare interrupt.
 }
 
@@ -212,3 +212,4 @@ inline uint8_t encoderPinHigh()
   // return PORTD & ( 1 << PORTD4 );
   return digitalRead( 4 );
 };
+

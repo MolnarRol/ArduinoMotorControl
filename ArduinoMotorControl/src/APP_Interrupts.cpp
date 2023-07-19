@@ -3,6 +3,7 @@
 extern uint16_t g_TIM0_ov;
 extern PID_TypeDef PID_controller;
 extern pulseBuffersTypeDef PulseBuffers;
+extern MODE sellected_mode;
 
 /// Current motor rpm readout
 float g_RPM = 0.0f;
@@ -18,27 +19,45 @@ float g_RPM = 0.0f;
 */
 ISR( TIMER2_COMPA_vect )
 {
-  sei();                                // Reenable interrupts to allow interrupt nesting   
-  switchPulseBuff();                    // Switch pulse buffer
-  g_RPM = getRPMfromPulses();           // Read current RPM
+  sei();                                    // Reenable interrupts to allow interrupt nesting   
+  PulseBuffers.idx ^= 1;                    // Switch pulse buffer
+  g_RPM = getRPMfromPulses();               // Read current RPM
 
-  #if ( ENC_WDG_EN == 1 ) 
+  if( sellected_mode == manual ) 
+  {
+    return;
+  }
+
+  /* If watchdog was not reset in time -> halts MCU */
+  #if ( ENC_WDG_EN == 1 )
     if( ( ENC_WatchDog += REG_PERIOD_MS ) > ENC_WDG_MS ) halt();
   #endif
-  
-  #if ( START_BOOST_EN == 1 )
-    if( PID_controller.motor_start )
-    {
-      if( g_RPM > MOTOR_RPM_REG_START ) 
-      {
-        PID_controller.motor_start = 0;
-        startRegulation( &PID_controller );
-      }
-      else SetPwmDuty( 100.0f );
-    }
-  #endif
 
-  if( PID_controller.enable ) SetPwmDuty( updatePID( &PID_controller, g_RPM ) ); // PID speed regulation
+  if( PID_controller.enable ) 
+  {
+    SetPwmDuty( updatePID( &PID_controller, g_RPM ) ); // PID speed regulation
+  } 
+  else 
+  {
+    /* Boost functionality -> Starts regulation after reaching defined RPM. */
+    #if ( START_BOOST_EN == 1 )
+    if(  PID_controller.motor_start )
+      {
+        if( g_RPM > MOTOR_RPM_REG_START  )
+        {
+          // Serial.println(g_RPM);
+          PID_controller.motor_start = 0;
+          startRegulation( &PID_controller );
+        }
+        else
+        {
+          SetPwmDuty( 100.0f );
+        } 
+      }
+    #else
+      PID_controller.enable = 1;
+    #endif
+  }
 }
 
 /**
@@ -50,9 +69,9 @@ ISR( PCINT2_vect )
   /*
     If encoder watchdog is enabled -> reset watchdog counter on new pulse.
   */
-  // #if ( ENC_WDG_EN == 1 )
-  //   ENC_WatchDog = 0;
-  // #endif
+  #if ( ENC_WDG_EN == 1 )
+    ENC_WatchDog = 0;
+  #endif
 
   /* 
     Measuring delta time between pin state change 
