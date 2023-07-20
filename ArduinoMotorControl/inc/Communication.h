@@ -14,7 +14,7 @@
 /*
   String manipulation and function calling
 */
-String getStringUART();
+String getStringUART( void );
 void printHeader();
 void msgToCommand( String msg );
 uint8_t stringToWords( String msg, String words[] );

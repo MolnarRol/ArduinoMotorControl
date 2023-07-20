@@ -125,7 +125,7 @@ float parseFloat( String strNum )
 /*
   Blocking UART string read with newline character as the string end
 */
-String getStringUART()
+String getStringUART( void )
 {
   while( Serial.available() == 0 ){};                     // Wait for input
   return Serial.readStringUntil( UART_TERMINATOR_CHAR );

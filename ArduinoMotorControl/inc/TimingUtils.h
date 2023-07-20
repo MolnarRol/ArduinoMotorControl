@@ -18,6 +18,8 @@ typedef struct pulseBuffers {
   volatile uint8_t idx;
 } pulseBuffersTypeDef;
 
+void clearPulseBuffers();
+
 void writePulseBuff( uint32_t val );
 uint32_t calcTimCntAVG( uint32_t* values, uint8_t len );
 float filter_1stOrder_r32(float r32ActualValue, float r32SmoothedValue, float r32SamplingTime_ms, float r32FilterTime_ms);
