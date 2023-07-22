@@ -8,10 +8,8 @@ const float speeds[] = SPEEDS;
 const uint8_t speeds_len = sizeof(speeds) / sizeof(float);
 uint8_t speed_idx = 0;
 /* ------------------------------------------------------------------------------- */
+
 enum MODE sellected_mode = regulation;
-// extern pulseBuffersTypeDef PulseBuffers;
-extern float g_l_val;
-extern uint8_t g_enc_first_edge;
 
 void StatusCallback( const String msg )
 {

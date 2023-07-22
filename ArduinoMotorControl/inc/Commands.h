@@ -1,9 +1,7 @@
 #ifndef _COMMANDS_H_
 #define _COMMANDS_H_
 
-#include <string.h>
-#include "../config.h"
-#include "CommandCallbacks.h"
+#include "main.h"
 
 /**
   \defgroup command_def Command group definitions
@@ -24,5 +22,8 @@ typedef struct CommandGroup
   const CommandTypeDef* List;               // List of used commands
 } CommandGroupTypeDef;
 /// @}
+
+extern CommandTypeDef MiscCommands[];
+extern CommandGroupTypeDef* CommandGroupArr[];
 
 #endif

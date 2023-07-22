@@ -1,13 +1,9 @@
 #include "../inc/TimingUtils.h"
 
- float g_l_val = 0.0f;
+float g_l_val = 0.0f;
 
 pulseBuffersTypeDef PulseBuffers = {0};
-//  = {
-//   .idx = 0,
-//   .buffer[0].pulseIdx = 0,
-//   .buffer[1].pulseIdx = 0
-// };
+
 void clearPulseBuffers()
 {
   PulseBuffers.idx = 0;

@@ -8,6 +8,8 @@
 extern "C" {
 #endif
 
+extern uint16_t g_TIM0_ov;
+
 static float GetStepPWM( const uint16_t TOP );
 
 

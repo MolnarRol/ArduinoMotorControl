@@ -1,15 +1,7 @@
 #ifndef _COMMUNICATION_H_
 #define _COMMUNICATION_H_
 
-#include "Arduino.h"
-#include <string.h>
-
-#include "../config.h"
-#include "CommandCallbacks.h"
-
-// debug
-#include "Timers.h"
-
+#include "main.h"
 
 /*
   String manipulation and function calling

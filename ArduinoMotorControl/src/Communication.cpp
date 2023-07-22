@@ -1,8 +1,5 @@
 #include "../inc/Communication.h"
 
-extern CommandGroupTypeDef* CommandGroupArr[];
-extern CommandTypeDef MiscCommands[];
-
 uint8_t g_group_idx = 255;  // Sellected group index -> 255 = no sellection
 
 void msgToCommand( String msg )

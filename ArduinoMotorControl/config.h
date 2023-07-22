@@ -55,7 +55,7 @@
 /** 
   Period of PID regulation output calculation
 */
-#define REG_PERIOD_MS 2              
+#define REG_PERIOD_MS 2.0f              
 
 /*
   Setpoint interval -> for rpm <new rpm> command
