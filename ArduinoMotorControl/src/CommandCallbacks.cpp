@@ -10,11 +10,6 @@ uint8_t speed_idx = 0;
 /* ------------------------------------------------------------------------------- */
 
 enum MODE sellected_mode = regulation;
-<<<<<<< HEAD
-=======
-// extern pulseBuffersTypeDef PulseBuffers;
-
->>>>>>> parent of f48da27... Boost start - bugfix
 
 void StatusCallback( const String msg )
 {
@@ -62,23 +57,37 @@ void MODE_Callback( const String msg )
 
 void MOTOR_off_Callback( const String msg )
 {
+  if( sellected_mode == regulation ) stopRegulation( &PID_controller );  
   DisablePWM();
   SetPwmDuty(0.0f);
   // EnablePWM_HiZ();
   PulseCaptureDisable();
   PeriodicInterruptDisable();
-  if( sellected_mode == regulation )
-  {
-    stopRegulation( &PID_controller );
-    PID_controller.motor_start = 1;
-  }    
+
+  // g_RPM = 0.0f;
+  // g_l_val = 0.0f;
+  // g_enc_first_edge = 1;
+  // PID_controller.motor_start = 1;
+  // resetPulseCount();
 };
 
 void MOTOR_on_Callback( const String msg )
 {
-  if( sellected_mode == regulation ) PID_controller.motor_start = 1;
-  PulseCaptureEnable();
+  g_RPM = 0.0f;
+  g_l_val = 0.0f;
+  g_enc_first_edge = 1;
+  PID_controller.motor_start = 1;
+  resetPulseCount();
+  clearPulseBuffers();
+
+  // #if ( START_BOOST_EN == 1 )
+  //   if( sellected_mode == regulation ) PID_controller.motor_start = 1;
+  // #else
+  //   SetPwmDuty( 0.0f );
+  // #endif
+  
   PeriodicInterruptEnable();
+  PulseCaptureEnable();
   EnablePWM();  // ?
 };
 
