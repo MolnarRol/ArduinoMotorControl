@@ -104,7 +104,7 @@
 /** Wait for n [ms] for encoder impulse. If no pulse will be detected in this time –> motor stop        
   ISR( TIMER2_COMPA_vect )
 */
-#define ENC_WDG_MS 20   
+#define ENC_WDG_MS 8   
 
 /// @}
 

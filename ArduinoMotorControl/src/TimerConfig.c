@@ -154,6 +154,23 @@ inline void DisablePWM_HiZ()
   DDRB |= (1 << DDB1);
 };
 
+<<<<<<< HEAD:ArduinoMotorControl/src/TimerConfig.c
+=======
+inline void PeriodicInterruptEnable()
+{
+  TCCR2A |= 0b00000010;   // Enable Clear Timer on Compare Match
+  TCCR2B |= 0b00000101;   // Enable CTC and set prescaler to 128
+  TIMSK2 |= 0b00000010;   // Enable interupt from compare match –> timer reset
+}
+
+inline void PeriodicInterruptDisable()
+{
+  TCCR2A = 0;
+  TCCR2B = 0;
+  TIMSK2 = 0;
+}
+
+>>>>>>> parent of f48da27... Boost start - bugfix:ArduinoMotorControl/src/Timers.c
 /**
   @brief Function calculates minimum possible step of duty cycle[%].
   @param TOP Maximum value of timer counter before overflow or timer counter reset.
@@ -161,9 +178,46 @@ inline void DisablePWM_HiZ()
 */
 float GetStepPWM( const uint16_t TOP )
 {
+<<<<<<< HEAD:ArduinoMotorControl/src/TimerConfig.c
   return ((float)TOP + 1.0f ) / 100.0f;
 };
 
+=======
+  /*
+    Register reset.
+  */
+  TCCR0A = 0;
+  TCCR0B = 0;
+  OCR0A = 255;                  // Setting the top to timer max.
+
+  /*
+    Clear timer on compare match(CTC). Top is defined by OCRA register.
+    No prescaling(prescaling by 1).
+  */
+  TCCR0A |= 0b00000010;
+  TCCR0B |= 0b00000001;
+  
+  /*
+    Pinchange interrupt on D4 (PORTD 4) PCINT20.
+  */
+  PCICR = 0;
+  PCMSK2 = 0;
+  PCICR |= ( 1 << PCIE2 );    // Pin Change Interrupt Enable 2.
+  PCMSK2 |= ( 1 << PCINT20 ); // Enable pin change interrupt on PCINT20.
+};
+
+inline void PulseCaptureEnable()
+{
+  TIMSK0 |= ( 1 << (OCIE0A) );  // Enabling output compare interrupt.
+  TCNT0 = 0;
+}
+
+inline void PulseCaptureDisable()
+{
+  TIMSK0 &= ~( 1 << (OCIE0A) );  // Enabling output compare interrupt.
+}
+
+>>>>>>> parent of f48da27... Boost start - bugfix:ArduinoMotorControl/src/Timers.c
 /**
   @brief Function reads timer count between ISR( PCINT2_vect ) pin change interrupts.
   @return "Virtual" timer count.

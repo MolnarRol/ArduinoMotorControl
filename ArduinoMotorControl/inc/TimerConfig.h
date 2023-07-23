@@ -40,6 +40,10 @@ void EnablePWM_HiZ();
 */
 float GetStepPWM( const uint16_t TOP );
 uint32_t readPulseCount();
+<<<<<<< HEAD:ArduinoMotorControl/inc/TimerConfig.h
+=======
+uint8_t encoderPinHigh();
+>>>>>>> parent of f48da27... Boost start - bugfix:ArduinoMotorControl/inc/Timers.h
 
 uint8_t encoderPinHigh();
 #ifdef __cplusplus
