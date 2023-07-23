@@ -51,7 +51,7 @@
 /// Start motor with 100% until MOTOR_RPM_REG_START rpm is reached
 #define START_BOOST_EN 1             
 /// Start regulation after reaching defined RPM by this macro 
-#define MOTOR_RPM_REG_START 1000.0f   
+#define MOTOR_RPM_REG_START 1600.0f   
 /** 
   Period of PID regulation output calculation
 */
@@ -82,22 +82,11 @@
 /// Rotary encoder steps per rotation
 #define ENC_N_PULSES 100    
 
-/*
-  Digital filtration for speed reading
-*/
-
-/**
- * Enable FIR filter in function getRPMfromPulses() in TimingUtils.cpp
-*/
-#define SPEED_FILTER_EN 1
-
 /**
   Filtration time constant     
   Sets time constant for FIR filter filter_1stOrder_r32().
 */      
-#define FIR_TIME 0.5f              
-
-
+#define FIR_TIME 1.0f              
 
 /// period of timer 0 for pulse measurement -> 1e6 / ( crystal_clock * prescaling )   
 #define TIM_STEP_us ( 1e6f / ( 16e6f * 1 )) 
@@ -118,7 +107,7 @@
 /** Wait for n [ms] for encoder impulse. If no pulse will be detected in this time –> motor stop        
   ISR( TIMER2_COMPA_vect )
 */
-#define ENC_WDG_MS 20   
+#define ENC_WDG_MS 8   
 
 /// @}
 

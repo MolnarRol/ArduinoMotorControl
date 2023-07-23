@@ -14,11 +14,14 @@ typedef struct pulseBuffers {
   volatile uint8_t idx;
 } pulseBuffersTypeDef;
 
+<<<<<<< HEAD
 extern float g_l_val;
 extern pulseBuffersTypeDef PulseBuffers;
 
 void clearPulseBuffers();
 
+=======
+>>>>>>> parent of f48da27... Boost start - bugfix
 void writePulseBuff( uint32_t val );
 uint32_t calcTimCntAVG( uint32_t* values, uint8_t len );
 float filter_1stOrder_r32(float r32ActualValue, float r32SmoothedValue, float r32SamplingTime_ms, float r32FilterTime_ms);

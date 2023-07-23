@@ -130,7 +130,6 @@ void PeriodicInterruptConfig()
 
 inline void PeriodicInterruptEnable()
 {
-  TCNT2 = 0;
   TCCR2A |= 0b00000010;   // Enable Clear Timer on Compare Match
   TCCR2B |= 0b00000101;   // Enable CTC and set prescaler to 128
   TIMSK2 |= 0b00000010;   // Enable interupt from compare match –> timer reset
@@ -173,21 +172,19 @@ void PulseCaptureConfig()
   */
   PCICR = 0;
   PCMSK2 = 0;
-  // PCICR |= ( 1 << PCIE2 );    // Pin Change Interrupt Enable 2.
+  PCICR |= ( 1 << PCIE2 );    // Pin Change Interrupt Enable 2.
   PCMSK2 |= ( 1 << PCINT20 ); // Enable pin change interrupt on PCINT20.
 };
 
 inline void PulseCaptureEnable()
 {
   TIMSK0 |= ( 1 << (OCIE0A) );  // Enabling output compare interrupt.
-  PCICR |= ( 1 << PCIE2 );
   TCNT0 = 0;
 }
 
 inline void PulseCaptureDisable()
 {
   TIMSK0 &= ~( 1 << (OCIE0A) );  // Enabling output compare interrupt.
-  PCICR = 0;
 }
 
 /**
@@ -204,12 +201,6 @@ inline uint32_t readPulseCount()
   g_TIM0_ov = 0;    
   return pulses;
 };
-
-inline void resetPulseCount( void )
-{
-  TCNT0 = 0;
-  g_TIM0_ov = 0;
-}
 
 /**
   Function gets current state of encoder pin.
