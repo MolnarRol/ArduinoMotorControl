@@ -6,7 +6,7 @@
 /*
   String manipulation and function calling
 */
-String getStringUART( void );
+String getStringUART();
 void printHeader();
 void msgToCommand( String msg );
 uint8_t stringToWords( String msg, String words[] );
