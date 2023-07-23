@@ -1,5 +1,7 @@
 #include "../inc/APP_Interrupts.h"
 
+// Test
+
 /// Current motor rpm readout
 float g_RPM = 0.0f;
 uint8_t g_enc_first_edge = 1;
