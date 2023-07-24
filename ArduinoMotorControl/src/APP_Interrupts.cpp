@@ -1,4 +1,8 @@
+#include "stdint.h"
 #include "../inc/APP_Interrupts.h"
+#include "../inc/CommandCallbacks.h"
+#include "../inc/TimingUtils.h"
+
 
 /// Current motor rpm readout
 float g_RPM = 0.0f;
