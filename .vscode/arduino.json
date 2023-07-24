@@ -1,6 +1,6 @@
 {
     "board": "arduino:avr:nano",
-    "port": "COM5",
+    "port": "COM6",
     "programmer": "avrisp",
     "sketch": "ArduinoMotorControl\\ArduinoMotorControl.ino",
     "configuration": "cpu=atmega328old"

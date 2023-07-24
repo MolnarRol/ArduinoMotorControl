@@ -12,6 +12,8 @@ enum MODE sellected_mode = regulation;
 // extern pulseBuffersTypeDef PulseBuffers;
 extern float g_l_val;
 extern uint8_t g_enc_first_edge;
+uint8_t g_flag_motor_running = 0;
+
 
 void StatusCallback( const String msg )
 {
@@ -41,7 +43,7 @@ void MODE_Callback( const String msg )
   else if( msg == "reg" )
   {
     sellected_mode = regulation;
-    // startRegulation( &PID_controller );
+    startRegulation( &PID_controller );
   }
   else if( msg.length() == 0 )
   {
@@ -60,17 +62,10 @@ void MODE_Callback( const String msg )
 void MOTOR_off_Callback( const String msg )
 {
   if( sellected_mode == regulation ) stopRegulation( &PID_controller );  
-  DisablePWM();
   SetPwmDuty(0.0f);
   // EnablePWM_HiZ();
   PulseCaptureDisable();
   PeriodicInterruptDisable();
-
-  // g_RPM = 0.0f;
-  // g_l_val = 0.0f;
-  // g_enc_first_edge = 1;
-  // PID_controller.motor_start = 1;
-  // resetPulseCount();
 };
 
 void MOTOR_on_Callback( const String msg )
@@ -82,15 +77,18 @@ void MOTOR_on_Callback( const String msg )
   resetPulseCount();
   clearPulseBuffers();
 
-  // #if ( START_BOOST_EN == 1 )
-  //   if( sellected_mode == regulation ) PID_controller.motor_start = 1;
+  #if ( START_BOOST_EN == 1 )
+    if( sellected_mode == regulation ) 
+    {
+      PID_controller.motor_start = 1;
+
+    }
   // #else
   //   SetPwmDuty( 0.0f );
-  // #endif
+  #endif
   
   PeriodicInterruptEnable();
   PulseCaptureEnable();
-  EnablePWM();  // ?
 };
 
 void SPEED_Callback( const String msg )
