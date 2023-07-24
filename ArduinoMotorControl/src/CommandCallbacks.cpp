@@ -73,7 +73,6 @@ void MOTOR_off_Callback( const String msg )
 void MOTOR_on_Callback( const String msg )
 {
   g_RPM = 0.0f;
-  // g_l_val = 0.0f;
   g_enc_first_edge = 1;
   PID_controller.motor_start = 1;
   // resetPulseCount();
@@ -175,7 +174,8 @@ void DIR_2_Callback( const String msg )
 
 void DIR_change_Callback( const String msg )
 {
-  static uint8_t state = ( PORTD & ~(1 << DIR_PIN) ) >> DIR_PIN;    // P5
+  // static uint8_t state = ( PORTD & ~(1 << DIR_PIN) ) >> DIR_PIN;    // P5
+  static uint8_t state = digitalRead( DIR_PIN );
   state = !state;
-  digitalWrite( DIR_PIN, state );
+  digitalWrite( DIR_PIN, ( state ) );
 };
