@@ -1,12 +1,7 @@
 #ifndef _COMMAND_CALLBACKS_H_
 #define _COMMAND_CALLBACKS_H_
 
-#include <string.h>
-#include "Communication.h"
-#include "Commands.h"
-#include "Timers.h"
-#include "TimingUtils.h"
-#include "Regulation.h"
+#include "main.h"
 
 /**
   \defgroup callbacks Callback functions
@@ -24,8 +19,7 @@ enum MODE {
   regulation
 };
 
-extern PID_TypeDef PID_controller;
-extern float g_RPM;
+extern enum MODE sellected_mode;
 
 void MODE_Callback( const String msg );
 void MOTOR_off_Callback( const String msg );

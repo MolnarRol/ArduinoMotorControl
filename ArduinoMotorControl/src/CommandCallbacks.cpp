@@ -8,12 +8,8 @@ const float speeds[] = SPEEDS;
 const uint8_t speeds_len = sizeof(speeds) / sizeof(float);
 uint8_t speed_idx = 0;
 /* ------------------------------------------------------------------------------- */
-enum MODE sellected_mode = regulation;
-// extern pulseBuffersTypeDef PulseBuffers;
-extern float g_l_val;
-extern uint8_t g_enc_first_edge;
-uint8_t g_flag_motor_running = 0;
 
+enum MODE sellected_mode = regulation;
 
 void StatusCallback( const String msg )
 {
@@ -62,6 +58,7 @@ void MODE_Callback( const String msg )
 void MOTOR_off_Callback( const String msg )
 {
   if( sellected_mode == regulation ) stopRegulation( &PID_controller );  
+  // DisablePWM();
   SetPwmDuty(0.0f);
   // EnablePWM_HiZ();
   PulseCaptureDisable();

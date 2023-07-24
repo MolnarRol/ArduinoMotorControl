@@ -14,7 +14,7 @@ PID_TypeDef PID_controller = {
   },
 
   .setPoint = SETPOINT_DEFAULT,
-  .T_ms = 2.0f,
+  .T_ms = REG_PERIOD_MS,
   .integrator = 0.0f,
   .prevE = 0.0f,
   .scalingFactor = 60.0f,
@@ -103,7 +103,7 @@ inline void stopRegulation( PID_TypeDef* handler )
   handler->enable = 0;
 };
 
-inline boostStartHandler( PID_TypeDef* handler, const float RPM )
+inline void boostStartHandler( PID_TypeDef* handler, const float RPM )
 {
   if(  handler->motor_start )
   {

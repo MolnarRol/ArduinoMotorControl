@@ -8,6 +8,8 @@
 extern "C" {
 #endif
 
+extern uint16_t g_TIM0_ov;
+
 static float GetStepPWM( const uint16_t TOP );
 
 
@@ -54,7 +56,6 @@ void setPinLowPWM();
 */
 
 uint32_t readPulseCount();
-void resetPulseCount( void );
 uint8_t encoderPinHigh();
 
 #ifdef __cplusplus

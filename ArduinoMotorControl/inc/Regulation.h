@@ -1,5 +1,6 @@
 #ifndef _REGULATION_H_
 #define _REGULATION_H_
+
 #include "../config.h"
 #include "Timers.h"
 
@@ -58,6 +59,9 @@ typedef struct {
   uint8_t motor_start;  // if "1" – motor starts from 0 rpm with 100% duty – regulation starts after achieving RPM defined by macro SETPOINT_DEFAULT (config.h)
 
 } PID_TypeDef;
+
+
+extern PID_TypeDef PID_controller;
 
 #ifdef __cplusplus
 extern "C" {
