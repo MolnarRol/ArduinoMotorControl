@@ -1,0 +1,7 @@
+{
+    "board": "arduino:avr:nano",
+    "port": "COM11",
+    "programmer": "avrisp",
+    "sketch": "ArduinoMotorControl\\ArduinoMotorControl.ino",
+    "configuration": "cpu=atmega328old"
+}

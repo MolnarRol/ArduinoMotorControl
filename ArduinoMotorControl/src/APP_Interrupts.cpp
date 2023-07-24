@@ -17,7 +17,6 @@ uint8_t g_enc_first_edge = 1;
   Interrupt service routine called each 2 ms.
   Used for reading current rpm and PID new value calculation.
 */
-
 ISR( TIMER2_COMPA_vect )
 {
   sei();                                    // Reenable interrupts to allow interrupt nesting   
@@ -66,7 +65,6 @@ ISR( PCINT2_vect )
     Measuring delta time between pin state change 
   */
   #if ( PULSE_DELTA_READ == EDGE_BOTH )
-
     /* 
       Aproximating number of pulses. 
       Possible only when duty cycle of the signal is 50%!!! 

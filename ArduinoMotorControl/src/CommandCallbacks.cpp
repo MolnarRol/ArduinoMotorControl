@@ -1,6 +1,5 @@
 #include "../inc/CommandCallbacks.h"
 
-
 /*
   User predefined speeds
   --------------------------------------------------------------------------------
@@ -11,11 +10,19 @@ uint8_t speed_idx = 0;
 /* ------------------------------------------------------------------------------- */
 
 enum MODE sellected_mode = regulation;
+<<<<<<< HEAD
 // extern pulseBuffersTypeDef PulseBuffers;
 extern float g_l_val;
 extern uint8_t g_enc_first_edge;
 uint8_t g_flag_motor_running = 0;
 
+=======
+<<<<<<< HEAD
+=======
+// extern pulseBuffersTypeDef PulseBuffers;
+
+>>>>>>> parent of f48da27... Boost start - bugfix
+>>>>>>> origin/main
 
 void StatusCallback( const String msg )
 {
@@ -63,15 +70,40 @@ void MODE_Callback( const String msg )
 
 void MOTOR_off_Callback( const String msg )
 {
+<<<<<<< HEAD
   if( sellected_mode == regulation ) stopRegulation( &PID_controller );  
+=======
+<<<<<<< HEAD
+  if( sellected_mode == regulation )
+  {
+    stopRegulation( &PID_controller );
+    PID_controller.enable = 0;
+    PID_controller.motor_start = 1;
+    SetPwmDuty(0.0f);
+  }  
+  DisablePWM();
+  EnablePWM_HiZ();
+=======
+  DisablePWM();
+>>>>>>> origin/main
   SetPwmDuty(0.0f);
   // EnablePWM_HiZ();
   PulseCaptureDisable();
   PeriodicInterruptDisable();
+<<<<<<< HEAD
+=======
+  if( sellected_mode == regulation )
+  {
+    stopRegulation( &PID_controller );
+    PID_controller.motor_start = 1;
+  }    
+>>>>>>> parent of f48da27... Boost start - bugfix
+>>>>>>> origin/main
 };
 
 void MOTOR_on_Callback( const String msg )
 {
+<<<<<<< HEAD
   g_RPM = 0.0f;
   // g_l_val = 0.0f;
   g_enc_first_edge = 1;
@@ -91,6 +123,19 @@ void MOTOR_on_Callback( const String msg )
   
   PeriodicInterruptEnable();
   PulseCaptureEnable();
+  EnablePWM();
+  DisablePWM_HiZ();
+  if( sellected_mode == regulation )
+  {
+    PID_controller.motor_start = 1;
+    PID_controller.enable = 1;
+    startRegulation( &PID_controller );
+  }  
+
+  if( sellected_mode == regulation ) PID_controller.motor_start = 1;
+  PulseCaptureEnable();
+  PeriodicInterruptEnable();
+  EnablePWM();  // ?
 };
 
 void SPEED_Callback( const String msg )
@@ -132,7 +177,7 @@ void RPM_Callback( const String msg )
 /*
   PWM Callback functions
 */
-void PWM_duty_Callback( String msg )
+void PWM_duty_Callback( const String msg )
 {
   if( msg.length() > 0 ) 
   {
