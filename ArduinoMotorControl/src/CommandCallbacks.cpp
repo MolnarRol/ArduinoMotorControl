@@ -1,5 +1,7 @@
 #include "../inc/CommandCallbacks.h"
 
+extern uint8_t g_enc_first_edge;
+
 /*
   User predefined speeds
   --------------------------------------------------------------------------------
@@ -72,10 +74,10 @@ void MOTOR_off_Callback( const String msg )
 void MOTOR_on_Callback( const String msg )
 {
   g_RPM = 0.0f;
-  g_l_val = 0.0f;
+  // g_l_val = 0.0f;
   g_enc_first_edge = 1;
   PID_controller.motor_start = 1;
-  resetPulseCount();
+  // resetPulseCount();
   clearPulseBuffers();
 
   #if ( START_BOOST_EN == 1 )

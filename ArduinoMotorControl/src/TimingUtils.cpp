@@ -1,6 +1,5 @@
 #include "../inc/TimingUtils.h"
 
-<<<<<<< HEAD
 float g_l_val = 0.0f;
 
 pulseBuffersTypeDef PulseBuffers = {0};
@@ -11,15 +10,6 @@ void clearPulseBuffers()
   PulseBuffers.buffer[0].pulseIdx = 0;
   PulseBuffers.buffer[1].pulseIdx = 0;
 }
-=======
-pulseBuffersTypeDef PulseBuffers = {0};
-//  = {
-//   .idx = 0,
-//   .buffer[0].pulseIdx = 0,
-//   .buffer[1].pulseIdx = 0
-// };
-
->>>>>>> parent of f48da27... Boost start - bugfix
 
 void writePulseBuff( uint32_t val )
 {

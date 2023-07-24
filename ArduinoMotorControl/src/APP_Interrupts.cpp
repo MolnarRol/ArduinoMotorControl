@@ -1,9 +1,13 @@
 #include "../inc/APP_Interrupts.h"
 
-// Test
+extern uint16_t g_TIM0_ov;
+extern PID_TypeDef PID_controller;
+extern pulseBuffersTypeDef PulseBuffers;
+extern MODE sellected_mode;
 
 /// Current motor rpm readout
 float g_RPM = 0.0f;
+uint8_t g_enc_first_edge = 1;
 
 #if ENC_WDG_EN == 1
   /// Encoder signal missing watchdog global variable.
@@ -14,17 +18,14 @@ float g_RPM = 0.0f;
   Interrupt service routine called each 2 ms.
   Used for reading current rpm and PID new value calculation.
 */
+
 ISR( TIMER2_COMPA_vect )
 {
-
   sei();                                    // Reenable interrupts to allow interrupt nesting   
   PulseBuffers.idx ^= 1;                    // Switch pulse buffer
   g_RPM = getRPMfromPulses();               // Read current RPM
 
-  if( sellected_mode == manual ) 
-  {
-    return;
-  }
+  if( sellected_mode == manual ) return;
 
   /* If watchdog was not reset in time -> halts MCU */
   #if ( ENC_WDG_EN == 1 )
@@ -62,31 +63,42 @@ ISR( PCINT2_vect )
   #if ( ENC_WDG_EN == 1 )
     ENC_WatchDog = 0;
   #endif
-
   /* 
     Measuring delta time between pin state change 
   */
   #if ( PULSE_DELTA_READ == EDGE_BOTH )
+
     /* 
       Aproximating number of pulses. 
       Possible only when duty cycle of the signal is 50%!!! 
     */
-    writePulseBuff ( 2 * readPulseCount() );                
+    if( g_enc_first_edge == 0 ) writePulseBuff ( 2 * readPulseCount() ); 
+    else g_enc_first_edge = 0;               
   #elif ( PULSE_DELTA_READ == EDGE_RISING )
     /* 
       Writing buffer only on rising edge -> encoder pin is high. 
     */
-    if( encoderPinHigh() ) writePulseBuff ( readPulseCount() );
+    if( encoderPinHigh() ) 
+    {
+      if( g_enc_first_edge == 0 ) writePulseBuff ( readPulseCount() );
+      else 
+      {
+        g_enc_first_edge = 0;
+        // resetPulseCount();
+      }
+    }
   #elif ( PULSE_DELTA == EDGE_FALLING )
     /* 
       Writing buffer only on rising edge -> encoder pin is low. 
     */
-    if( !encoderPinHigh() ) writePulseBuff ( readPulseCount() );
+    if( !encoderPinHigh() ) 
+    {
+      if( g_enc_first_edge == 0 ) writePulseBuff ( readPulseCount() );
+      else g_enc_first_edge = 0;
+    }
   #else
     #error "Specified macro is not defined!!!"
   #endif
-
-  // if( p_currentState == StateRegulation )
 }
 
 ISR( TIMER0_COMPA_vect )
