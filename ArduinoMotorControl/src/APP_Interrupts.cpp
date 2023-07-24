@@ -40,17 +40,10 @@ ISR( TIMER2_COMPA_vect )
   {
     /* Boost functionality -> Starts regulation after reaching defined RPM. */
     #if ( START_BOOST_EN == 1 )
-    if(  PID_controller.motor_start )
+      if(  PID_controller.motor_start )
       {
-        if( g_RPM > MOTOR_RPM_REG_START )
-        {
-          PID_controller.motor_start = 0;
-          startRegulation( &PID_controller );
-        }
-        else
-        {
-          SetPwmDuty( 100.0f );
-        } 
+        if( g_RPM > MOTOR_RPM_REG_START ) startRegulation( &PID_controller );
+        else SetPwmDuty( 100.0f ); 
       }
     #else
       PID_controller.enable = 1;

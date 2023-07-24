@@ -114,7 +114,7 @@
 */
 
 /// Enable encover pulse watchdog functionality
-#define ENC_WDG_EN 0          
+#define ENC_WDG_EN 1          
 /** Wait for n [ms] for encoder impulse. If no pulse will be detected in this time –> motor stop        
   ISR( TIMER2_COMPA_vect )
 */
