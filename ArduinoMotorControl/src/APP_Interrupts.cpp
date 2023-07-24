@@ -1,10 +1,5 @@
 #include "../inc/APP_Interrupts.h"
 
-extern uint16_t g_TIM0_ov;
-extern PID_TypeDef PID_controller;
-extern pulseBuffersTypeDef PulseBuffers;
-extern MODE sellected_mode;
-
 /// Current motor rpm readout
 float g_RPM = 0.0f;
 uint8_t g_enc_first_edge = 1;

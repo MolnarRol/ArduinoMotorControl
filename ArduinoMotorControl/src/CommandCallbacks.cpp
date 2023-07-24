@@ -1,7 +1,5 @@
 #include "../inc/CommandCallbacks.h"
 
-extern uint8_t g_enc_first_edge;
-
 /*
   User predefined speeds
   --------------------------------------------------------------------------------
