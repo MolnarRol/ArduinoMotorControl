@@ -10,8 +10,11 @@ extern "C" {
 /***************************************************
     Pointer to current state of the state machine.
 ****************************************************/
-extern void (*volatile p_currentState)(void);
 
+extern void (*volatile p_currentState)(void);
+extern void (*volatile p_prevState)(void);
+
+void StateHANLDER( void(*volatile p_newState)(void) );
 void StateIDLE      ( void );
 void StateRUNNING   ( void );
 void StateRegulation( void );
