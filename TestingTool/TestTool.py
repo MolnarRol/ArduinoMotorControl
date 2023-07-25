@@ -5,10 +5,11 @@ from time import sleep
 # Keyword defines
 WAIT_KEYWORD = "WAIT"
 WAIT_KEYWORD_LEN = len(WAIT_KEYWORD)
+MSG_DEADTIME = 0.1
 
 def sendCommand( commandString ):
     serialPort.write( commandString.encode() )
-    sleep(0.1)
+    sleep(MSG_DEADTIME)
 
 def isCommand( checkedString ):
     if len(checkedString) != 0 and checkedString[0] != "#":
@@ -42,9 +43,8 @@ for item in commandList:
     if len(item) == 0:                                      # Skip empty lines
         continue
     if item[ 0:WAIT_KEYWORD_LEN ] == WAIT_KEYWORD:
-        sleep( float( item[(WAIT_KEYWORD_LEN + 1):] ) )
+        sleep( float( item[(WAIT_KEYWORD_LEN + 1):] ) - MSG_DEADTIME )
     else:
         sendCommand(item)
-        print(item)
 
 print( "[DONE]" )
