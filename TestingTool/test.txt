@@ -1,24 +1,16 @@
-COM6
+# This is a comment
+# First valid line of the file must be name of the COM port used
+# for communication with the hardware 
+/dev/ttyUSB0
+
+# The commands are executed line by line. Empty or commented lines are ignored
 ct
 mode man
 start
 duty 25
 WAIT 1
-duty 75
+duty 0
 WAIT 1
 duty 25
 WAIT 1
-duty 75
-WAIT 1
-duty 25
-WAIT 1
-duty 75
-WAIT 1
-duty 25
-WAIT 1
-duty 75
-WAIT 1
-duty 25
-WAIT 1
-duty 75
-WAIT 1
+stop
