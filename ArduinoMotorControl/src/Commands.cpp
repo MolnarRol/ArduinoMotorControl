@@ -5,14 +5,14 @@
 */
 CommandTypeDef CONTROL_commands[] = 
 {
-  { "duty", &PWM_duty_Callback },
-  { "rpm", &RPM_Callback },
+  { "duty", PWM_duty_Callback },
+  { "rpm", RPM_Callback },
   { "mode", &MODE_Callback },
-  { "s", &SPEED_Callback },
-  { "+", &SPEED_inc_Callback },
-  { "-", &SPEED_dec_Callback },
-  { "stop", &MOTOR_off_Callback }, //Turn on pwm modulation. Usage: on <duty> – if no duty is specified, then the last saved will be used.
-  { "start", &MOTOR_on_Callback },
+  { "s", SPEED_Callback },
+  { "+", SPEED_inc_Callback },
+  { "-", SPEED_dec_Callback },
+  { "stop", MOTOR_off_Callback }, //Turn on pwm modulation. Usage: on <duty> – if no duty is specified, then the last saved will be used.
+  { "start", MOTOR_on_Callback },
   { "__End__", NULL }
 };
 
@@ -27,8 +27,8 @@ CommandGroupTypeDef CONTROL =
 */
 CommandTypeDef BRAKE_commands[] = 
 {
-  { "on", &BRAKE_on_Callback },
-  { "off", &BRAKE_off_Callback },
+  { "on", BRAKE_on_Callback },
+  { "off", BRAKE_off_Callback },
   { "__End__", NULL }
 };
 
@@ -43,9 +43,9 @@ CommandGroupTypeDef BRAKE =
 */
 CommandTypeDef DIR_commands[] = 
 {
-  { "cw", &DIR_1_Callback },
-  { "ccw", &DIR_2_Callback },
-  { "chDir", &DIR_change_Callback },
+  { "cw", DIR_1_Callback },
+  { "ccw", DIR_2_Callback },
+  { "chDir", DIR_change_Callback },
   { "__End__", NULL }
 };
 

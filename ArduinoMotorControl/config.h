@@ -28,6 +28,11 @@
 #define   BRK_PIN     7               
 /// @}
 
+#define ACTIVE_LOW    0
+#define ACTIVE_HIGH   1
+
+#define LOGIG_POLARITY ACTIVE_LOW
+
 #define PWM_OUTPUT_HiZ 0
 
 /**

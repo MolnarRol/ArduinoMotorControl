@@ -11,9 +11,6 @@ uint8_t speed_idx = 0;
 /* ------------------------------------------------------------------------------- */
 
 enum MODE sellected_mode = regulation;
-// extern pulseBuffersTypeDef PulseBuffers;
-extern float g_l_val;
-extern uint8_t g_enc_first_edge;
 uint8_t g_flag_motor_running = 0;
 
 
@@ -150,13 +147,22 @@ void PWM_duty_Callback( String msg )
 */
 void BRAKE_on_Callback( const String msg )
 {
-  digitalWrite( BRK_PIN, 0 );
+  #if ( LOGIG_POLARITY == ACTIVE_HIGH )
+    digitalWrite( BRK_PIN, 1 );
+  #elif ( LOGIC_POLARITY == ACTIVE_LOW )  
+    digitalWrite( BRK_PIN, 0 );
+  #endif
+  
   MOTOR_off_Callback("");
 };
 
 void BRAKE_off_Callback( const String msg )
 {
-  digitalWrite( BRK_PIN, 1 );
+  #if ( LOGIG_POLARITY == ACTIVE_HIGH )
+    digitalWrite( BRK_PIN, 0 );
+  #elif ( LOGIC_POLARITY == ACTIVE_LOW )  
+    digitalWrite( BRK_PIN, 1 );
+  #endif
 };
 
 /*
@@ -177,5 +183,5 @@ void DIR_change_Callback( const String msg )
   // static uint8_t state = ( PORTD & ~(1 << DIR_PIN) ) >> DIR_PIN;    // P5
   static uint8_t state = digitalRead( DIR_PIN );
   state = !state;
-  digitalWrite( DIR_PIN, ( state ) );
+  digitalWrite( DIR_PIN, state );
 };

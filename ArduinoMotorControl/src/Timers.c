@@ -44,13 +44,21 @@ void SetPwmDuty( const float dutyPerc )
   {
     OCR1A = 0;
     DisablePWM();
-    setPinHighPWM();    
+    #if ( LOGIG_POLARITY == ACTIVE_HIGH )
+      setPinLowPWM();
+    #elif ( LOGIC_POLARITY == ACTIVE_LOW )
+      setPinHighPWM();   
+    #endif 
   }
   else if( dutyPerc > (100.0f - duty_step_perc) )
   {
     OCR1A = top;
     DisablePWM();
-    setPinLowPWM();
+    #if ( LOGIG_POLARITY == ACTIVE_HIGH )
+      setPinHighPWM();  
+    #elif ( LOGIC_POLARITY == ACTIVE_LOW )
+      setPinLowPWM(); 
+    #endif
   }
   else
   {
@@ -81,7 +89,18 @@ inline void DisablePWM()
 */
 inline void EnablePWM()
 {  
-  TCCR1A |= 0b11000010;    // turn on PWM
+    #if ( LOGIG_POLARITY == ACTIVE_HIGH )
+      TCCR1A |= 0b10000010; 
+    #elif ( LOGIC_POLARITY == ACTIVE_LOW )
+      TCCR1A |= 0b11000010;
+    #endif
+
+
+  // #if ( LOGIG_POLARITY == ACTIVE_LOW )
+  //       // turn on PWM
+  // #elif ( LOGIC_POLARITY == ACTIVE_HIGH )
+  //       // turn on PWM
+  // #endif
 };
 
 /**
