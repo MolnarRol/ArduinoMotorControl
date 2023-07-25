@@ -1,5 +1,24 @@
-COM9
-123
-456
-WAIT 2
-789
+COM6
+ct
+mode man
+start
+duty 25
+WAIT 1
+duty 75
+WAIT 1
+duty 25
+WAIT 1
+duty 75
+WAIT 1
+duty 25
+WAIT 1
+duty 75
+WAIT 1
+duty 25
+WAIT 1
+duty 75
+WAIT 1
+duty 25
+WAIT 1
+duty 75
+WAIT 1
