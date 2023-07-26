@@ -10,7 +10,6 @@ String getStringUART();
 void printHeader();
 void msgToCommand( String msg );
 uint8_t stringToWords( String msg, String words[] );
-// uint8_t stringToWords( String msg, String words[6] );
 float parseFloat( String strNum );
 uint8_t charToDec( char ch ); 
 uint32_t charStrToDec( char* numStr );

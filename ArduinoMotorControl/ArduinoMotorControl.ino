@@ -12,8 +12,6 @@
 #include "inc/Regulation.h"
 #include "inc/Timers.h"
 #include "inc/TimingUtils.h"
-#include "inc/StateMachine.h"
-
 
 // global_flags_TypeDef g_flags = {
 //   g_enc_first_edge = 1
@@ -34,9 +32,9 @@ void setup() {
   /*
     Timer setup functions
   */
-  PulseCaptureConfig();       // Rotary encoder capture
-  PwmConfig();                // Output PWM signal
-  PeriodicInterruptConfig();  // Generation periodic interrupt each 2 ms
+  PulseCaptureConfig();             // Rotary encoder capture
+  PwmConfig();                      // Output PWM signal
+  PeriodicInterruptConfig();        // Generation periodic interrupt each 2 ms
 
   /*
     Digital pin setup
@@ -46,12 +44,9 @@ void setup() {
   pinMode(DIR_PIN, OUTPUT);         // Direction pin
   digitalWrite( BRK_PIN, 1 );       // Disengage brake
 
-
-  // DisablePWM_HiZ();
   pinMode( 9, OUTPUT );
   SetPwmDuty( 0.0f );               // PWM is turned off
-  // setPinHighPWM();
-  pinMode( 4, INPUT ); // _PULLUP
+  pinMode( 4, INPUT );
 
   #ifdef DEBUG
     Serial.println( F("[Setup complete]") );
@@ -70,7 +65,6 @@ void loop() {
     Serial.println( msg );
     msgToCommand( msg );
   }
-  else Serial.println(); 
 }
 
 /**
