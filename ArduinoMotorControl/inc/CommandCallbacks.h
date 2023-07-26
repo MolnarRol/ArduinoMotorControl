@@ -2,6 +2,7 @@
 #define _COMMAND_CALLBACKS_H_
 
 #include "main.h"
+
 /**
   \defgroup callbacks Callback functions
   \ingroup command_def

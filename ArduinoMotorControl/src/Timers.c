@@ -4,7 +4,6 @@
 /// Variable is used to increase limited timer resolution to more then 8 bits. Value is incremented by ISR( TIMER0_COMPA_vect ).
 /// Variable is read and written to 0 by readPulseCount() function.
 uint16_t g_TIM0_ov = 0;
-float g_saved_duty = 0.0f;
 
 /**
   @brief Function that configures Timer 1 as PWM output with fixed frequency(20kHz).

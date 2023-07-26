@@ -1,23 +1,4 @@
-#include <string.h>
-#include <stdint.h>
-#include "Arduino.h"
-
-
-#include "config.h"
 #include "inc/main.h"
-#include "inc/APP_Interrupts.h"
-#include "inc/Commands.h"
-#include "inc/CommandCallbacks.h"
-#include "inc/Communication.h"
-#include "inc/Regulation.h"
-#include "inc/Timers.h"
-#include "inc/TimingUtils.h"
-#include "inc/StateMachine.h"
-
-
-// global_flags_TypeDef g_flags = {
-//   g_enc_first_edge = 1
-// };
 
 /// Arduino setup function
 void setup() {
