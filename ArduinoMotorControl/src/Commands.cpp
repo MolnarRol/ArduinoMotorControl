@@ -1,4 +1,6 @@
 #include "../inc/Commands.h"
+#include "../inc/Communication.h"
+#include "../inc/CommandCallbacks.h"
 
 /*
   Commands for motor controll

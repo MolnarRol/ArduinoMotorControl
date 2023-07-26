@@ -1,4 +1,6 @@
+#include  "../config.h"
 #include "../inc/Communication.h"
+#include "../inc/Commands.h"
 
 uint8_t g_group_idx = 255;  // Sellected group index -> 255 = no sellection
 
