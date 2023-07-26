@@ -2,7 +2,6 @@
 #define _CONFIG_H_
 
 #include <stdint.h>
-
 #define DEBUG
 
 /**
@@ -13,26 +12,37 @@
 */
 
 /// Software version  
-#define VERSION 1.2                
+#define VERSION 1.3
+
+/// Rotary encoder steps per rotation
+#define ENC_N_PULSES 100              
+
+/************************************************************************
+                        Output pin definition
+*************************************************************************/
 
 /**
-  \defgroup outpins Output pin definitions
-  Pin deffinitions
-  @{
+ Pin for guick debugging (D2) - NOT USED
 */
-/// Pin for guick debugging (D2)
-#define   DEBUG_PIN   2           
-/// Pin for direction setup (D5)    
+#define   DEBUG_PIN   2
+
+/**
+ Pin for direction setup (D5) 
+*/    
 #define   DIR_PIN     5          
-/// Pin for brake activation (D7)     
+
+/**
+  Pin for brake activation (D7) 
+*/     
 #define   BRK_PIN     7               
 /// @}
 
+/************************************************************************
+                        Logic definition
+*************************************************************************/
 #define ACTIVE_LOW    0
 #define ACTIVE_HIGH   1
-
 #define LOGIG_POLARITY ACTIVE_LOW
-
 #define PWM_OUTPUT_HiZ 0
 
 /**
@@ -42,30 +52,62 @@
   @{
 */
 
-/// Proportial gain
-#define KP 0.15f        
-/// Integral gain              
-#define KI 0.005f              
-/// Derivative gain       
-#define KD 1.0f              
-/// Enable anti reset windup         
-#define ARW_EN 1                      
+/************************************************************************
+                        PID regulator parameters
+*************************************************************************/
 
-/// Default regulation setpoint [RPM]
-#define SETPOINT_DEFAULT 1440.0f      
-/// Start motor with 100% until MOTOR_RPM_REG_START rpm is reached
-#define START_BOOST_EN 1             
-/// Start regulation after reaching defined RPM by this macro 
-#define MOTOR_RPM_REG_START 1600.0f   
 /** 
   Period of PID regulation output calculation
 */
-#define REG_PERIOD_MS 2.0f              
+#define REG_PERIOD_MS 2.0f 
 
+/**
+  Proportial gain
+*/ 
+#define KP 0.15f  
+
+/** 
+  Integral gain 
+*/              
+#define KI 0.005f      
+
+/**
+  Derivative gain       
+*/
+#define KD 1.0f       
+
+/**
+  Enable anti reset windup (Default: on)
+*/      
+#define ARW_EN 1                      
+
+/**
+ * Default regulation setpoint [RPM]
+*/ 
+#define SETPOINT_DEFAULT 1440.0f                   
+
+/************************************************************************
+                        Boost start functionality
+*************************************************************************/
+
+/**
+  Start motor with 100% until MOTOR_RPM_REG_START rpm is reached
+*/ 
+#define START_BOOST_EN 1 
+
+/**
+  PWM duty that is applied on boost start of the motor
+*/
+#define START_BOOST_DUTY 100.0f
+
+/** 
+  Start regulation after reaching defined RPM by this macro 
+*/
+#define MOTOR_RPM_REG_START 1600.0f  
+ 
 /*
   Setpoint interval -> for rpm <new rpm> command
 */
-
 /// changeSetPoint() maximum value [rpm] 
 #define RPM_MIN 300.0f                 
 /// changeSetPoint() minimum value [rpm]          
@@ -83,9 +125,6 @@
   TimerConfig.h Timing config macros
   @{
 */
-
-/// Rotary encoder steps per rotation
-#define ENC_N_PULSES 100    
 
 /**
   Filtration time constant     

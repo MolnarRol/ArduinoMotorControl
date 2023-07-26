@@ -6,6 +6,7 @@
 
 /// Current motor rpm readout
 float g_RPM = 0.0f;
+/// Global flag
 uint8_t g_enc_first_edge = 1;
 
 #if ENC_WDG_EN == 1

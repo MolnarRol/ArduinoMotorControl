@@ -61,10 +61,11 @@ void MODE_Callback( const String msg )
 void MOTOR_off_Callback( const String msg )
 {
   if( sellected_mode == regulation ) stopRegulation( &PID_controller );  
-  SetPwmDuty(0.0f);
   // EnablePWM_HiZ();
   PulseCaptureDisable();
   PeriodicInterruptDisable();
+  SetPwmDuty(0.0f);
+  PID_controller.integrator = 0.0f;
 };
 
 void MOTOR_on_Callback( const String msg )

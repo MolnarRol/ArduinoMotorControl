@@ -5,7 +5,7 @@ from time import sleep
 # Keyword defines
 WAIT_KEYWORD = "WAIT"
 WAIT_KEYWORD_LEN = len(WAIT_KEYWORD)
-MSG_DEADTIME = 0.1
+MSG_DEADTIME = 1
 
 def sendCommand( commandString ):
     serialPort.write( commandString.encode() )
@@ -18,8 +18,17 @@ def isCommand( checkedString ):
 
 # Open and read file line by line
 # Each line is saved to list
+
+filename = "test.txt"
+if len(sys.argv) == 2:
+    filename = sys.argv[1]    
+
 # file = open( sys.argv[1], "r" ).read()
-file = open( "test.txt", "r" ).read()       # Testing
+try:
+    file = open( filename, "r" ).read()       # Testing
+except:
+    sys.exit( "Could not find file named: \"" + filename + "\"" )
+
 lines = file.split('\n')
 commandList = []
 for line in lines:
@@ -34,17 +43,17 @@ serialPort = serial.Serial(
     baudrate = 115200,
     timeout = None
 )
-# if serialPort.isOpen():
-serialPort.close()
+if serialPort.isOpen():
+    serialPort.close()
 serialPort.open()
 
-
+# Execute commands
 for item in commandList:
-    if len(item) == 0:                                      # Skip empty lines
-        continue
+    print( item )
     if item[ 0:WAIT_KEYWORD_LEN ] == WAIT_KEYWORD:
         sleep( float( item[(WAIT_KEYWORD_LEN + 1):] ) - MSG_DEADTIME )
     else:
         sendCommand(item)
 
-print( "[DONE]" )
+serialPort.close()
+sys.exit( "[DONE]" )
