@@ -3,23 +3,11 @@
 
 #include "Arduino.h"
 #include "../config.h"
-
-typedef struct pulseStruct {
-  volatile uint32_t pulses[PULSES_MAX];
-  volatile uint8_t pulseIdx;
-} pulseTypeDef;
-
-typedef struct pulseBuffers {
-  volatile pulseTypeDef buffer[2];
-  volatile uint8_t idx;
-} pulseBuffersTypeDef;
+#include "Buffer.h"
 
 extern float g_l_val;
-extern pulseBuffersTypeDef PulseBuffers;
+// extern pulseBuffersTypeDef PulseBuffers;
 
-void clearPulseBuffers();
-
-void writePulseBuff( uint32_t val );
 uint32_t calcTimCntAVG( uint32_t* values, uint8_t len );
 float filter_1stOrder_r32(float r32ActualValue, float r32SmoothedValue, float r32SamplingTime_ms, float r32FilterTime_ms);
 float getRPMfromPulses( void );

@@ -1,22 +1,7 @@
 #include "../inc/TimingUtils.h"
 
 float g_l_val = 0.0f;
-
 pulseBuffersTypeDef PulseBuffers = {0};
-
-void clearPulseBuffers()
-{
-  PulseBuffers.idx = 0;
-  PulseBuffers.buffer[0].pulseIdx = 0;
-  PulseBuffers.buffer[1].pulseIdx = 0;
-}
-
-void writePulseBuff( uint32_t val )
-{
-  pulseTypeDef* p_buff = &PulseBuffers.buffer[ PulseBuffers.idx ];
-  p_buff->pulses[ p_buff->pulseIdx++ ] = val;
-  if( p_buff->pulseIdx >= PULSES_MAX ) p_buff->pulseIdx = 0;
-};
 
 uint32_t calcTimCntAVG( uint32_t* values, uint8_t len )
 {
