@@ -1,7 +1,9 @@
 #include "stdint.h"
 #include "../inc/APP_Interrupts.h"
 #include "../inc/CommandCallbacks.h"
+#include "../inc/Timers.h"
 #include "../inc/TimingUtils.h"
+#include "../inc/Regulation.h"
 
 
 /// Current motor rpm readout
@@ -42,7 +44,12 @@ ISR( TIMER2_COMPA_vect )
     #if ( START_BOOST_EN == 1 )
       if(  PID_controller.motor_start )
       {
-        if( g_RPM > MOTOR_RPM_REG_START ) startRegulation( &PID_controller );
+        if( g_RPM > MOTOR_RPM_REG_START ) 
+        {
+          // Serial.println(g_RPM);
+          startRegulation( &PID_controller );
+          PID_controller.motor_start = 0;
+        }
         else SetPwmDuty( 100.0f ); 
       }
     #else
@@ -80,7 +87,7 @@ ISR( PCINT2_vect )
     */
     if( encoderPinHigh() ) 
     {
-      if( g_enc_first_edge == 0 ) writePulseBuff ( readPulseCount() );
+      if( !g_enc_first_edge ) writePulseBuff ( readPulseCount() );
       else 
       {
         g_enc_first_edge = 0;

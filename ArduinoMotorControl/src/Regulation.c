@@ -94,7 +94,6 @@ void changeSetPoint( PID_TypeDef* handler, float newSetPoint )
 inline void startRegulation( PID_TypeDef* handler )
 {
   handler->integrator = GetPwmDuty() / handler->params.ki;    // integrator preload
-  handler->motor_start = 0;
   handler->enable = 1;
 };
 

@@ -40,7 +40,7 @@ commandList.pop(0)
 # Setting up serial communication
 serialPort = serial.Serial(
     port = COM_PORT,
-    baudrate = 115200,
+    baudrate = 38400,
     timeout = None
 )
 if serialPort.isOpen():
