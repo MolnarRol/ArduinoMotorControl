@@ -1,10 +1,5 @@
-#include "../config.h"
-#include "../inc/APP_Interrupts.h"
-#include "../inc/Communication.h"
 #include "../inc/CommandCallbacks.h"
-#include "../inc/Timers.h"
-#include "../inc/TimingUtils.h"
-#include "../inc/Regulation.h"
+
 
 /*
   User predefined speeds
@@ -17,6 +12,7 @@ uint8_t speed_idx = 0;
 
 enum MODE sellected_mode = regulation;
 uint8_t g_flag_motor_running = 0;
+
 
 void StatusCallback( const String msg )
 {
@@ -46,15 +42,7 @@ void MODE_Callback( const String msg )
   else if( msg == "reg" )
   {
     sellected_mode = regulation;
-    
-    if( !g_flag_motor_running )
-    {
-      PID_controller.motor_start = 1;
-    }
-    else
-    {
-      startRegulation( &PID_controller );
-    }
+    startRegulation( &PID_controller );
   }
   else if( msg.length() == 0 )
   {
@@ -72,24 +60,32 @@ void MODE_Callback( const String msg )
 
 void MOTOR_off_Callback( const String msg )
 {
-  if( !g_flag_motor_running ) return;
   if( sellected_mode == regulation ) stopRegulation( &PID_controller );  
+  // EnablePWM_HiZ();
   PulseCaptureDisable();
   PeriodicInterruptDisable();
   SetPwmDuty(0.0f);
   PID_controller.integrator = 0.0f;
-  g_RPM = 0.0f;
-  g_enc_first_edge = 1;
-  PID_controller.motor_start = 1;
-  g_flag_motor_running = 0;
 };
 
 void MOTOR_on_Callback( const String msg )
 {
-  if( g_flag_motor_running ) return;
-  g_flag_motor_running = 1;
+  g_RPM = 0.0f;
+  g_enc_first_edge = 1;
+  PID_controller.motor_start = 1;
+  // resetPulseCount();
   clearPulseBuffers();
-  SetPwmDuty( g_saved_duty );
+
+  #if ( START_BOOST_EN == 1 )
+    if( sellected_mode == regulation ) 
+    {
+      PID_controller.motor_start = 1;
+
+    }
+  // #else
+  //   SetPwmDuty( 0.0f );
+  #endif
+  
   PeriodicInterruptEnable();
   PulseCaptureEnable();
 };
@@ -137,24 +133,13 @@ void PWM_duty_Callback( const String msg )
 {
   if( msg.length() > 0 ) 
   {
-    float duty = parseFloat( msg );
-    if( g_flag_motor_running ) SetPwmDuty( duty ); 
-    g_saved_duty = duty;
+    SetPwmDuty( parseFloat( msg ) ); 
   }
   else
   {
-    if( g_flag_motor_running )
-    {
-      Serial.print( F("PWM duty: ") );
-      Serial.print( GetPwmDuty() );
-      Serial.println( F("%") );
-    }
-    else
-    {
-      Serial.print( F("Set PWM duty(motor not running): ") );
-      Serial.print( g_saved_duty );
-      Serial.println( F("%") );
-    }
+    Serial.print("PWM duty: ");
+    Serial.print( GetPwmDuty() );
+    Serial.println("%");
   } 
 };
 
