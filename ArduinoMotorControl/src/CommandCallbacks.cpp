@@ -15,24 +15,18 @@ const uint8_t speeds_len = sizeof(speeds) / sizeof(float);
 uint8_t speed_idx = 0;
 /* ------------------------------------------------------------------------------- */
 
-enum MODE sellected_mode = REGULATION;
+enum MODE sellected_mode = regulation;
 uint8_t g_flag_motor_running = 0;
 
 void StatusCallback( const String msg )
 {
-  Serial.print( F("Sellected mode: ") );
-  if( sellected_mode == REGULATION ) 
-  { 
-    Serial.println( F("Regulation") );
-  }
-  else 
-  {
-    Serial.println( F("Manual PWM") );
-  }
+  Serial.print("Sellected mode: ");
+  if( sellected_mode == regulation ) Serial.println( "Regulation" );
+  else Serial.println( "Manual PWM" );
   
-  Serial.print( F("Current RPM: ") );
-  Serial.println( g_val_RPM );
-  PWM_duty_Callback( "" );
+  Serial.print("Current RPM: ");
+  Serial.println(g_RPM);
+  PWM_duty_Callback("");
 };
 
 #if ENC_WDG_EN == 1
@@ -46,12 +40,12 @@ void MODE_Callback( const String msg )
 {
   if( msg ==  "man")
   {
-    sellected_mode = MANUAL;
+    sellected_mode = manual;
     stopRegulation( &PID_controller );
   }
   else if( msg == "reg" )
   {
-    sellected_mode = REGULATION;
+    sellected_mode = regulation;
     
     if( !g_flag_motor_running )
     {
@@ -65,7 +59,7 @@ void MODE_Callback( const String msg )
   else if( msg.length() == 0 )
   {
     Serial.print("Mode: ");
-    if( sellected_mode == REGULATION )
+    if( sellected_mode == regulation )
     {
       Serial.println("regulation");
     }
@@ -79,13 +73,13 @@ void MODE_Callback( const String msg )
 void MOTOR_off_Callback( const String msg )
 {
   if( !g_flag_motor_running ) return;
-  if( sellected_mode == REGULATION ) stopRegulation( &PID_controller );  
+  if( sellected_mode == regulation ) stopRegulation( &PID_controller );  
   PulseCaptureDisable();
   PeriodicInterruptDisable();
   SetPwmDuty(0.0f);
   PID_controller.integrator = 0.0f;
-  g_val_RPM = 0.0f;
-  g_flag_enc_first_edge = 1;
+  g_RPM = 0.0f;
+  g_enc_first_edge = 1;
   PID_controller.motor_start = 1;
   g_flag_motor_running = 0;
 };

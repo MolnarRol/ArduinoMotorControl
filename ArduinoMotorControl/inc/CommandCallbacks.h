@@ -2,7 +2,6 @@
 #define _COMMAND_CALLBACKS_H_
 
 #include "main.h"
-
 /**
   \defgroup callbacks Callback functions
   \ingroup command_def
@@ -15,20 +14,20 @@
   @{
 */
 enum MODE {
-  MANUAL,
-  REGULATION
+  manual,
+  regulation
 };
 
 extern enum MODE sellected_mode;
 
-void MODE_Callback          ( const String msg );
-void MOTOR_off_Callback     ( const String msg );
-void MOTOR_on_Callback      ( const String msg );
-void PWM_duty_Callback      ( const String msg );
-void RPM_Callback           ( const String msg );
-void SPEED_Callback         ( const String msg );
-void SPEED_inc_Callback     ( const String msg );
-void SPEED_dec_Callback     ( const String msg );
+void MODE_Callback( const String msg );
+void MOTOR_off_Callback( const String msg );
+void MOTOR_on_Callback( const String msg );
+void PWM_duty_Callback( const String msg );
+void RPM_Callback( const String msg );
+void SPEED_Callback( const String msg );
+void SPEED_inc_Callback( const String msg );
+void SPEED_dec_Callback( const String msg );
 /// @}
 
 /**
@@ -36,9 +35,9 @@ void SPEED_dec_Callback     ( const String msg );
   Direction callback functions
   @{
 */
-void DIR_1_Callback         ( const String msg );
-void DIR_2_Callback         ( const String msg );
-void DIR_change_Callback    ( const String msg );
+void DIR_1_Callback( const String msg );
+void DIR_2_Callback( const String msg );
+void DIR_change_Callback( const String msg );
 /// @}
 
 /**
@@ -46,9 +45,9 @@ void DIR_change_Callback    ( const String msg );
   Brake callback functions
   @{
 */
-void BRAKE_on_Callback      ( const String msg );
-void BRAKE_off_Callback     ( const String msg );
+void BRAKE_on_Callback( const String msg );
+void BRAKE_off_Callback( const String msg );
 /// @}
-void StatusCallback         ( const String msg );
+void StatusCallback( const String msg );
 /// @}
 #endif

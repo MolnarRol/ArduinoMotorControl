@@ -7,9 +7,9 @@
 
 
 /// Current motor rpm readout
-float g_val_RPM = 0.0f;
+float g_RPM = 0.0f;
 /// Global flag
-uint8_t g_flag_enc_first_edge = 1;
+uint8_t g_enc_first_edge = 1;
 
 #if ENC_WDG_EN == 1
   /// Encoder signal missing watchdog global variable.
@@ -20,13 +20,14 @@ uint8_t g_flag_enc_first_edge = 1;
   Interrupt service routine called each 2 ms.
   Used for reading current rpm and PID new value calculation.
 */
+
 ISR( TIMER2_COMPA_vect )
 {
   sei();                                    // Reenable interrupts to allow interrupt nesting   
   PulseBuffers.idx ^= 1;                    // Switch pulse buffer
-  g_val_RPM = getRPMfromPulses();               // Read current RPM
+  g_RPM = getRPMfromPulses();               // Read current RPM
 
-  if( sellected_mode == MANUAL ) return;
+  if( sellected_mode == manual ) return;
 
   /* If watchdog was not reset in time -> halts MCU */
   #if ( ENC_WDG_EN == 1 )
@@ -35,7 +36,7 @@ ISR( TIMER2_COMPA_vect )
 
   if( PID_controller.enable ) 
   {
-    SetPwmDuty( updatePID( &PID_controller, g_val_RPM ) ); // PID speed regulation
+    SetPwmDuty( updatePID( &PID_controller, g_RPM ) ); // PID speed regulation
   } 
   else 
   {
@@ -43,7 +44,7 @@ ISR( TIMER2_COMPA_vect )
     #if ( START_BOOST_EN == 1 )
       if(  PID_controller.motor_start )
       {
-        if( g_val_RPM > MOTOR_RPM_REG_START ) 
+        if( g_RPM > MOTOR_RPM_REG_START ) 
         {
           // Serial.println(g_RPM);
           startRegulation( &PID_controller );
@@ -53,7 +54,6 @@ ISR( TIMER2_COMPA_vect )
       }
     #else
       PID_controller.enable = 1;
-      SetPwmDuty( updatePID( &PID_controller, g_val_RPM ) );
     #endif
   }
 }
@@ -79,18 +79,18 @@ ISR( PCINT2_vect )
       Aproximating number of pulses. 
       Possible only when duty cycle of the signal is 50%!!! 
     */
-    if( g_flag_enc_first_edge == 0 ) writePulseBuff ( 2 * readPulseCount() ); 
-    else g_flag_enc_first_edge = 0;               
+    if( g_enc_first_edge == 0 ) writePulseBuff ( 2 * readPulseCount() ); 
+    else g_enc_first_edge = 0;               
   #elif ( PULSE_DELTA_READ == EDGE_RISING )
     /* 
       Writing buffer only on rising edge -> encoder pin is high. 
     */
     if( encoderPinHigh() ) 
     {
-      if( !g_flag_enc_first_edge ) writePulseBuff ( readPulseCount() );
+      if( !g_enc_first_edge ) writePulseBuff ( readPulseCount() );
       else 
       {
-        g_flag_enc_first_edge = 0;
+        g_enc_first_edge = 0;
         // resetPulseCount();
       }
     }
@@ -100,8 +100,8 @@ ISR( PCINT2_vect )
     */
     if( !encoderPinHigh() ) 
     {
-      if( g_flag_enc_first_edge == 0 ) writePulseBuff ( readPulseCount() );
-      else g_flag_enc_first_edge = 0;
+      if( g_enc_first_edge == 0 ) writePulseBuff ( readPulseCount() );
+      else g_enc_first_edge = 0;
     }
   #else
     #error "Specified macro is not defined!!!"
