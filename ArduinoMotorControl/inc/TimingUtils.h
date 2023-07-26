@@ -10,6 +10,7 @@ typedef struct pulseStruct {
 } pulseTypeDef;
 
 typedef struct pulseBuffers {
+
   volatile pulseTypeDef buffer[2];
   volatile uint8_t idx;
 } pulseBuffersTypeDef;

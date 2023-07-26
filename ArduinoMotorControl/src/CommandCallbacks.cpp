@@ -133,7 +133,7 @@ void RPM_Callback( const String msg )
 /*
   PWM Callback functions
 */
-void PWM_duty_Callback( String msg )
+void PWM_duty_Callback( const String msg )
 {
   if( msg.length() > 0 ) 
   {
