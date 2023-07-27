@@ -2,7 +2,6 @@
 #include <stdint.h>
 #include "Arduino.h"
 
-
 #include "config.h"
 #include "inc/main.h"
 #include "inc/APP_Interrupts.h"
@@ -25,11 +24,11 @@ void setup() {
     UART setup
   */
   Serial.begin( UART_BAUD );
-  clearTerminal( "" );
+  // clearTerminal( "" );
 
-  #ifdef DEBUG
-    Serial.println( F("[MCU reset]") );
-  #endif
+  // #ifdef DEBUG
+  //   Serial.println( F("[MCU reset]") );
+  // #endif
 
   /*
     Timer setup functions
@@ -53,9 +52,9 @@ void setup() {
   // setPinHighPWM();
   pinMode( 4, INPUT ); // _PULLUP
 
-  #ifdef DEBUG
-    Serial.println( F("[Setup complete]") );
-  #endif
+  // #ifdef DEBUG
+  //   Serial.println( F("[Setup complete]") );
+  // #endif
 }
 
 /**

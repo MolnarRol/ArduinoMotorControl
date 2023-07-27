@@ -5,8 +5,38 @@ COM6
 
 # The commands are executed line by line. Empty or commented lines are ignored
 
+back
+back
 ct
 mode man
 start
-duty 25
+
+duty 10
 WAIT 2
+
+duty 20
+WAIT 2
+
+duty 30
+WAIT 2
+
+duty 40
+WAIT 2
+
+duty 50
+WAIT 2
+
+duty 60
+WAIT 2
+
+rpm 1440
+mode reg
+
+WAIT 2
+rpm 2000
+
+WAIT 2 
+RPM 2800
+
+WAIT 5
+stop
