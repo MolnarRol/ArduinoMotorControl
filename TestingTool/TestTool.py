@@ -145,7 +145,7 @@ else:
 serialPort = serial.Serial(
     port = SerialConfig[0],
     baudrate = SerialConfig[1],
-    timeout = 0.1               # Leave as is
+    timeout = 0.1               # Leave as is 
 )
 
 # Open serial communication
@@ -168,5 +168,6 @@ try:
     serialPort.close()
     sys.exit( "[DONE]" )
 except KeyboardInterrupt:
+    sendCommand("stop")
     serialPort.close()
     print("Serial port closed")

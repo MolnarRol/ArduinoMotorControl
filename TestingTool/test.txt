@@ -1,15 +1,12 @@
 # This is a comment
-# First valid line of the file must be name of the COM port used
-# for communication with the hardware 
-COM6
-
 # The commands are executed line by line. Empty or commented lines are ignored
 
 back
-back
-ct
+    ct
     mode man
     duty 10
     start 
-    WAIT 5
+    WAIT 50
+    duty 30
+    WAIT 500
 stop
