@@ -1,3 +1,4 @@
-
 .vscode/
+TestTool/__pycache__/
+TestTool/config.txt
 doc/
