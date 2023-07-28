@@ -9,14 +9,15 @@ def clearTerminal():
     else:
         _ = os.system('clear')
 
-def something():
-    print( "something" )
-
 def loadTest():
     print("load")
+
+def showTestFolder():
+    print("")
 
 Commands = [
     [ "clear", clearTerminal, 0 ],
     [ "test", test, 1 ],
-    [ "so", something, 0 ]
+    [ "load", loadTest, 1 ],
+    [ "show", showTestFolder, 1 ]
     ]

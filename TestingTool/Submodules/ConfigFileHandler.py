@@ -35,7 +35,7 @@ class Config:
 
     def __newConfigFile( self ):
         # from TestTool import clearTerminal
-        from SerialPort import printSerialPorts
+        from Submodules.SerialPort import printSerialPorts
 
         # clearTerminal()
         print("No config file found! Creating a new file ...")
