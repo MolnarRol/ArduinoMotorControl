@@ -1,2 +1,3 @@
 port COM6
 baudrate 115200
+testfolder Tests

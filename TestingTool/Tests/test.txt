@@ -5,8 +5,10 @@ back
     ct
     mode man
     duty 10
+    start
+    mode man
+    rpm 1800
+
     start 
-    WAIT 50
-    duty 30
-    WAIT 500
+    rpm 2500
 stop
