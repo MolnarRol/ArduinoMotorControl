@@ -7,14 +7,15 @@ from modules.FileParser import *
 # Keyword defines
 WAIT_KEYWORD = "WAIT"
 WAIT_KEYWORD_LEN = len(WAIT_KEYWORD)
-MSG_DEADTIME = 0.2
+MSG_DEADTIME = 0.001
 
 def app():
 
     if len(sys.argv) == 2:
         filename = sys.argv[1]    
     else:
-        sys.exit("You need to specify one test file\n\tpython3 SimpleTool.py <testfile.txt>")
+        filename = "TestingTool/SimpleTool/test.txt"
+        # sys.exit("You need to specify one test file\n\t>> python3 SimpleTool.py <testfile.txt>")
 
     try:
         file = open( filename, "r" ).read()       # Testing
@@ -28,12 +29,13 @@ def app():
     commandList.pop(0)
     
     funList = parseCommands( commandList )
-    print( funList )
 
+    for item in funList:
+        print( item )
+    print("###########################################")
 
     print( getResponse_BLOCKING(), end = "" )
     for action in funList:
-        print( action["arg"] )
         action["fun"](action["arg"])
 
     serialPort.close()

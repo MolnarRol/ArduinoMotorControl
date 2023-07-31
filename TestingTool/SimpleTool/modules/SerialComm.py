@@ -11,7 +11,11 @@ KEYWORDS = (
     "_ENDLOOP_"
 )
 
-def LOOP( n, funList ):
+def LOOP( funList ):
+    fList = funList[:-1]
+
+    # for idx in range( ):
+    #     continue
     return
 
 def WAIT( n ):
@@ -23,23 +27,38 @@ def isKeyword( word ):
             return True
     return False
 
-def parseCommands( lineList ):
+def parseCommands( lineList, symbol=None ):
     funList = []
 
-    for line in lineList:
+    for idx, line in enumerate( lineList ):
+
         tmp_action = {
             "fun" : None,
             "arg" : None
         }
+
         splittedLine = line.split()
+        if symbol != None:
+            if splittedLine[0] == symbol:
+                return funList
+
+
         if isKeyword( splittedLine[0] ) == False:
             tmp_action["fun"] = sendCommand
             tmp_action["arg"] = line
         else:
-            tmp_action["fun"] = WAIT
-            tmp_action["arg"] = float(splittedLine[1])
+            if splittedLine[0] == "_WAIT_":
+                tmp_action["fun"] = WAIT
+                tmp_action["arg"] = float(splittedLine[1])
+            elif splittedLine[0] == "_LOOP_":
+                # print( lineList[idx+1:] )
+                tmp_action["fun"] = LOOP
+                tmp_action["arg"] = parseCommands( lineList[idx+1:], "_ENDLOOP_" )
+                tmp_action["arg"].append( splittedLine[1] )
 
         funList.append( tmp_action )
+
+    
     return funList
 
 
