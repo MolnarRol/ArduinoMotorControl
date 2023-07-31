@@ -1,0 +1,25 @@
+# This is a comment
+# The commands are executed line by line. Empty or commented lines are ignored
+COM6
+
+# Test
+back
+ct
+mode man
+start
+
+_LOOP_ 5
+    duty 10
+    _WAIT_ 2
+    duty 25
+    _WAIT_ 2
+
+    _LOOP_ 2
+        duty 15
+        _WAIT_ 2
+        duty 5
+        _WAIT_ 2
+    _ENDLOOP_
+_ENDLOOP_
+
+stop
