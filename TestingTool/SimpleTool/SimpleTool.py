@@ -3,6 +3,7 @@ from time import sleep
 
 from modules.SerialComm import *
 from modules.FileParser import *
+from modules.CommandParser import *
 
 # Keyword defines
 WAIT_KEYWORD = "WAIT"
@@ -27,13 +28,13 @@ def app():
     # Setting up serial communication
     serialSetup( commandList[0] )
     commandList.pop(0)
+
+    # for line in commandList:
+    #     print(line)
+    # print("######################")
     
     parsed = parseCommands( commandList )
     funList = parsed[0]
-
-    # for item in funList:
-    #     print( item )
-    # print("###########################################")
 
     print( getResponse_BLOCKING(), end = "" )
     for action in funList:

@@ -7,6 +7,7 @@ def removeCommentedLines( file ):
     lines = file.split('\n')
     commandList = []
     for line in lines:
-        if isCommand(line):
-            commandList.append(line.strip())
+        stripped = line.strip()
+        if isCommand(stripped):
+            commandList.append(stripped)
     return commandList
