@@ -23,6 +23,16 @@ def app():
     except:
         sys.exit( "Could not find file named: \"" + filename + "\"" )
 
+
+    syntax_errors = syntax_checker( file )
+    if len(syntax_errors) != 0:
+        for error in syntax_errors:
+            print( error )
+        sys.exit("Parsing of " + filename + " was unsucsesfull. Stopping the program ...")
+    print("[Parsing OK]")
+    input("Press ENTER to start the test ...")
+    sys.exit()
+
     commandList = removeCommentedLines( file )
     
     # Setting up serial communication
@@ -38,10 +48,10 @@ def app():
 
     print( getResponse_BLOCKING(), end = "" )
     for action in funList:
-        # print(action["arg"])
+        print(action["arg"])
         action["fun"](action["arg"])
 
-    serialPort.close()
+    # serialPort.close()
     sys.exit( "[DONE]" )
 
 

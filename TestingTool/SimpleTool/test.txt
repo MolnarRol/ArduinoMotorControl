@@ -1,6 +1,5 @@
 # This is a comment
 # The commands are executed line by line. Empty or commented lines are ignored
-COM6
 
 # Test
 #back
@@ -9,10 +8,10 @@ COM6
 start
 
 _LOOP_ 2
-    LOOP1
+    LOOP1 2
 
 
-    _LOOP_ 2
+    _LOOP_ 1
 
 
         LOOP2      
