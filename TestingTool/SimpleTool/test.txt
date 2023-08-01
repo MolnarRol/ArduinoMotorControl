@@ -3,15 +3,21 @@
 COM6
 
 # Test
-# back
-# ct
-# mode man
-# start
+back
+ct
+mode man
+start
 
-_LOOP_ 2
+_LOOP_ 1
     duty 10
     _WAIT_ 2
-    duty 25
-    _WAIT_ 2
+
+    _LOOP_ 2
+       duty 20
+       _WAIT_ 5
+       duty 30
+       _WAIT_ 5
+    _ENDLOOP_
+
 _ENDLOOP_
 stop

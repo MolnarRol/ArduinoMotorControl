@@ -28,14 +28,16 @@ def app():
     serialSetup( commandList[0] )
     commandList.pop(0)
     
-    funList = parseCommands( commandList )
+    parsed = parseCommands( commandList )
+    funList = parsed[0]
 
-    for item in funList:
-        print( item )
-    print("###########################################")
+    # for item in funList:
+    #     print( item )
+    # print("###########################################")
 
     print( getResponse_BLOCKING(), end = "" )
     for action in funList:
+        # print(action["arg"])
         action["fun"](action["arg"])
 
     serialPort.close()
