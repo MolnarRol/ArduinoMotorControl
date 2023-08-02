@@ -1,30 +1,16 @@
 # This is a comment
 # The commands are executed line by line. Empty or commented lines are ignored
-
+COM9
 # Test
-#back
-#ct
-#mode man
+
+back
+ct
+rpm 2000
 start
-
-_LOOP_ 2
-    LOOP1 2
-
-
-    _LOOP_ 1
-
-
-        LOOP2      
-
-        _LOOP_ 1     
-
-            LOOP3
-
-        _ENDLOOP_
-
-        
-
-    _ENDLOOP_
-
+_LOOP_ 5
+    _WAIT_ 3
+    rpm 2800
+    _WAIT_ 3
+    rpm 2000
 _ENDLOOP_
-#stop
+stop

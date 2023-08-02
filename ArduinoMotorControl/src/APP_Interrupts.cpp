@@ -36,7 +36,9 @@ ISR( TIMER2_COMPA_vect )
 
   if( PID_controller.enable ) 
   {
-    SetPwmDuty( updatePID( &PID_controller, g_RPM ) ); // PID speed regulation
+    float regOut = updatePID( &PID_controller, g_RPM );
+    SetPwmDuty( regOut ); // PID speed regulation
+    // Serial.println( regOut );
   } 
   else 
   {
@@ -48,6 +50,7 @@ ISR( TIMER2_COMPA_vect )
         {
           // Serial.println(g_RPM);
           startRegulation( &PID_controller );
+          SetPwmDuty( updatePID( &PID_controller, g_RPM ) );
           PID_controller.motor_start = 0;
         }
         else SetPwmDuty( 100.0f ); 

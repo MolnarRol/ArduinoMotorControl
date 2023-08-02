@@ -17,7 +17,7 @@ PID_TypeDef PID_controller = {
   .T_ms = REG_PERIOD_MS,
   .integrator = 0.0f,
   .prevE = 0.0f,
-  .scalingFactor = 60.0f,
+  .scalingFactor = 30.0f,
   
   .enable = 0,
   .motor_start = 1
@@ -37,7 +37,7 @@ float updatePID( PID_TypeDef* handler, float y )
 
   const float T = handler->T_ms / 1000.0f;                                // Conversion from [ms] -> [s]
   const float E = ( handler->setPoint - y ) / handler->scalingFactor;     // Regulation error calculation
-
+  // const float E = ( handler->setPoint - y );
   /*
     Proporial term
   */
@@ -70,7 +70,7 @@ float updatePID( PID_TypeDef* handler, float y )
     Calculated regulation output
   */
   U =  P + I + D;  
-
+  // U /= 10.0f;
   /*
     Clamp output to defined interval
   */

@@ -4,13 +4,23 @@ from time import sleep
 from modules.SerialComm import *
 from modules.FileParser import *
 from modules.CommandParser import *
-
+from ctypes import *
 # Keyword defines
 WAIT_KEYWORD = "WAIT"
 WAIT_KEYWORD_LEN = len(WAIT_KEYWORD)
 MSG_DEADTIME = 0.001
 
 def app():
+
+    serialSetup("COM6")
+    Bytes = getByteResponse_BLOCKING()
+    out = 0
+    for idx, char in enumerate(Bytes):
+        out |= char << ( 8 * idx )
+        print(hex(char))
+    print( hex(out) )
+    print( (c_float)(out) )
+    sys.exit()
 
     if len(sys.argv) == 2:
         filename = sys.argv[1]    
@@ -23,15 +33,12 @@ def app():
     except:
         sys.exit( "Could not find file named: \"" + filename + "\"" )
 
-
-    syntax_errors = syntax_checker( file )
-    if len(syntax_errors) != 0:
-        for error in syntax_errors:
-            print( error )
-        sys.exit("Parsing of " + filename + " was unsucsesfull. Stopping the program ...")
-    print("[Parsing OK]")
-    input("Press ENTER to start the test ...")
-    sys.exit()
+    # syntax_errors = syntax_checker( file )
+    # if len(syntax_errors) != 0:
+    #     for error in syntax_errors:
+    #         print( error )
+    #     sys.exit("Parsing of " + filename + " was unsucsesfull. Stopping the program ...")
+    # sys.exit()
 
     commandList = removeCommentedLines( file )
     
@@ -46,12 +53,14 @@ def app():
     parsed = parseCommands( commandList )
     funList = parsed[0]
 
+    input( "Pres ENTER to start ... " )
+
     print( getResponse_BLOCKING(), end = "" )
     for action in funList:
         print(action["arg"])
         action["fun"](action["arg"])
 
-    # serialPort.close()
+    serialPort.close()
     sys.exit( "[DONE]" )
 
 

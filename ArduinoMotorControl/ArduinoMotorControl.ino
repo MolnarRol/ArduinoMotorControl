@@ -24,6 +24,24 @@ void setup() {
     UART setup
   */
   Serial.begin( UART_BAUD );
+  // float bytesToFloat( const uint8_t bytes[4] );
+  // void floatToBytes( const float input, uint8_t bytes[4] );
+  float x = 3.14f;
+  uint8_t bytes[4];
+  floatToBytes( x, bytes );
+  char byteArray[5];
+
+  for( uint8_t i = 0; i < 4; i++ )
+  {
+    byteArray[i] = (char)bytes[i];
+    Serial.println( (char)bytes[i], HEX );
+  }
+  byteArray[4] = 0;
+  Serial.print( byteArray );
+  
+
+  while(1);
+  
   // clearTerminal( "" );
 
   // #ifdef DEBUG
@@ -51,6 +69,9 @@ void setup() {
   SetPwmDuty( 0.0f );               // PWM is turned off
   // setPinHighPWM();
   pinMode( 4, INPUT ); // _PULLUP
+
+  // MOTOR_on_Callback("");
+  // while( 1 );
 
   // #ifdef DEBUG
   //   Serial.println( F("[Setup complete]") );

@@ -194,6 +194,35 @@ void helper( String msg )
     ));
 };
 
+union floatByteConversion
+  {
+    float f;
+    uint8_t b[4];
+  };
+
+void floatToBytes( const float input, uint8_t bytes[4] )
+{
+  floatByteConversion conv = {
+    .f = input
+  };
+
+  /* Copy bytes to byte array */
+  for( uint8_t idx = 0; idx < 4; idx++ )
+  {
+    bytes[idx] = conv.b[idx];
+  }
+}
+
+float bytesToFloat( const uint8_t bytes[4] )
+{
+  floatByteConversion conv;
+  for( uint8_t idx = 0; idx < 4; idx++ )
+  {
+    conv.b[idx] = bytes[idx];
+  }
+  return conv.f;
+}
+
 void test( String msg )
 {
 };

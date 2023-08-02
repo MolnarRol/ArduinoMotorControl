@@ -1,0 +1,7 @@
+COM9
+
+back
+ct
+start
+_WAIT_ 50
+stop

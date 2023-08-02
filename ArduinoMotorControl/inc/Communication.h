@@ -23,4 +23,7 @@ void resetGroup( String msg );
 void helper( String msg );
 void test( String msg );
 uint32_t powerOf10( uint8_t n );
+
+float bytesToFloat( const uint8_t bytes[4] );
+void floatToBytes( const float input, uint8_t bytes[4] );
 #endif

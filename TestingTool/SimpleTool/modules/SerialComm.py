@@ -24,6 +24,12 @@ def getResponse_BLOCKING():
         res = res.decode()
     return res
 
+def getByteResponse_BLOCKING():
+    res = serialPort.readline()
+    while isResponse( res ) == 0:
+        res = serialPort.readline()
+    return res
+
 def isResponse( data ):
     if len( data ) == 0:
         return False
