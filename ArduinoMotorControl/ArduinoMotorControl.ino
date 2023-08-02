@@ -26,15 +26,15 @@ void setup() {
   Serial.begin( UART_BAUD );
   // float bytesToFloat( const uint8_t bytes[4] );
   // void floatToBytes( const float input, uint8_t bytes[4] );
-  float x = 3.14f;
+  float x = 49.420420f;
   uint8_t bytes[4];
   floatToBytes( x, bytes );
   char byteArray[5];
 
   for( uint8_t i = 0; i < 4; i++ )
   {
-    byteArray[i] = (char)bytes[i];
-    Serial.println( (char)bytes[i], HEX );
+    byteArray[i] = bytes[i];
+    // Serial.println( bytes[i], HEX );
   }
   byteArray[4] = 0;
   Serial.print( byteArray );

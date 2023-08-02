@@ -4,6 +4,8 @@ from time import sleep
 from modules.SerialComm import *
 from modules.FileParser import *
 from modules.CommandParser import *
+
+import struct
 from ctypes import *
 # Keyword defines
 WAIT_KEYWORD = "WAIT"
@@ -12,14 +14,12 @@ MSG_DEADTIME = 0.001
 
 def app():
 
+    # https://www.datasciencelearner.com/convert-a-byte-array-to-float-in-python/
+
     serialSetup("COM6")
     Bytes = getByteResponse_BLOCKING()
-    out = 0
-    for idx, char in enumerate(Bytes):
-        out |= char << ( 8 * idx )
-        print(hex(char))
-    print( hex(out) )
-    print( (c_float)(out) )
+    float_value = struct.unpack('<f', Bytes)[0]
+    print( float_value )
     sys.exit()
 
     if len(sys.argv) == 2:
