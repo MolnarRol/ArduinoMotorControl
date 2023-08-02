@@ -1,6 +1,6 @@
 from time import sleep
 import modules.SerialComm as SerialComm
-# from modules.SyntaxChecker import *
+from modules.SyntaxChecker import *
 
 
 KEYWORDS = (

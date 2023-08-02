@@ -16,11 +16,11 @@ def app():
 
     # https://www.datasciencelearner.com/convert-a-byte-array-to-float-in-python/
 
-    serialSetup("COM6")
-    Bytes = getByteResponse_BLOCKING()
-    float_value = struct.unpack('<f', Bytes)[0]
-    print( float_value )
-    sys.exit()
+    # serialSetup("COM6")
+    # Bytes = getByteResponse_BLOCKING()
+    # float_value = struct.unpack('<f', Bytes)[0]
+    # print( float_value )
+    # sys.exit()
 
     if len(sys.argv) == 2:
         filename = sys.argv[1]    
@@ -33,17 +33,16 @@ def app():
     except:
         sys.exit( "Could not find file named: \"" + filename + "\"" )
 
-    # syntax_errors = syntax_checker( file )
-    # if len(syntax_errors) != 0:
-    #     for error in syntax_errors:
-    #         print( error )
-    #     sys.exit("Parsing of " + filename + " was unsucsesfull. Stopping the program ...")
-    # sys.exit()
+    syntax_errors = syntax_checker( file )
+    if len(syntax_errors) != 0:
+        for error in syntax_errors:
+            print( error )
+        sys.exit("Parsing of " + filename + " was unsucsesfull. Stopping the program ...")
 
     commandList = removeCommentedLines( file )
     
     # Setting up serial communication
-    serialSetup( commandList[0] )
+    # serialSetup( commandList[0] )
     commandList.pop(0)
 
     # for line in commandList:
@@ -55,12 +54,12 @@ def app():
 
     input( "Pres ENTER to start ... " )
 
-    print( getResponse_BLOCKING(), end = "" )
-    for action in funList:
-        print(action["arg"])
-        action["fun"](action["arg"])
+    # print( getResponse_BLOCKING(), end = "" )
+    # for action in funList:
+    #     print(action["arg"])
+    #     action["fun"](action["arg"])
 
-    serialPort.close()
+    # serialPort.close()
     sys.exit( "[DONE]" )
 
 

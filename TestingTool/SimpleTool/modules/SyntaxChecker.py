@@ -16,10 +16,10 @@ def error_line_formatter( line_num, msg, line ):
 
 def syntax_checker( input ):
     lines = input.split('\n')
+
     errors = []
 
     loop_counter = 0
-    end_loop_counter = 0
 
     for idx,line in enumerate(lines):
         stripped = line.strip()
@@ -46,7 +46,7 @@ def syntax_checker( input ):
                 loop_counter += 1
             
             case "_ENDLOOP_":
-                end_loop_counter += 1
+                loop_counter -= 1
 
             # case "_LOOP_":
 
@@ -56,9 +56,9 @@ def syntax_checker( input ):
         # print( str(idx) + "\t| ", end="" )
         # print( line )
     
-    if loop_counter > end_loop_counter:
+    if loop_counter > 0:
         errors.append( "One or more loops were not terminated by \"_ENDLOOP_\"!" )
-    elif loop_counter < end_loop_counter:
+    elif loop_counter < 0:
         errors.append( "Additional \"_ENDLOOP_\" symbols declared!" )
 
     return errors
