@@ -57,6 +57,7 @@ void setPinLowPWM();
 */
 
 uint32_t readPulseCount();
+void resetPulseCount();
 uint8_t encoderPinHigh();
 
 #ifdef __cplusplus

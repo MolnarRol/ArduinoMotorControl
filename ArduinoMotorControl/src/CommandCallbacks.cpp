@@ -11,8 +11,8 @@
   --------------------------------------------------------------------------------
 */
 const float speeds[] = SPEEDS;
-const uint8_t speeds_len = sizeof(speeds) / sizeof(float);
-uint8_t speed_idx = 0;
+const uint8_t speeds_len_u8 = sizeof(speeds) / sizeof(float);
+uint8_t speed_idx_u8 = 0;
 /* ------------------------------------------------------------------------------- */
 
 enum MODE sellected_mode = regulation;
@@ -25,7 +25,7 @@ void StatusCallback( const String msg )
   else Serial.println( "Manual PWM" );
   
   Serial.print("Current RPM: ");
-  Serial.println(g_RPM);
+  Serial.println(g_RPM_f32);
   PWM_duty_Callback("");
 };
 
@@ -78,8 +78,8 @@ void MOTOR_off_Callback( const String msg )
   PeriodicInterruptDisable();
   SetPwmDuty(0.0f);
   PID_controller.integrator = 0.0f;
-  g_RPM = 0.0f;
-  g_enc_first_edge = 1;
+  g_RPM_f32 = 0.0f;
+  g_enc_first_edge_u8 = 1;
   PID_controller.motor_start = 1;
   g_flag_motor_running = 0;
 };
@@ -90,29 +90,34 @@ void MOTOR_on_Callback( const String msg )
   g_flag_motor_running = 1;
   clearPulseBuffers();
   SetPwmDuty( g_saved_duty );
-  PeriodicInterruptEnable();
+
   PulseCaptureEnable();
+  #if ( START_BOOST_EN == 1 )
+    SetPwmDuty( 100.0f );
+  #else
+    PeriodicInterruptEnable();
+  #endif
 };
 
 void SPEED_Callback( const String msg )
 {
-  speed_idx = (uint16_t)parseFloat( msg ) - 1;
-  if( speed_idx >= speeds_len ) speed_idx = speeds_len - 1;
-  changeSetPoint( &PID_controller, speeds[speed_idx] );
+  speed_idx_u8 = (uint16_t)parseFloat( msg ) - 1;
+  if( speed_idx_u8 >= speeds_len_u8 ) speed_idx_u8 = speeds_len_u8 - 1;
+  changeSetPoint( &PID_controller, speeds[speed_idx_u8] );
 };
 
 void SPEED_inc_Callback( const String msg )
 {
-  speed_idx++;
-  if( speed_idx == speeds_len ) speed_idx = speeds_len - 1;
-  changeSetPoint( &PID_controller, speeds[speed_idx] );
+  speed_idx_u8++;
+  if( speed_idx_u8 == speeds_len_u8 ) speed_idx_u8 = speeds_len_u8 - 1;
+  changeSetPoint( &PID_controller, speeds[speed_idx_u8] );
 };
 
 void SPEED_dec_Callback( const String msg )
 {
-  speed_idx--;
-  if( speed_idx == 255 ) speed_idx = 0;
-  changeSetPoint( &PID_controller, speeds[speed_idx] );
+  speed_idx_u8--;
+  if( speed_idx_u8 == 255 ) speed_idx_u8 = 0;
+  changeSetPoint( &PID_controller, speeds[speed_idx_u8] );
 };
 
 /*

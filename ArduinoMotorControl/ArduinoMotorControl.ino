@@ -13,35 +13,11 @@
 #include "inc/TimingUtils.h"
 #include "inc/StateMachine.h"
 
-
-// global_flags_TypeDef g_flags = {
-//   g_enc_first_edge = 1
-// };
-
-/// Arduino setup function
 void setup() {
   /*
     UART setup
   */
   Serial.begin( UART_BAUD );
-  // float bytesToFloat( const uint8_t bytes[4] );
-  // void floatToBytes( const float input, uint8_t bytes[4] );
-  // float x = 49.4;
-  // uint8_t bytes[5];
-  // floatToBytes( x, bytes );
-  // char byteArray[5];
-
-  // bytes[4] = 0;
-  // Serial.print( bytes );
-  
-
-  // while(1);
-  
-  // clearTerminal( "" );
-
-  // #ifdef DEBUG
-  //   Serial.println( F("[MCU reset]") );
-  // #endif
 
   /*
     Timer setup functions
@@ -53,24 +29,14 @@ void setup() {
   /*
     Digital pin setup
   */
-  pinMode(DEBUG_PIN, OUTPUT);       // Debug pin
-  pinMode(BRK_PIN, OUTPUT);         // Brake pin
-  pinMode(DIR_PIN, OUTPUT);         // Direction pin
+  pinMode( DEBUG_PIN, OUTPUT );       // Debug pin
+  pinMode( BRK_PIN, OUTPUT );         // Brake pin
+  pinMode( DIR_PIN, OUTPUT );         // Direction pin
   digitalWrite( BRK_PIN, 1 );       // Disengage brake
 
-
-  // DisablePWM_HiZ();
   pinMode( 9, OUTPUT );
   SetPwmDuty( 0.0f );               // PWM is turned off
-  // setPinHighPWM();
-  pinMode( 4, INPUT ); // _PULLUP
-
-  // MOTOR_on_Callback("");
-  // while( 1 );
-
-  // #ifdef DEBUG
-  //   Serial.println( F("[Setup complete]") );
-  // #endif
+  pinMode( 4, INPUT ); 
 }
 
 /**
@@ -94,7 +60,7 @@ void loop() {
 */
 void halt( void )
 {
-  SetPwmDuty(0.0f);     // Disable PWM
+  SetPwmDuty( 0.0f );   // Disable PWM
   cli();                // Globally disable interrupts
   while(1) {};          // Endless loop
 }

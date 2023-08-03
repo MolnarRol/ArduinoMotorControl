@@ -37,12 +37,8 @@ def app():
     commandList = removeCommentedLines( file )
     
     # Setting up serial communication
-    # serialSetup( commandList[0] )
+    serialSetup( commandList[0] )
     commandList.pop(0)
-
-    # for line in commandList:
-    #     print(line)
-    # print("######################")
     
     parsed = parseCommands( commandList )
     funList = parsed[0]

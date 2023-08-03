@@ -79,7 +79,7 @@
 /**
   Enable anti reset windup (Default: on)
 */      
-#define ARW_EN 0                      
+#define ARW_EN 1                      
 
 /**
  * Default regulation setpoint [RPM]

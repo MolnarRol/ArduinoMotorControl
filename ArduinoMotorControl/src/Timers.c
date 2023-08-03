@@ -190,20 +190,24 @@ void PulseCaptureConfig()
   /*
     Pinchange interrupt on D4 (PORTD 4) PCINT20.
   */
-  PCICR = 0;
-  PCMSK2 = 0;
-  PCICR |= ( 1 << PCIE2 );    // Pin Change Interrupt Enable 2.
-  PCMSK2 |= ( 1 << PCINT20 ); // Enable pin change interrupt on PCINT20.
+  // PCICR = 0;
+  // PCMSK2 = 0;
+  // PCICR |= ( 1 << PCIE2 );    // Pin Change Interrupt Enable 2.
+  // PCMSK2 |= ( 1 << PCINT20 ); // Enable pin change interrupt on PCINT20.
 };
 
 inline void PulseCaptureEnable()
 {
   TIMSK0 |= ( 1 << (OCIE0A) );  // Enabling output compare interrupt.
   TCNT0 = 0;
+  PCICR |= ( 1 << PCIE2 );    // Pin Change Interrupt Enable 2.
+  PCMSK2 |= ( 1 << PCINT20 ); // Enable pin change interrupt on PCINT20.
 }
 
 inline void PulseCaptureDisable()
 {
+  PCICR = 0;
+  PCMSK2 = 0;
   TIMSK0 &= ~( 1 << (OCIE0A) );  // Enabling output compare interrupt.
 }
 
@@ -220,6 +224,12 @@ inline uint32_t readPulseCount()
   TCNT0 = 0;
   g_TIM0_ov = 0;    
   return pulses;
+};
+
+inline void resetPulseCount()
+{
+  TCNT0 = 0;
+  g_TIM0_ov = 0;
 };
 
 /**

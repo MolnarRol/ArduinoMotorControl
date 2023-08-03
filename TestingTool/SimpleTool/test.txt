@@ -1,16 +1,16 @@
 # This is a comment
 # The commands are executed line by line. Empty or commented lines are ignored
-COM9
+COM6
 # Test
 
 back
 ct
-rpm 2000
+rpm 2800
 start
-_LOOP_ 5
-    _WAIT_ 2
-    rpm 2800
-    _WAIT_ 3
-    rpm 2000
+_LOOP_ 1000
+    _WAIT_ 1
+    stop
+    _WAIT_ 1
+    start
 _ENDLOOP_
 stop

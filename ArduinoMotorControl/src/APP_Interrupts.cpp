@@ -5,14 +5,11 @@
 #include "../inc/TimingUtils.h"
 #include "../inc/Regulation.h"
 
+float g_RPM_f32 = 0.0f;   /// Current motor rpm readout
+uint8_t g_enc_first_edge_u8 = 1; /// Global flag
 
-/// Current motor rpm readout
-float g_RPM = 0.0f;
-/// Global flag
-uint8_t g_enc_first_edge = 1;
-
-#if ENC_WDG_EN == 1
-  /// Encoder signal missing watchdog global variable.
+/** Encoder signal missing watchdog global variable. */
+#if ENC_WDG_EN == 1  
   uint16_t ENC_WatchDog = 0;
 #endif
 
@@ -20,12 +17,11 @@ uint8_t g_enc_first_edge = 1;
   Interrupt service routine called each 2 ms.
   Used for reading current rpm and PID new value calculation.
 */
-
 ISR( TIMER2_COMPA_vect )
 {
   sei();                                    // Reenable interrupts to allow interrupt nesting   
   PulseBuffers.idx ^= 1;                    // Switch pulse buffer
-  g_RPM = getRPMfromPulses();               // Read current RPM
+  g_RPM_f32 = getRPMfromPulses();               
 
   if( sellected_mode == manual ) return;
 
@@ -34,31 +30,7 @@ ISR( TIMER2_COMPA_vect )
     if( ( ENC_WatchDog += REG_PERIOD_MS ) > ENC_WDG_MS ) halt();
   #endif
 
-  if( PID_controller.enable ) 
-  {
-    float regOut = updatePID( &PID_controller, g_RPM );
-    SetPwmDuty( regOut ); // PID speed regulation
-    // Serial.println( regOut );
-  } 
-  else 
-  {
-    /* Boost functionality -> Starts regulation after reaching defined RPM. */
-    #if ( START_BOOST_EN == 1 )
-      if(  PID_controller.motor_start )
-      {
-        if( g_RPM > MOTOR_RPM_REG_START ) 
-        {
-          // Serial.println(g_RPM);
-          startRegulation( &PID_controller );
-          SetPwmDuty( updatePID( &PID_controller, g_RPM ) );
-          PID_controller.motor_start = 0;
-        }
-        else SetPwmDuty( 100.0f ); 
-      }
-    #else
-      PID_controller.enable = 1;
-    #endif
-  }
+  SetPwmDuty( updatePID( &PID_controller, g_RPM_f32 ) );
 }
 
 /**
@@ -67,48 +39,45 @@ ISR( TIMER2_COMPA_vect )
 */
 ISR( PCINT2_vect )
 {
-  /*
-    If encoder watchdog is enabled -> reset watchdog counter on new pulse.
-  */
+  uint32_t pulse_count_u32 = 0;
+
   #if ( ENC_WDG_EN == 1 )
     ENC_WatchDog = 0;
   #endif
-  /* 
-    Measuring delta time between pin state change 
-  */
-  #if ( PULSE_DELTA_READ == EDGE_BOTH )
 
-    /* 
-      Aproximating number of pulses. 
-      Possible only when duty cycle of the signal is 50%!!! 
-    */
-    if( g_enc_first_edge == 0 ) writePulseBuff ( 2 * readPulseCount() ); 
-    else g_enc_first_edge = 0;               
-  #elif ( PULSE_DELTA_READ == EDGE_RISING )
-    /* 
-      Writing buffer only on rising edge -> encoder pin is high. 
-    */
-    if( encoderPinHigh() ) 
+  if( encoderPinHigh() ) 
+  {
+    if( !g_enc_first_edge_u8 ){
+      pulse_count_u32 = readPulseCount();
+    } 
+    else 
     {
-      if( !g_enc_first_edge ) writePulseBuff ( readPulseCount() );
-      else 
+      g_enc_first_edge_u8 = 0;
+      resetPulseCount();
+      return;
+    }
+  }
+  else 
+  {
+    return;
+  }
+
+  #if ( START_BOOST_EN == 1 )
+    if( PID_controller.motor_start )
+    {
+      g_RPM_f32 = calcRPM( pulse_count_u32 );
+      if( g_RPM_f32 >= 500 )
       {
-        g_enc_first_edge = 0;
-        // resetPulseCount();
+        PeriodicInterruptEnable();
+        startRegulation( &PID_controller );
+        SetPwmDuty( updatePID( &PID_controller, g_RPM_f32 ) );
+        PID_controller.motor_start = 0;
       }
+      return;
     }
-  #elif ( PULSE_DELTA == EDGE_FALLING )
-    /* 
-      Writing buffer only on rising edge -> encoder pin is low. 
-    */
-    if( !encoderPinHigh() ) 
-    {
-      if( g_enc_first_edge == 0 ) writePulseBuff ( readPulseCount() );
-      else g_enc_first_edge = 0;
-    }
-  #else
-    #error "Specified macro is not defined!!!"
   #endif
+
+  writePulseBuff( pulse_count_u32 );
 }
 
 ISR( TIMER0_COMPA_vect )
