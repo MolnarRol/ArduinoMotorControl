@@ -22,12 +22,15 @@ def getResponse_BLOCKING():
     while isResponse( res ) == 0:
         res = serialPort.readline()
         res = res.decode()
+
     return res
 
 def getByteResponse_BLOCKING():
     res = serialPort.readline()
     while isResponse( res ) == 0:
         res = serialPort.readline()
+    for char in res:
+        print( hex(char) )
     return res
 
 def isResponse( data ):

@@ -7,7 +7,7 @@ back
 ct
 rpm 2000
 start
-_LOOP_ 
+_LOOP_ 5
     _WAIT_ 2
     rpm 2800
     _WAIT_ 3

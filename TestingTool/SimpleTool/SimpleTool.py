@@ -1,27 +1,22 @@
 import sys
-from time import sleep
-
 from modules.SerialComm import *
 from modules.FileParser import *
 from modules.CommandParser import *
 
-import struct
-from ctypes import *
 # Keyword defines
 WAIT_KEYWORD = "WAIT"
 WAIT_KEYWORD_LEN = len(WAIT_KEYWORD)
 MSG_DEADTIME = 0.001
 
-def app():
-
     # https://www.datasciencelearner.com/convert-a-byte-array-to-float-in-python/
-
+    # import struct
     # serialSetup("COM6")
     # Bytes = getByteResponse_BLOCKING()
     # float_value = struct.unpack('<f', Bytes)[0]
     # print( float_value )
     # sys.exit()
 
+def app():
     if len(sys.argv) == 2:
         filename = sys.argv[1]    
     else:
@@ -52,14 +47,16 @@ def app():
     parsed = parseCommands( commandList )
     funList = parsed[0]
 
+    # print( hex(OP_CODES["start"]) )
     input( "Pres ENTER to start ... " )
 
-    # print( getResponse_BLOCKING(), end = "" )
-    # for action in funList:
-    #     print(action["arg"])
-    #     action["fun"](action["arg"])
+    print( getResponse_BLOCKING(), end = "" )
+    for action in funList:
+        print(action["arg"])
+        action["fun"](action["arg"])
 
-    # serialPort.close()
+    serialPort.close()
+
     sys.exit( "[DONE]" )
 
 
